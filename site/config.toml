@@ -1,17 +1,17 @@
-baseURL = "https://ublogger.netlify.app/"
+baseURL = "http://haicheviet.com/"
 # [en, zh-cn, fr, pl, ...] determines default content language
 # [en, zh-cn, fr, pl, ...] 设置默认的语言
 defaultContentLanguage = "en"
 # theme
 # 主题
-theme = "uBlogger"
+theme = "HaiChe"
 # themes directory
 # 主题目录
 themesDir = "../.."
 
 # website title
 # 网站标题
-title = "uBlogger"
+title = "HaiChe"
 
 # whether to use robots.txt
 # 是否使用 robots.txt
