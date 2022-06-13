@@ -11,7 +11,7 @@ Hai Che is an engineer and a part-time researcher who currently work as Lead AI 
 
 Hai is a enthusiasitic and passionate programmer who is interested in the field of AI, software and database. His primary interest sit at the intersections of the AI researcher and software development, examining AI model in the context of software development and closing feedback loop in AI integration. More broadly, he is interested in the field of natural language processing and vector database.
 
-He is also a small venture capitalists as habit both in stock and crypto currency. Hai enjoys good music, bad jokes and writing about himself in the third person. He is also required, by law and ancient custom, to inform absolutely everyone that he has, in fact, beaten Elden Ring.
+He is also a small venture capitalists both in stock and crypto currency. Hai enjoys good music, bad jokes and writing about himself in the third person. He is also required, by law and ancient custom, to inform absolutely everyone that he has, in fact, beaten Elden Ring.
 
 TL;DR: Just an engieneer have a lot of fun in learning as his own and want to share it with others :relaxed: :relaxed: :relaxed:.
 
