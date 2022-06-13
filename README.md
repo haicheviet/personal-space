@@ -4,7 +4,7 @@
 
 ## Documentation
 
-Build Documentation Locally:
+Build Blog Locally:
 
 ```bash
 hugo server --source=site

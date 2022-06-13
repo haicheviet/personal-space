@@ -66,14 +66,6 @@ enableEmoji = true
         title = ""
         weight = 3
       [[languages.en.menu.main]]
-        identifier = "documentation"
-        pre = ""
-        post = ""
-        name = "Docs"
-        url = "/categories/documentation/"
-        title = ""
-        weight = 4
-      [[languages.en.menu.main]]
         identifier = "about"
         pre = ""
         post = ""
@@ -86,7 +78,7 @@ enableEmoji = true
         pre = "<i class='fab fa-github fa-fw'></i>"
         post = ""
         name = ""
-        url = "https://github.com/upagge/ublogger"
+        url = "https://github.com/haicheviet"
         title = "GitHub"
         weight = 6
     [languages.en.params]
@@ -223,6 +215,72 @@ enableEmoji = true
         [languages.en.params.social.Jobhopin]
           id = "en"
           prefix = "https://www.jobhopin.com/"
+  # [languages.vi]
+  #   weight = 1
+  #   # language code
+  #   languageCode = "vi"
+  #   # language name
+  #   languageName = "Vietnamese"
+  #   # whether to include Chinese/Japanese/Korean
+  #   hasCJKLanguage = false
+  #   # default amount of posts in each pages
+  #   paginate = 12
+  #   # copyright description used only for seo schema
+  #   copyright = "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License."
+  #   # Menu config
+  #   [languages.vi.menu]
+  #     [[languages.vi.menu.main]]
+  #       identifier = "posts"
+  #       # you can add extra information before the name (HTML format is supported), such as icons
+  #       pre = ""
+  #       # you can add extra information after the name (HTML format is supported), such as icons
+  #       post = ""
+  #       name = "Posts"
+  #       url = "/posts/"
+  #       # title will be shown when you hover on this menu link.
+  #       title = ""
+  #       weight = 1
+  #     [[languages.vi.menu.main]]
+  #       identifier = "tags"
+  #       pre = ""
+  #       post = ""
+  #       name = "Tags"
+  #       url = "/tags/"
+  #       title = ""
+  #       weight = 2
+  #     [[languages.vi.menu.main]]
+  #       identifier = "categories"
+  #       pre = ""
+  #       post = ""
+  #       name = "Categories"
+  #       url = "/categories/"
+  #       title = ""
+  #       weight = 3
+  #     [[languages.vi.menu.main]]
+  #       identifier = "documentation"
+  #       pre = ""
+  #       post = ""
+  #       name = "Docs"
+  #       url = "/categories/documentation/"
+  #       title = ""
+  #       weight = 4
+  #     [[languages.vi.menu.main]]
+  #       identifier = "about"
+  #       pre = ""
+  #       post = ""
+  #       name = "About"
+  #       url = "/about/"
+  #       title = ""
+  #       weight = 5
+  #     [[languages.vi.menu.main]]
+  #       identifier = "github"
+  #       pre = "<i class='fab fa-github fa-fw'></i>"
+  #       post = ""
+  #       name = ""
+  #       url = "https://github.com/upagge/ublogger"
+  #       title = "GitHub"
+  #       weight = 6
+  #   [languages.vi.params]
 
 [params]
   # uBlogger theme version
