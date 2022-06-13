@@ -155,9 +155,9 @@ enableEmoji = true
           paginate = 6
       # Social config in home page
       [languages.en.params.social]
-        GitHub = "https://github.com/HaiCheViet"
-        Linkedin = "https://www.linkedin.com/in/hai-che/"
-        Twitter = "xxxx"
+        GitHub = "haicheviet"
+        Linkedin = "hai-che"
+        Twitter = "viet_che"
         Instagram = ""
         Telegram = ""
         Medium = ""
@@ -221,7 +221,7 @@ enableEmoji = true
         Udemy = ""
         RSS = true
         [languages.en.params.social.Jobhopin]
-          id = "@xxxx"
+          id = "en"
           prefix = "https://www.jobhopin.com/"
 
 [params]
