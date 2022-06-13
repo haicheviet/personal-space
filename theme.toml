@@ -1,7 +1,7 @@
 # theme.toml template for a Hugo theme
 # See https://github.com/gohugoio/hugoThemes#themetoml for an example
 
-name = "HaiChe"
+name = "personal-space"
 license = "MIT"
 licenselink = "https://github.com/HaiCheViet/personal-space/blob/main/LICENSE"
 description = "The whole focus of the topic is on ease of reading for visitors and SEO optimization."
