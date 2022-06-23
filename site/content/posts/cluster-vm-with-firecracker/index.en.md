@@ -1,20 +1,21 @@
 ---
-weight: 4
-title: "Basic Markdown Syntax"
-date: 2019-12-01T21:57:40+08:00
-lastmod: 2020-01-01T16:45:40+08:00
-description: "This article shows the basic Markdown syntax and format."
+weight: 5
+title: "Cluster VM with firecracker"
+date: 2022-06-23T21:57:40+08:00
+lastmod: 2022-06-23T16:45:40+08:00
+description: "This article shows how to use Firecracker to create cluster VMs with container."
 resources:
 - name: "featured-image"
   src: "featured-image.png"
 
-tags: ["Markdown", "HTML"]
-categories: ["Markdown"]
+tags: ["Firecracker", "Container", "Qemu", "Ignite"]
+categories: ["Container"]
 
 
 ---
 
-This article offers a sample of basic Markdown syntax that can be used in Hugo content files.
+Recently after being leader position, I was asked join the recruiment process and onboarding new members. As the team and our project grow both in size and complexity, our document to hand on projects is complicated and only work in certain ubuntu and python version.
+So to make sure the on boarding process is fast and reproducible, I have to come up a new plan to create a isolate enviroment for coding and less learning curve as possible
 
 <!--more-->
 
@@ -98,14 +99,12 @@ Once the VM is booted, it will have its network configured and will be accessibl
 
 ## SSH into the VM
 ### To SSH into a `VM`, enter:
-
 ```bash
 $ ignite ssh haiche-vm
 Welcome to Ubuntu 18.04.2 LTS (GNU/Linux 5.10.51 x86_64)
 ...
 root@3c5fa9a18682741f:~#
 ```
-
 To exit SSH, just quit the shell process with exit.
 
 
