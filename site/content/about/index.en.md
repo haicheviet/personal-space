@@ -15,7 +15,7 @@ He also has interest in investing both in stock and cryptocurrency. Hai enjoys g
 
 TL;DR: Just an engieneer have a lot of fun in learning and want to share it with others :relaxed: :relaxed: :relaxed:.
 
-You can find his CV here (updated 13-06-2022): [link](https://github.com/haicheviet/personal-space/tree/main/site/assets/pdf/my_resume.pdf)
+You can find his CV here (updated 13-06-2022): [link](https://raw.githubusercontent.com/haicheviet/personal-space/main/site/assets/pdf/my_resume.pdf)
 
 ### Projects
 
