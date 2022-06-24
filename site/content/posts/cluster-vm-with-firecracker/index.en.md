@@ -156,11 +156,46 @@ Welcome to Ubuntu 18.04.2 LTS (GNU/Linux 5.10.51 x86_64)
 root@3c5fa9a18682741f:~#
 ```
 
+Final wrapping with bastion host techinque to fully secure ssh to VM host
+
+`~/.ssh/config`
+
+```apacheconf
+Host workstation
+    HostName 192.168.1.15
+    User haiche
+    IdentityFile ~/.ssh/id_rsa
+
+Host haiche-vm
+    HostName 172.17.0.3
+    ProxyJump workstation
+    User root
+    IdentityFile ~/.ssh/id_rsa
+```
+
+{{< mermaid >}}
+
+graph LR;
+    A[Client] -->| B(Workstation)
+    B -->|One| D[haiche-vm]
+    B -->|Two| E[other-vm]
+    B -->|N| N[n-vm]
+
+{{< /mermaid >}}
+
+{{< mermaid >}}
+graph LR;
+    A[Hard edge] -->|Link text| B(Round edge)
+    B --> C{Decision}
+    C -->|One| D[Result one]
+    C -->|Two| E[Result two]
+{{< /mermaid >}}
+
 ## How I extend container to reduce repeatable setup process
 
 After successfully creating VM, mostly I will install conda and some packages to run my project. But I don't want to repeatedly install conda and create a new environment each time I create VM. Here is my step to extend the base Ubuntu image and use it to create a better VM experience
 
-Dockerfile
+`Dockerfile`
 
 ```Docker
 FROM weaveworks/ignite-ubuntu
@@ -192,7 +227,7 @@ RUN which python && python -c "import fastapi"
 RUN conda init bash && echo "source activate haiche" >> ~/.bashrc
 ```
 
-minconda.yaml
+`minconda.yaml`
 
 ```yaml
 apiVersion: ignite.weave.works/v1alpha4
