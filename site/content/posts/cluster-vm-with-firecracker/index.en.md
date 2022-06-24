@@ -158,7 +158,7 @@ root@3c5fa9a18682741f:~#
 
 ### Secure bastion host
 
-Final wrapping with bastion host techinque to fully secure ssh to VM host
+Final wrapping with bastion host technique to fully secure ssh to VM host
 
 `~/.ssh/config`
 
