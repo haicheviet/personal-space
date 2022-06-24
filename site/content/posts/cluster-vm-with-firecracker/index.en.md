@@ -105,7 +105,7 @@ $ sudo ignite run --config config.yaml
 INFO[0001] Created VM with ID "3c5fa9a18682741f" and name "haiche-vm" 
 ```
 
-Wolla :insert_icon_here: you've succeedfully created a new VM
+Wolla :tada: :tada: :tada: you've succeedfully created a new VM
 To list the running `VMs`, enter:
 
 ```bash
