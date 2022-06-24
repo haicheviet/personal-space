@@ -249,9 +249,9 @@ A few things still stuck in my mind with this approach:
 
 * Currently firecracker doesn't support snapshot restore but will support in near future <https://github.com/firecracker-microvm/firecracker/issues/1184>
 
-* Can't upgrade new image but have to copy each time when updating new base image. I was dealing with this by making a copy every time, but that’s kind of slow and it felt really inefficient. But there’s some solution online that I will try later [Device mapper to manage firecracker images](https://jvns.ca/blog/2021/01/27/day-47--using-device-mapper-to-manage-firecracker-images/)
+* Can't easy upgrade base image like `docker pull`. I was dealing with this by making a copy every time, but that’s kind of slow and it felt really inefficient. But there’s some solution online that I will try later [Device mapper to manage firecracker images](https://jvns.ca/blog/2021/01/27/day-47--using-device-mapper-to-manage-firecracker-images/)
 
-* I don’t know if it’s possible to run graphical applications in Firecracker
+* I don’t know if it’s possible to run graphical applications in Firecracker yet
 
 * Firecracker with Kubernetes is a new thing but I don't find it appealing cause using Pod to group containers is already fast and secure. Some people gave me this useful thread discuss about [Why aren’t they compatible yet](https://twitter.com/micahhausler/status/1238496944684597248?lang=en)
 
