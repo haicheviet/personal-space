@@ -14,42 +14,61 @@ categories: ["Container"]
 
 ---
 
-Recently after being leader position, I was asked join the recruiment process and onboarding new members. As the team and our project grow both in size and complexity, our document to hand on projects is complicated and only work in certain ubuntu and python version.
-So to make sure the on boarding process is fast and reproducible, I have to come up a new plan to create a isolate enviroment for coding and less learning curve as possible
+Recently I was asked to join the recruitment process and onboarding of new members. As the team and our project grow both in size and complexity, our document to hand on projects is complicated and only work in certain operating system.
+So to make sure the onboarding process is fast and reproducible, I have to come up with a new plan to create an isolate enviroment for coding and less learning curve as possible
 
 <!--more-->
 
-## My goal: A isolate enviroment where every member get their own resource and custom preinstall package
+## My goal
 
-Our project in Jobhopin combine multiple languages (Rust, Python, ...) and the process of create virtualenv is quiet large and only work in linux system. Here is sample of one Docker file
+An isolate enviroment where every member get their own resource and custom preinstall package
 
-## why not use containers image?
+Our project in Jobhopin combines multiple languages (Rust, Python, ...) and the process of creating virtualenv is quite large and only work in certain Linux systems. Usually, on-boarding new members took 2 weeks for them to hand on our current projects
 
-Firstly I encourage team to use Docker and docker-compose to code and debug project but at nature of AI team that combine both engineer and scientist. The science team find it hard to debug in docker and took a lot of time for new memmber to learn and and make use of docker image.
-I wanted to mimic a real production machine that the member has root access to – I wanted folks to be able to set sysctls, use nsenter, make iptables rules, configure networking with ip, run perf, basically literally anything.
+## Why not use containers image?
 
-## why not use virtual machine?
+Firstly I encourage the team to use Docker and docker-compose to code and debug projects our team has both engineer and scientist members. The science team find it hard to debug in docker and took a lot of time for new members to learn and make use of docker's image.
+I wanted to mimic a real production machine that the member has root access to – wanted folks to be able to set sysctls, use nsenter, make iptables rules, configure networking with ip, run perf, basically literally anything.
 
-I've tried some vm vendor (Qemu and Vmware) to create per vm per member but too much problem in the process:
+## Why not use virtual machine?
 
-* VM boosting time is slow and image size is too large
-* Lack of API and the snapshot vm have to be manual create without any reproduce code
+I've tried some VM vendors (Qemu and Vmware) to create per VM per member but too many problems in the process:
 
-I want our member only need to provide their credential with custom VM size and instantly launch a new virtual machine.
+* VM boosting time is slow plus the snapshot size is too large
+* Lack of API and the snapshot VM have to be manual created without any reproduce code
+
+I want our members only need to provide their credentials with custom VM size and instantly launch a fresh virtual machine.
 
 ## Firecracker can start a VM in less than a second with base OCI container
 
 Initially when I read about Firecracker being released, I thought it was just a tool for cloud providers to use that provide security rather than bare docker, but I didn’t think that it was something that I could directly use it to create a dev VM.
 
-After a few reading information, I just shock with how fast Firecracker is in boosting VM [ref](https://lwn.net/Articles/775736)
-> The VMM process starts up in around 12ms on AWS EC2 I3.metal instances. Though this time varies, it stays under 60ms. Once the guest VM is configured, it takes a further 125ms to launch the init process in the guest. Firecracker spawns a thread for each VM vCPU to use via the KVM API along with a separate management thread. The memory overhead of each thread (excluding guest memory) is less than 5MB.
+After a few reading information, I just shock with how fast Firecracker is in boosting VM
 
-Some comperations between Firecracker and QEMU [ref](https://news.ycombinator.com/item?id=25883837)
-> By comparison: Firecracker is purpose-built in Rust for this one task, provides no BIOS, and offers only network, block, keyboard, and serial device support --- with tiny drivers (the serial support is less than 300 lines of code).
+{{< admonition >}}
 
-Firecracker integrate with existing container tooling, making adoption rather painless and easy to use. After some research in tooling to manage firecreaker VM, I choose to use [Ignite](https://github.com/weaveworks/ignite) that cli command is very similar to docker
+The VMM process starts up in around 12ms on AWS EC2 I3.metal instances. Though this time varies, it stays under 60ms. Once the guest VM is configured, it takes a further 125ms to launch the init process in the guest. Firecracker spawns a thread for each VM vCPU to use via the KVM API along with a separate management thread. The memory overhead of each thread (excluding guest memory) is less than 5MB. [ref](https://lwn.net/Articles/775736)
 
-> With Ignite, you pick an OCI-compliant image (Docker image) that you want to run as a VM, and then just execute `ignite run` instead of `docker run`
+{{< /admonition >}}
+
+Some comperations between Firecracker and QEMU
+
+{{< admonition >}}
+
+By comparison: Firecracker is purpose-built in Rust for this one task, provides no BIOS, and offers only network, block, keyboard, and serial device support --- with tiny drivers (the serial support is less than 300 lines of code).
+[ref](https://news.ycombinator.com/item?id=25883837)
+
+{{< /admonition >}}
+
+Firecracker integrates with existing container tooling, making adoption rather painless and easy to use. After some research in tooling to manage Firecracker VM, I choose to use [Ignite](https://github.com/weaveworks/ignite) that CLI command is very similar to docker
+
+{{< admonition >}}
+
+With Ignite, you pick an OCI-compliant image (Docker image) that you want to run as a VM, and then just execute `ignite run` instead of `docker run`
+
+{{< /admonition >}}
+
+## How to use Firecracker with ignite
 
 Install ignite and start a fresh VM is very simple, there’s basically 3 steps:
 
@@ -98,17 +117,20 @@ VM ID                   IMAGE                           KERNEL                  
 Once the VM is booted, it will have its network configured and will be accessible from the host (thanks to the IP assigned to the bridge) via password-less SSH and with sudo permissions
 
 ## SSH into the VM
-### To SSH into a `VM`, enter:
+
+### Via ignite cli
+
 ```bash
 $ ignite ssh haiche-vm
 Welcome to Ubuntu 18.04.2 LTS (GNU/Linux 5.10.51 x86_64)
 ...
 root@3c5fa9a18682741f:~#
 ```
+
 To exit SSH, just quit the shell process with exit.
 
+### Via ssh cli and rsa key
 
-### To enter the vm server via ssh cli and rsa key
 add your public key to `~/.ssh/authorized_keys` in new boosted VM or update config and create new VM with default path to pub key
 
 ```yaml
@@ -127,7 +149,8 @@ root@3c5fa9a18682741f:~#
 ```
 
 ## How I extend container to reduce repeatable setup process
-After suscefully create VM, mostly I will install conda and some package to run my project. But I don't want to repeatly install conda and create new enviroment every time I create new VM. Here is my step to extend base Ubuntu image and use it to create better VM
+
+After successfully creating VM, mostly I will install conda and some packages to run my project. But I don't want to repeatedly install conda and create a new environment each time I create VM. Here is my step to extend the base Ubuntu image and use it to create a better VM experience
 
 Dockerfile
 
@@ -177,8 +200,8 @@ spec:
   ssh: path/your/id_rsa.pub
 ```
 
-Here is some tricky parts, the current ignite don't support local docker image build. I have to push the image to public register [Docker hub](https://hub.docker.com/) to succesfully pull to ignite image.
-To start new VM
+Here are some tricky parts, the current ignite doesn't support local docker image build. I have to push the image to the public register [Docker Hub](https://hub.docker.com/) to successfully import ignite's image.
+To start a new VM
 
 ```bash
 $ sudo ignite run --config minconda.yaml
@@ -187,10 +210,9 @@ INFO[0002] Created image with ID "cae0ac317cca74ba" and name "haiche/ubuntu-minc
 INFO[0004] Created VM with ID "c1ab652804e664ed" and name "haiche-minconda-vm" 
 ```
 
+If you use a private registry such as ECR, run the command above with `--runtime=docker` to pull the private registry
 
-If you use private registery such as ECR, run the command above with `--runtime=docker` to pull private registery
-
-Test our new vm with conda enviroment
+Test our new VM with conda environment
 
 ```bash
 $ ssh -i path/your/id_rsa root@172.17.0.4
@@ -205,18 +227,28 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>
 ```
 
-I really liked the configuration file approach for doing vmware because I found it easier to be able to see everything all in one place. Now the member can provide the config file and pubkey and I can create a fresh VM in instant
+I liked the configuration file approach for doing VMware because I found it easier to be able to see everything all in one place. Now the member can provide the config file and pubkey and I can create a fresh VM in instant
 
 ## Cloud supports nested virtualization
 
-Another question I had in mind: “ok, where am I going to run these Firecracker VMs in production?“. The funny thing about running a VM in the cloud is that cloud instances are already VMs. Running a VM inside a VM is called “nested virtualization” and not all cloud providers support it – for example AWS only support nested virtualization in `bare-metal` instance which is ridiculously high prices.
+Another question I had in mind: “ok, where am I going to run these Firecracker VMs in production?“. The funny thing about running a VM in the cloud is that cloud instances are already VMs. Running a VM inside a VM is called “nested virtualization” and not all cloud providers support it – for example, AWS only supports nested virtualization in **Bare-metal** instances which are ridiculously high prices.
 
-GCP supports nested virtualization but not on default, you have to enable this feature in create vm section. DigitalOcean support nested virtualization on default even on their smallest droplets
+GCP supports nested virtualization but not on default, you have to enable this feature in creating VM section. DigitalOcean support nested virtualization on default even on their smallest droplets
 
-Some open questions:
+## Some afterthought
 
-A few things still stuck on my mind with this approach:
+A few things still stuck in my mind with this approach:
 
-* Currently firecracker doesn't support snapshot but will support in near future https://github.com/firecracker-microvm/firecracker/issues/1184
+* Currently firecracker doesn't support snapshot but will support in near future <https://github.com/firecracker-microvm/firecracker/issues/1184>
 
-* I still don't understant clearly about why Firecracker is so fast
+* Can't upgrade new image but have to copy each time when updating new base image, I was dealing with this by making a copy every time, but that’s kind of slow and it felt really inefficient. But there’s some solution online that I will try later  <https://jvns.ca/blog/2021/01/27/day-47--using-device-mapper-to-manage-firecracker-images/>
+
+* I don’t know if it’s possible to run graphical applications in Firecracker
+
+Here are some links I found usefull when researching about Firecracker:
+
+* [How aws firecracker works a deep dive](https://unixism.net/2019/10/how-aws-firecracker-works-a-deep-dive/) is very usefull to demonstrates some of the concepts with a tiny version of Firecracker
+
+* AWS fargate and lambda was back by [Firecracker serverless computing](https://aws.amazon.com/blogs/aws/firecracker-lightweight-virtualization-for-serverless-computing/)
+
+* Comparing other isolation technique [Sandboxing and workload isolation](https://fly.io/blog/sandboxing-and-workload-isolation/)
