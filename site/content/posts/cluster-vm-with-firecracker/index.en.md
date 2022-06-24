@@ -23,7 +23,7 @@ So to make sure the onboarding process is fast and reproducible, I have to come 
 
 > An isolate enviroment where every member get their own resource and custom preinstall package
 
-Our project in [Jobhopin](https://jobhopin.com/) combines multiple languages (Rust, Python, ...) and the process of creating virtualenv is quite tedious and with multiple attempts to make it work. Usually, It took 2-3 weeks for newcomers to learn our current projects and work effectively
+Our project in [Jobhopin](https://jobhopin.com/) combines multiple languages (Rust, Python, ...) and the process of creating virtualenv is quite tedious with multiple attempts to make it work. Usually, It took 2-3 weeks for newcomers to learn about our current projects and work effectively
 
 ## Why not use containers image?
 
