@@ -1,6 +1,6 @@
 ---
 weight: 5
-title: "Cluster VM with firecracker"
+title: "Cluster VMs with Firecracker"
 date: 2022-06-23T21:57:40+08:00
 lastmod: 2022-06-23T16:45:40+08:00
 description: "This article shows how to use Firecracker to create cluster VMs with container."
@@ -97,7 +97,7 @@ spec:
   ssh: true
 ```
 
-`Step 3`: Start your vm server under 5 second
+`Step 3`: Start your VM server under 5 second
 
 ```bash
 $ sudo ignite run --config config.yaml
@@ -139,7 +139,7 @@ spec:
   ssh: path/your/id_rsa.pub
 ```
 
-and then ssh to your vm
+and then ssh to your VM
 
 ```bash
 $ ssh -i path/your/id_rsa root@172.17.0.3
