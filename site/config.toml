@@ -135,7 +135,7 @@ enableEmoji = true
           # title shown in home page (HTML format is supported)
           title = "HaiCheBlog"
           # subtitle shown in home page (HTML format is supported)
-          subtitle = "A Clean, Elegant but Advanced Hugo Theme"
+          subtitle = "My personal space"
           # whether to show social links
           social = true
           # disclaimer (HTML format is supported)

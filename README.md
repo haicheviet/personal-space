@@ -4,8 +4,6 @@
 
 ## [Blog site](http://haicheviet.com/)
 
-To see this theme in action, here is a live [blog site](http://haicheviet.com/) which is rendered with **uBlogger** theme.
-
 ## Local development
 
 Build Blog Locally:
