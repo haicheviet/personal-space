@@ -23,7 +23,7 @@ So to make sure the onboarding process is fast and reproducible, I have to come 
 
 > An isolate enviroment where every member get their own resource and custom preinstall package
 
-Our project in [Jobhopin](https://jobhopin.com/) combines multiple languages (Rust, Python, ...) and the process of creating virtualenv is quite tedious and with multiple attempts to make it work. Usually, new members took 2 weeks for them to hand on our current projects and work effectively
+Our project in [Jobhopin](https://jobhopin.com/) combines multiple languages (Rust, Python, ...) and the process of creating virtualenv is quite tedious and with multiple attempts to make it work. Usually, It took 2-3 weeks for newcomers to learn our current projects and work effectively
 
 ## Why not use containers image?
 
@@ -266,7 +266,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>
 ```
 
-I liked the configuration file approach so far and it is easier to be able to see everything all in one place. Now the member simply provide the config file and public key to create a fresh VM in instant
+I liked the configuration file approach so far and it is easier to be able to see everything all in one place. Now the member simply provides the config file and public key to create a fresh VM with all needed environments in instant
 
 ## Cloud supports nested virtualization
 
