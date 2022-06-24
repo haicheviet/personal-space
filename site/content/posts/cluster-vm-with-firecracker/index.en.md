@@ -257,8 +257,8 @@ A few things still stuck in my mind with this approach:
 
 Here are some links I found useful when researching about Firecracker:
 
-* [How aws firecracker works a deep dive](https://unixism.net/2019/10/how-aws-firecracker-works-a-deep-dive/) to demonstrates some of the concepts with a tiny version of Firecracker
+* [How AWS Firecracker works: a deep dive](https://unixism.net/2019/10/how-aws-firecracker-works-a-deep-dive/) to demonstrates some of the concepts with a tiny version of Firecracker
 
-* AWS fargate and lambda was back by [Firecracker serverless computing](https://aws.amazon.com/blogs/aws/firecracker-lightweight-virtualization-for-serverless-computing/)
+* AWS Fargate and Lambda was back by [Firecracker serverless computing](https://aws.amazon.com/blogs/aws/firecracker-lightweight-virtualization-for-serverless-computing/)
 
-* Comparing other isolation technique [Sandboxing and workload isolation](https://fly.io/blog/sandboxing-and-workload-isolation/)
+* Comparing other isolation technique [Sandboxing and Workload Isolation](https://fly.io/blog/sandboxing-and-workload-isolation/)
