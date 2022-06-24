@@ -43,7 +43,7 @@ I want our members only need to provide their credentials with custom VM size an
 
 Initially when I read about Firecracker being released, I thought it was just a tool for cloud providers to use that provide security rather than bare docker, but I didn’t think that it was something that I could directly use it to create a dev VM.
 
-After a few reading information, I just shock with how fast Firecracker is in boosting VM
+After a few reading information, I just impress with how fast and convenient Firecracker is in boosting VM
 
 {{< admonition >}}
 
@@ -60,7 +60,7 @@ By comparison: Firecracker is purpose-built in Rust for this one task, provides 
 
 {{< /admonition >}}
 
-Firecracker integrates with existing container tooling, making adoption rather painless and easy to use. After some research in tooling to manage Firecracker VM, I choose to use [Ignite](https://github.com/weaveworks/ignite) that CLI command is very similar to docker
+Firecracker integrates with existing container tooling, making adoption rather painless and easy to use. I choose to use [Ignite](https://github.com/weaveworks/ignite) that CLI command is very similar to docker
 
 {{< admonition >}}
 
@@ -114,7 +114,7 @@ INFO[0001] Created VM with ID "3c5fa9a18682741f" and name "haiche-vm"
 ```
 
 Wolla :tada: :tada: :tada: you've succeedfully created a new VM.
-To list the running `VMs`, enter:
+To list the running VMs, enter:
 
 ```bash
 $ ignite ps
@@ -122,7 +122,7 @@ VM ID                   IMAGE                           KERNEL                  
 3c5fa9a18682741f        weaveworks/ignite-ubuntu:latest weaveworks/ignite-kernel:5.10.51        63m ago 4.0 GB  2       1.0 GB          Running 172.17.0.3              haiche-vm
 ```
 
-Once the VM is booted, it will have its network configured and will be accessible from the host (thanks to the IP assigned to the bridge) via password-less SSH and with sudo permissions
+Once the VM is booted, it will have its network configured and will be accessible from the host via password-less SSH and with sudo permissions
 
 ## SSH into the VM
 
@@ -139,7 +139,7 @@ To exit SSH, just quit the shell process with exit.
 
 ### Via ssh cli and rsa key
 
-add your public key to `~/.ssh/authorized_keys` in new boosted VM or update config and create new VM with default path to pub key
+add your public key to `~/.ssh/authorized_keys` in new boosted VM or update config and create new VM with default path to public key
 
 ```yaml
 spec:
@@ -235,7 +235,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>
 ```
 
-I liked the configuration file approach so far and it is easier to be able to see everything all in one place. Now the member can provide the config file and pubkey and I can create a fresh VM in instant
+I liked the configuration file approach so far and it is easier to be able to see everything all in one place. Now the member can provide the config file and public key and I can create a fresh VM in instant
 
 ## Cloud supports nested virtualization
 
