@@ -21,14 +21,14 @@ So to make sure the onboarding process is fast and reproducible, I have to come 
 
 ## My goal
 
-An isolate enviroment where every member get their own resource and custom preinstall package
+> An isolate enviroment where every member get their own resource and custom preinstall package
 
-Our project in Jobhopin combines multiple languages (Rust, Python, ...) and the process of creating virtualenv is quite large and only work in certain Linux systems. Usually, on-boarding new members took 2 weeks for them to hand on our current projects
+Our project in [Jobhopin](https://jobhopin.com/) combines multiple languages (Rust, Python, ...) and the process of creating virtualenv is quite tedious and with multiple attempts to make it work. Usually, new members took 2 weeks for them to hand on our current projects and work effectively
 
 ## Why not use containers image?
 
-Firstly I encourage the team to use Docker and docker-compose to code and debug projects our team has both engineer and scientist members. The science team find it hard to debug in docker and took a lot of time for new members to learn and make use of docker's image.
-I wanted to mimic a real production machine that the member has root access to – wanted folks to be able to set sysctls, use nsenter, make iptables rules, configure networking with ip, run perf, basically literally anything.
+Firstly I encourage the team to use Docker and docker-compose to code and debug projects but our team has both engineer and scientist members. The science team find it hard to debug in docker and took a lot of time for new members to learn and make use of docker's image.
+I wanted to mimic a real production machine that the member has root access to – wanted folks to be able to set sysctls, install new packages, make iptables rules, configure networking with ip, run perf, basically literally anything with strong isolation.
 
 ## Why not use virtual machine?
 
@@ -47,7 +47,7 @@ After a few reading information, I just shock with how fast Firecracker is in bo
 
 {{< admonition >}}
 
-The VMM process starts up in around 12ms on AWS EC2 I3.metal instances. Though this time varies, it stays under 60ms. Once the guest VM is configured, it takes a further 125ms to launch the init process in the guest. Firecracker spawns a thread for each VM vCPU to use via the KVM API along with a separate management thread. The memory overhead of each thread (excluding guest memory) is less than 5MB. [ref](https://lwn.net/Articles/775736)
+The VMM process starts up in around 12ms on AWS EC2 I3.metal instances. Though this time varies, it stays under 60ms. Once the guest VM is configured, it takes a further 125ms to launch the init process in the guest. Firecracker spawns a thread for each VM vCPU to use via the KVM API along with a separate management thread. The memory overhead of each thread (excluding guest memory) is less than 5MB. [Ref](https://lwn.net/Articles/775736)
 
 {{< /admonition >}}
 
@@ -56,7 +56,7 @@ Some comperations between Firecracker and QEMU
 {{< admonition >}}
 
 By comparison: Firecracker is purpose-built in Rust for this one task, provides no BIOS, and offers only network, block, keyboard, and serial device support --- with tiny drivers (the serial support is less than 300 lines of code).
-[ref](https://news.ycombinator.com/item?id=25883837)
+[Ref](https://news.ycombinator.com/item?id=25883837)
 
 {{< /admonition >}}
 
@@ -97,7 +97,15 @@ spec:
   ssh: true
 ```
 
-`Step 3`: Start your VM server under 5 second
+`Step 3`: Start your VM server under 125 ms
+
+{{< admonition >}}
+
+[Specification](https://github.com/firecracker-microvm/firecracker/blob/main/SPECIFICATION.md)
+
+It takes <= 125 ms to go from receiving the Firecracker InstanceStart API call to the start of the Linux guest user-space /sbin/init process
+
+{{< /admonition >}}
 
 ```bash
 $ sudo ignite run --config config.yaml
@@ -105,7 +113,7 @@ $ sudo ignite run --config config.yaml
 INFO[0001] Created VM with ID "3c5fa9a18682741f" and name "haiche-vm" 
 ```
 
-Wolla :tada: :tada: :tada: you've succeedfully created a new VM
+Wolla :tada: :tada: :tada: you've succeedfully created a new VM.
 To list the running `VMs`, enter:
 
 ```bash
@@ -227,7 +235,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>
 ```
 
-I liked the configuration file approach for doing VMware because I found it easier to be able to see everything all in one place. Now the member can provide the config file and pubkey and I can create a fresh VM in instant
+I liked the configuration file approach so far and it is easier to be able to see everything all in one place. Now the member can provide the config file and pubkey and I can create a fresh VM in instant
 
 ## Cloud supports nested virtualization
 
@@ -239,15 +247,17 @@ GCP supports nested virtualization but not on default, you have to enable this f
 
 A few things still stuck in my mind with this approach:
 
-* Currently firecracker doesn't support snapshot but will support in near future <https://github.com/firecracker-microvm/firecracker/issues/1184>
+* Currently firecracker doesn't support snapshot restore but will support in near future <https://github.com/firecracker-microvm/firecracker/issues/1184>
 
-* Can't upgrade new image but have to copy each time when updating new base image, I was dealing with this by making a copy every time, but that’s kind of slow and it felt really inefficient. But there’s some solution online that I will try later  <https://jvns.ca/blog/2021/01/27/day-47--using-device-mapper-to-manage-firecracker-images/>
+* Can't upgrade new image but have to copy each time when updating new base image. I was dealing with this by making a copy every time, but that’s kind of slow and it felt really inefficient. But there’s some solution online that I will try later [Device mapper to manage firecracker images](https://jvns.ca/blog/2021/01/27/day-47--using-device-mapper-to-manage-firecracker-images/)
 
 * I don’t know if it’s possible to run graphical applications in Firecracker
 
-Here are some links I found usefull when researching about Firecracker:
+* Firecracker with Kubernetes is a new thing but I don't find it appealing cause using Pod to group containers is already fast and secure. Some people gave me this useful thread discuss about [Why aren’t they compatible yet](https://twitter.com/micahhausler/status/1238496944684597248?lang=en)
 
-* [How aws firecracker works a deep dive](https://unixism.net/2019/10/how-aws-firecracker-works-a-deep-dive/) is very usefull to demonstrates some of the concepts with a tiny version of Firecracker
+Here are some links I found useful when researching about Firecracker:
+
+* [How aws firecracker works a deep dive](https://unixism.net/2019/10/how-aws-firecracker-works-a-deep-dive/) to demonstrates some of the concepts with a tiny version of Firecracker
 
 * AWS fargate and lambda was back by [Firecracker serverless computing](https://aws.amazon.com/blogs/aws/firecracker-lightweight-virtualization-for-serverless-computing/)
 
