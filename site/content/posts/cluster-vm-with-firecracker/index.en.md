@@ -235,7 +235,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>
 ```
 
-I liked the configuration file approach so far and it is easier to be able to see everything all in one place. Now the member can provide the config file and public key and I can create a fresh VM in instant
+I liked the configuration file approach so far and it is easier to be able to see everything all in one place. Now the member simply provide the config file and public key to create a fresh VM in instant
 
 ## Cloud supports nested virtualization
 
