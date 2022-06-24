@@ -7,13 +7,13 @@ draft: false
 math:
   enable: true
 ---
-Hai Che is an engineer and a part-time researcher who currently work as Lead AI Engineer in Jobhopin (#1 AI recruiment platform).
+Hai Che is an engineer and a part-time researcher who currently work as a Lead AI Engineer in [Jobhopin](https://www.jobhopin.com/) (the #1 AI recruitment platform).
 
-Hai is a enthusiasitic and passionate programmer who is interested in the field of AI, software and database. His primary interest sit at the intersections of the AI researcher and software development, examining AI model in the context of software development and closing feedback loop in AI integration. More broadly, he is interested in the field of natural language processing and vector database.
+Hai is an enthusiastic and passionate programmer who is interested in the field of AI, software, and database. His primary interest sits at the intersections of AI research and software development, examining AI models in the context of software development and closing the feedback loop in AI integration. More broadly, he is interested in the field of natural language processing and vector database.
 
-He is also a small venture capitalists both in stock and crypto currency. Hai enjoys good music, bad jokes and writing about himself in the third person. He is also required, by law and ancient custom, to inform absolutely everyone that he has, in fact, beaten Elden Ring.
+He also has interest in investing both in stock and cryptocurrency. Hai enjoys good music, bad jokes, and writing about himself in the third person. He is also required, by law and ancient custom, to inform absolutely everyone that he has, in fact, beaten Dark Souls.
 
-TL;DR: Just an engieneer have a lot of fun in learning as his own and want to share it with others :relaxed: :relaxed: :relaxed:.
+TL;DR: Just an engieneer have a lot of fun in learning and want to share it with others :relaxed: :relaxed: :relaxed:.
 
 You can find his CV here (updated 13-06-2022): [link](https://github.com/haicheviet/personal-space/tree/main/site/assets/pdf/my_resume.pdf)
 

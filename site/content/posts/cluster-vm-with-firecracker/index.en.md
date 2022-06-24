@@ -15,7 +15,7 @@ categories: ["Container"]
 ---
 
 Recently I was asked to join the recruitment process and onboarding of new members. As the team and our project grow both in size and complexity, our document to hand on projects is complicated and only work in certain operating system.
-So to make sure the onboarding process is fast and reproducible, I have to come up with a new plan to create an isolate enviroment for coding and less learning curve as possible
+So to make sure the onboarding process is fast and reproducible, I have to come up with a new plan to create an isolate enviroment for coding and less learning curve as possible.
 
 <!--more-->
 
