@@ -199,8 +199,6 @@ FROM weaveworks/ignite-ubuntu
 ENV PATH="/root/miniconda3/bin:${PATH}"
 ARG PATH="/root/miniconda3/bin:${PATH}"
 
-ARG DOCKER_IMAGE_APP
-
 RUN apt-get update -qq && \
     apt-get update -y && \
     apt-get install git vim rsync \
@@ -232,8 +230,8 @@ metadata:
   name: haiche-minconda-vm
 spec:
   cpus: 2
-  memory: 6GB
-  diskSize: 30GB
+  memory: 1GB
+  diskSize: 6GB
   image:
     oci: haiche/ubuntu-minconda
   ssh: path/your/id_rsa.pub
