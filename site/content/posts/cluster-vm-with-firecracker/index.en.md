@@ -28,7 +28,7 @@ Our project in [Jobhopin](https://jobhopin.com/) combines multiple languages (Ru
 ## Why not use containers image?
 
 Firstly I encourage the team to use Docker and docker-compose to code and debug projects but our team has both engineer and scientist members. The science team find it hard to debug in docker and took a lot of time for new members to learn and make use of docker's image.
-I wanted to mimic a real production machine that the member has root access to – wanted folks to be able to set sysctls, install new packages, make iptables rules, configure networking with ip, run perf, basically literally anything with strong isolation.
+Furthermore I wanted to mimic a real production machine that the member has root access to – wanted folks to be able to set sysctls, install new packages, make iptables rules, configure networking with ip, run perf, basically literally anything with strong isolation.
 
 ## Why not use virtual machine?
 
