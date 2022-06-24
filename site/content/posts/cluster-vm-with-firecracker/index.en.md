@@ -156,11 +156,42 @@ Welcome to Ubuntu 18.04.2 LTS (GNU/Linux 5.10.51 x86_64)
 root@3c5fa9a18682741f:~#
 ```
 
+### Secure bastion host
+
+Final wrapping with bastion host technique to fully secure ssh to VM host
+
+`~/.ssh/config`
+
+```apacheconf
+Host workstation
+    HostName 192.168.1.15
+    User haiche
+    IdentityFile ~/.ssh/id_rsa
+
+Host haiche-vm
+    HostName 172.17.0.3
+    ProxyJump workstation
+    User root
+    IdentityFile ~/.ssh/id_rsa
+```
+
+Add the config above to your ssh folder and run `ssh haiche-vm` to access VM host from your client
+
+{{< mermaid >}}
+
+graph LR
+    A[Client] -->|ssh| B{Workstation}
+    B -->|One| D[haiche-vm]
+    B -->|Two| E[other-vm]
+    B -->|...| N[n-vm]
+
+{{< /mermaid >}}
+
 ## How I extend container to reduce repeatable setup process
 
 After successfully creating VM, mostly I will install conda and some packages to run my project. But I don't want to repeatedly install conda and create a new environment each time I create VM. Here is my step to extend the base Ubuntu image and use it to create a better VM experience
 
-Dockerfile
+`Dockerfile`
 
 ```Docker
 FROM weaveworks/ignite-ubuntu
@@ -192,7 +223,7 @@ RUN which python && python -c "import fastapi"
 RUN conda init bash && echo "source activate haiche" >> ~/.bashrc
 ```
 
-minconda.yaml
+`miniconda-vm.yaml`
 
 ```yaml
 apiVersion: ignite.weave.works/v1alpha4
@@ -212,7 +243,7 @@ Here are some tricky parts, the current ignite doesn't support local docker imag
 To start a new VM
 
 ```bash
-$ sudo ignite run --config minconda.yaml
+$ sudo ignite run --config miniconda-vm.yaml
 ...
 INFO[0002] Created image with ID "cae0ac317cca74ba" and name "haiche/ubuntu-minconda" 
 INFO[0004] Created VM with ID "c1ab652804e664ed" and name "haiche-minconda-vm" 
