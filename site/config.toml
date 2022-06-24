@@ -381,12 +381,11 @@ enableEmoji = true
   [params.comment]
     enable = true
     [params.comment.remark42]
-      enable = true
+      enable = false
       host = "https://comments.upagge.ru"
       site = "documentation"
       locale = "en"
     # Disqus comment config (https://disqus.com/)
-    # Disqus 评论系统设置 (https://disqus.com/)
     [params.comment.disqus]
       enable = false
       # Disqus shortname to use Disqus in posts
@@ -599,10 +598,8 @@ enableEmoji = true
     # 页面 SEO 配置
     [params.page.seo]
       # image URL
-      # 图片 URL
-      images = []
+      images = ["/images/avatar.png"]
       # Publisher info
-      # 出版者信息
       [params.page.seo.publisher]
         name = "xxxx"
         logoUrl = "/images/avatar.png"
