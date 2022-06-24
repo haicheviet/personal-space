@@ -72,7 +72,7 @@ With Ignite, you pick an OCI-compliant image (Docker image) that you want to run
 
 Install ignite and start a fresh VM is very simple, there’s basically 3 steps:
 
-`Step 1`: Check your system is enable KVM and virtualization and install Ignite in here [Installing-guide](https://github.com/weaveworks/ignite/blob/main/docs/installation.md)
+`Step 1`: Check your system is enable KVM virtualization and install Ignite in here [Installing-guide](https://github.com/weaveworks/ignite/blob/main/docs/installation.md)
 
 ```bash
 $ ignite version
@@ -181,9 +181,9 @@ Add the config above to your ssh folder and run `ssh haiche-vm` to access VM hos
 
 graph LR
     A[Client] -->|ssh| B{Workstation}
-    B -->|One| D[haiche-vm]
-    B -->|Two| E[other-vm]
-    B -->|...| N[n-vm]
+    B -->|One| D[haiche1-vm]
+    B -->|Two| E[haiche2-vm]
+    B -->|...| N[other-vm]
 
 {{< /mermaid >}}
 
@@ -288,7 +288,7 @@ A few things still stuck in my mind with this approach:
 
 Here are some links I found useful when researching about Firecracker:
 
-* [How AWS Firecracker works: a deep dive](https://unixism.net/2019/10/how-aws-firecracker-works-a-deep-dive/) to demonstrates some of the concepts with a tiny version of Firecracker
+* [How AWS Firecracker works: a deep dive](https://unixism.net/2019/10/how-aws-firecracker-works-a-deep-dive/) that demonstrates some of the concepts with a tiny version of Firecracker
 
 * AWS Fargate and Lambda was back by [Firecracker serverless computing](https://aws.amazon.com/blogs/aws/firecracker-lightweight-virtualization-for-serverless-computing/)
 
