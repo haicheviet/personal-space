@@ -156,6 +156,8 @@ Welcome to Ubuntu 18.04.2 LTS (GNU/Linux 5.10.51 x86_64)
 root@3c5fa9a18682741f:~#
 ```
 
+### Secure bastion host
+
 Final wrapping with bastion host techinque to fully secure ssh to VM host
 
 `~/.ssh/config`
@@ -173,22 +175,16 @@ Host haiche-vm
     IdentityFile ~/.ssh/id_rsa
 ```
 
+Add the config above to your ssh folder and run `ssh haiche-vm` to access VM host from your client
+
 {{< mermaid >}}
 
-graph LR;
-    A[Client] -->| B(Workstation)
+graph LR
+    A[Client] -->|ssh| B{Workstation}
     B -->|One| D[haiche-vm]
     B -->|Two| E[other-vm]
-    B -->|N| N[n-vm]
+    B -->|...| N[n-vm]
 
-{{< /mermaid >}}
-
-{{< mermaid >}}
-graph LR;
-    A[Hard edge] -->|Link text| B(Round edge)
-    B --> C{Decision}
-    C -->|One| D[Result one]
-    C -->|Two| E[Result two]
 {{< /mermaid >}}
 
 ## How I extend container to reduce repeatable setup process
@@ -227,7 +223,7 @@ RUN which python && python -c "import fastapi"
 RUN conda init bash && echo "source activate haiche" >> ~/.bashrc
 ```
 
-`minconda.yaml`
+`miniconda-vm.yaml`
 
 ```yaml
 apiVersion: ignite.weave.works/v1alpha4
@@ -247,7 +243,7 @@ Here are some tricky parts, the current ignite doesn't support local docker imag
 To start a new VM
 
 ```bash
-$ sudo ignite run --config minconda.yaml
+$ sudo ignite run --config miniconda-vm.yaml
 ...
 INFO[0002] Created image with ID "cae0ac317cca74ba" and name "haiche/ubuntu-minconda" 
 INFO[0004] Created VM with ID "c1ab652804e664ed" and name "haiche-minconda-vm" 
