@@ -427,4 +427,13 @@ bash aws-init-task.sh
 
 ## Conclusion
 
-You learnt how to create a CloudFormation template which creates an ECS Fargate cluster and runs a Dockerized nginx application. Creating a stack, uploading a template, deleting the stack, etc. are powerfull tools and the complete configuration is under version control. Learning hot to create the template can take some effort. The AWS documentation provides a good resource for this, but besides that, you will find yourself googling for examples. Quite some AWS documentation is provided with examples, but some of them are not. Besides that, it is a great way for managing infrastructure.
+Congratulations! you have reached the end of the workshop. We covered a lot of ground learning how to apply EC2 Spot best practices such as diversification, as well as the use of capacity providers.
+
+In the session, we have:
+
+Deployed a CloudFormation Stack that prepared our environment, including our VPC and a Cloud9 environment.
+Created and configured an ECS cluster from the scratch.
+Created Auto Scaling Groups and Capacity Providers associated with them for OnDemand and Spot instances, and applied EC2 Spot Diversification srategies.
+Configured a Capacity provider strategy that mixes OnDemand and Spot
+Learned how ECS Cluster Scaling works with Capacity Providers
+Deployed Services both on Fargate Capacity Providers and EC2 Capacity providers
