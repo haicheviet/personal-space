@@ -383,9 +383,9 @@ The output of the above command should display a table as below.
 
 |       AZ        | CapacityProvider  | Instance  |    Status | TaskArn |
 |:---------------:|:-----------------:|:---------:|:---------:|---------|
-|  ap-southeast-1b|  FARGATE          |  None     |  RUNNING |  arn:aws:ecs:XXXXXXXX:task/cluster-fargate-demo-nginx-Cluster-1   |
-|  ap-southeast-1a|  FARGATE          |  None     |  RUNNING      |  arn:aws:ecs:XXXXXXXX:task/cluster-fargate-demo-nginx-Cluster-2   |
-|  ap-southeast-1b|  FARGATE_SPOT     |  None     |  RUNNING      |  arn:aws:ecs:XXXXXXXX:task/cluster-fargate-demo-nginx-Cluster-3   |
+|  ap-southeast-1b|  FARGATE          |  None     |  RUNNING |  arn:aws:ecs:XXXXXXXX:task/cluster-fargate-demo-nginx-Cluster/task-1   |
+|  ap-southeast-1a|  FARGATE          |  None     |  RUNNING      |  arn:aws:ecs:XXXXXXXX:task/cluster-fargate-demo-nginx-Cluster/task-2   |
+|  ap-southeast-1b|  FARGATE_SPOT     |  None     |  RUNNING      |  arn:aws:ecs:XXXXXXXX:task/cluster-fargate-demo-nginx-Cluster/task-3   |
 
 ## Cleanup
 
