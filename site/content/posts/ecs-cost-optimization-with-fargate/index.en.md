@@ -1,14 +1,14 @@
 ---
-title: "ECS Fargate With Cloudformation"
+title: "ECS Cost Optimization With Fargate"
 subtitle: ""
 date: 2022-06-25T16:57:12+07:00
 lastmod: 2022-06-25T16:57:12+07:00
-author: ""
 description: ""
 
 resources:
 - name: "featured-image"
   src: "featured-image.png"
+
 ---
 
 Deploying individual containers is not difficult. However, when you need to coordinate many container deployments, a container management tool like ECS can greatly simplify the task (no pun intended).
@@ -25,26 +25,26 @@ AWS Fargate is a technology that you can use with Amazon ECS to run containers w
 
 {{< /admonition >}}
 
-**Insert fargate.png**
+![Fargate Overview](fargate.png "Fargate Overview")
 
 ECS consists out of a few components:
 
-* Elastic Container Repository (ECR): A Docker repository to store your Docker images (similar as DockerHub but now provisioned by AWS).
 * Task Definition: ECS refers to a JSON formatted template called a Task Definition  that describes one or more containers making up your application or service. The task definition is the recipe that ECS uses to run your containers as a task on your EC2 instances or AWS Fargate.
 * ECS Cluster: The Cluster definition itself where you will specify how many instances you would like to have and how it should scale.
 * Service: Based on a Task Definition, you will deploy the container by means of a Service into your Cluster.
 
 You will create a Docker image for a basic Nginx applicaion, upload it to ECR, create a full working solution ECS cluster with autoscaling and capacity provider strategy for optimal cost
 
-*Insert design.png*
+![ECS Architecture](ecs-fargate-architecture.png "ECS Architecture")
 
-TLDRL The sources being used in this blog are available at [GitHub]().
+TLDR: The sources being used in this blog are available at [GitHub](https://github.com/haicheviet/blog-code/tree/main/ecs-cost%20optimization-with-fargate).
 
 ## Cloudforamtion IAC structure
 
 Our cloud formation was structure by these following components:
 
-* Description
+### Description
+
 The template Description enables you to provide arbitrary comments about your template. It is a literal variable string that is between 0 and 1024 bytes in length; its value cannot be based on a parameter or function.
 
 ```yaml
@@ -53,7 +53,7 @@ Description: 'VPC: public and private subnets in two availability zones'
 ..
 ```
 
-* Parameters and Metadata
+### Parameters and Metadata
 
 The optional Parameters section enables you to pass values into your template at stack creation time. Parameters let you create templates that can be customized for each stack deployment. When you create a stack from a template containing parameters, you can specify values for those parameters. Within the template, you can use the “Ref” intrinsic function to specify those parameter values in properties values for resources. For example, you can pass parameters in the AWS CLI or you can type the values in the AWS console while creating an instance.
 
@@ -77,7 +77,7 @@ Metadata:
       - ClassB
 ```
 
-* Resouce
+### Resouce
 
 In the Resources section you declare the AWS resources you want as part of your stack. Each resource must have a logical name unique within the template. This is the name you use elsewhere in the template as a dereference argument. Because constraints on the names of resources vary by service, all resource logical names must be alphanumeric [a-zA-Z0-9] only. You must specify the type for each resource. Type names are fixed according to those listed in [Resource Property Types](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html) reference on the AWS website. If a resource does not require any properties to be declared, you can omit the Properties section of that resource.
 
@@ -95,9 +95,9 @@ Resources:
         Value: !Sub '10.${ClassB}.0.0/16'
 ```
 
-* Outputs
+### Outputs
 
-The optional Outputs section declares output values that you can import into other stacks (to create cross-stack references), return in response (to describe stack calls), or view on the AWS CloudFormation console. For example, you can output the S3 bucket name for a stack to make the bucket easier to find.
+The optional **Outputs section** declares output values that you can import into other stacks (to create cross-stack references), return in response (to describe stack calls), or view on the AWS CloudFormation console. For example, you can output the S3 bucket name for a stack to make the bucket easier to find.
 
 ```yaml
 Outputs:
@@ -119,13 +119,13 @@ To create private image ECR is somewhat simple, you can follwing [this guide](ht
 
 A VPC is a virtual network inside AWS where you can isolate your workload. A VPC consists of several subnets. Each subnet is bound to an Availability Zone. A **public** subnet has a direct route to/from the Internet. As long as your service have an public IPv4/IPv6 address, they **can communicate (in and out) with the Internet**. A private subnet does not have a IPv4 route to/from the Internet but an Ipv6 route to the Internet exists. Service in **private** subnets can not be accessed from the public Internet. If you want to access the Internet from a private subnet, you need to create a NAT gateway/instance or assign an IPv6 address. You can deploy a bastion host/instance to reduce the attack surface of internal applications.
 
-*Insert image vpc-2azs.png*
+![VPC-2azs](vpc-2azs.png "VPC 2azs")
 
 ### Client Security Group network
 
 Some data stores are integrated into the VPC, others are only accessible via the AWS API. For VPC integration, you have to create a Client Security Group stack. The stack is used as a parent stack for security group ElastiCache, Elasticsearch, and RDS. To expand communicate with the data store from a EC2 instance, you have to attach the Client Security Group to the EC2 instance. The Security Group does not have any rules, but it marks traffic. The marked traffic is then allowed to enter the data store.
 
-**Insert image target-group.png**
+![target-group](target-group.png "Security best practices")
 
 With this appoarch, we can well seperace concern and security our app. Only service that subscribers to our client sg can communicate in cluster stack.
 
@@ -159,14 +159,11 @@ aws cloudformation deploy \
 
 The cloudformation stack can be display in CloudFormation and navigate to &*Stack section**. In the Events tab of the stack, the progress of creating the stack can be followed.
 
-*Insert image progress.png*
+![progress](progress.png "Cloudformation progress")
 
 ### Outputs
 
-These stack return:
-
 * VPC with public and private subnets in two availability zones
-
 * Client security group
 
 ## Add ECS cluster and load balancer
@@ -262,17 +259,15 @@ aws cloudformation deploy \
 
 ### Outputs
 
-These stack return:
-
 * ECS cluster with enable both fargate spot and on-demand provider
-
 * Dedicate load balancer for this specific cluster
-
 * HTTP/HTTPS ALB
-
 * Logging to s3 (*Optional*)
-
 * CloudWatch alarm 5xx and maximum number of connections (*Optional*)
+
+![ecs-cluster](ecs-cluster.png "ECS cluster")
+
+The red retangle is domain dns for our application that will be used in task definition
 
 ## Task definitions
 
@@ -354,7 +349,6 @@ aws cloudformation deploy \
         ParentClientStack1=client-$APP_ENV-$PROJECT_NAME \
         AppEnvironment1Value=$APP_ENV \
         AppImage=$APP_IMAGE \
-        Spot=true \
         AutoScaling=true \
         Cpu=0.25 \
         Memory=0.5 \
@@ -364,7 +358,7 @@ aws cloudformation deploy \
 
 ### Outputs
 
-These stack return:
+{{< admonition >}}
 
 * ECS task with nginx image
 
@@ -372,18 +366,26 @@ These stack return:
 
 * Autoscaling group and healthcheck
 
-Navigate to the cluster-stack, retrieve the public IP in Output section and verify whether the containers can be reached and return their host IP and a welcome message
+{{< /admonition >}}
 
+Navigate to the cluster-stack, retrieve the public IP in Output section and verify whether the containers can be reached and return their host IP and a welcome message
 
 ```bash
 aws ecs describe-tasks \
---tasks $(aws ecs list-tasks --cluster EcsSpotWorkshop \
---service-name fargate-service-split --query taskArns[*] --output text) \
---cluster $cluster_name \
+--tasks $(aws ecs list-tasks --cluster $CLUSTER_NAME --query taskArns[*] --output text) \
+--cluster $CLUSTER_NAME \
 --query 'sort_by(tasks,&capacityProviderName)[*].{TaskArn:taskArn,CapacityProvider:capacityProviderName,Instance:containerInstanceArn,AZ:availabilityZone,Status:lastStatus}' \
 --output table
 
 ```
+
+The output of the above command should display a table as below.
+
+|       AZ        | CapacityProvider  | Instance  |    Status | TaskArn |
+|:---------------:|:-----------------:|:---------:|:---------:|---------|
+|  ap-southeast-1b|  FARGATE          |  None     |  RUNNING |  arn:aws:ecs:XXXXXXXX:task/cluster-fargate-demo-nginx-Cluster-1   |
+|  ap-southeast-1a|  FARGATE          |  None     |  RUNNING      |  arn:aws:ecs:XXXXXXXX:task/cluster-fargate-demo-nginx-Cluster-2   |
+|  ap-southeast-1b|  FARGATE_SPOT     |  None     |  RUNNING      |  arn:aws:ecs:XXXXXXXX:task/cluster-fargate-demo-nginx-Cluster-3   |
 
 ## Cleanup
 
@@ -421,9 +423,9 @@ bash aws-init-task.sh
 
 `Step 5`: Verify ecs stack working
 
-*Insert task running ecs.png*
+![ECS task running](task-running-ecs.png "ECS task running")
 
-*Insert healthcheck.png*
+![Nginx succeed](alb-succeed.png "Nginx succeed")
 
 ## Conclusion
 

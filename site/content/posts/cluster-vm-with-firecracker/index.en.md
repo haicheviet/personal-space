@@ -1,5 +1,4 @@
 ---
-weight: 5
 title: "Cluster VMs with Firecracker"
 date: 2022-06-23T21:57:40+08:00
 lastmod: 2022-06-23T16:45:40+08:00
