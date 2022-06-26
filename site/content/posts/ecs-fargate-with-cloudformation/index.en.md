@@ -374,6 +374,17 @@ These stack return:
 
 Navigate to the cluster-stack, retrieve the public IP in Output section and verify whether the containers can be reached and return their host IP and a welcome message
 
+
+```bash
+aws ecs describe-tasks \
+--tasks $(aws ecs list-tasks --cluster EcsSpotWorkshop \
+--service-name fargate-service-split --query taskArns[*] --output text) \
+--cluster $cluster_name \
+--query 'sort_by(tasks,&capacityProviderName)[*].{TaskArn:taskArn,CapacityProvider:capacityProviderName,Instance:containerInstanceArn,AZ:availabilityZone,Status:lastStatus}' \
+--output table
+
+```
+
 ## Cleanup
 
 Cleaning up the resources is fairly easy now. Navigate to the Stack and click the Delete button. The progress of deletion can be tracked in the Events tab. This will take some minutes, but the good news is, that no manual deletion of resources must be done. Everything which has been created with the template is automatically removed.
