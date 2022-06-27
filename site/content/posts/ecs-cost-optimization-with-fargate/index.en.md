@@ -201,7 +201,7 @@ The Cloudformation stack can be displayed in CloudFormation and navigate to the 
 
 ### ECS cluster
 
-This file starts from the [cluster-fargate.yml](https://github.com/haicheviet/blog-code/blob/main/ecs-cost%20optimization-with-fargate/aws/cluster-fargate.yml) file where you will add the cluster configuration.
+This file starts from the [cluster-fargate.yml](https://github.com/haicheviet/blog-code/blob/main/ecs-cost%20optimization-with-fargate/aws/cluster-fargate.yml) file where you will add the cluster and ALB configuration.
 
 ```yaml
 Resources:
@@ -222,6 +222,19 @@ The ALB configuration requires the configuration of the subnets to use. We will 
 ![ALB-ECS](alb-visualize.png "ALB log store")
 
 ```yaml
+Parameters:
+  LoadBalancerCertificateArn:
+    Description: 'Optional Amazon Resource Name (ARN) of the certificate to associate with the load balancer. If set, HTTP requests are redirected to HTTPS.'
+    Type: String
+    Default: ''
+  LoadBalancerIdleTimeout:
+    Description: 'The idle timeout value, in seconds.'
+    Type: Number
+    Default: 60
+    MinValue: 1
+    MaxValue: 4000
+  ...
+Resources:
   LoadBalancer:
     Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
     Properties:
@@ -313,6 +326,31 @@ The red rectangle is domain DNS for our application that will be used in task de
 Configure task and ECS service in Cloudformation with mix provider strategy.
 
 ```yaml
+Parameters:
+  DesiredCount:
+    Description: "The number of simultaneous tasks, that you want to run on the cluster."
+    Type: Number
+    Default: 2
+    ConstraintDescription: "Must be >= 1"
+    MinValue: 1
+  MaxCapacity:
+    Description: "The maximum number of simultaneous tasks, that you want to run on the cluster."
+    Type: Number
+    Default: 4
+    ConstraintDescription: "Must be >= 1"
+    MinValue: 1
+  MinCapacity:
+    Description: "The minimum number of simultaneous tasks, that you want to run on the cluster."
+    Type: Number
+    Default: 2
+    ConstraintDescription: "Must be >= 1"
+    MinValue: 1
+  AutoScaling:
+    Description: "Scale number of tasks based on CPU load?"
+    Type: String
+    Default: "true"
+    AllowedValues: ["true", "false"]
+...
 Resources:
   TaskDefinition:
     Type: 'AWS::ECS::TaskDefinition'
@@ -470,6 +508,8 @@ Verify ECS stack working.
 
 Congratulations! you have reached the end of the blog. We covered a lot of ground learning how to apply ECS Fargate Spot best practices such as diversification, as well as the use of capacity providers.
 
+{{< admonition info >}}
+
 In the blog, we have covered:
 
 * Deployed a CloudFormation Stack that prepared our environment, including our VPC and a Client-SG environment.
@@ -477,6 +517,9 @@ In the blog, we have covered:
 * Created Auto Scaling Groups and Capacity Providers associated with them for OnDemand and Spot.
 * Configured a Capacity provider strategy that mixes OnDemand and Spot.
 * Learned how ECS Cluster Scaling works with Capacity Providers.
+
+{{< /admonition >}}
+
 
 ## Some afterthought
 
