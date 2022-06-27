@@ -7,7 +7,7 @@ resources:
 - name: "featured-image"
   src: "featured-image.png"
 
-tags: ["Firecracker", "Container", "Qemu", "Ignite"]
+tags: ["Firecracker", "Container", "QEMU", "Ignite"]
 categories: ["Container"]
 
 
@@ -281,7 +281,8 @@ A few things still stuck in my mind with this approach:
 
 * I don’t know if it’s possible to run graphical applications in Firecracker yet
 
-* Firecracker with Kubernetes is a new thing but I don't find it appealing cause using Pod to group containers is already fast and secure. Some people gave me this useful thread discuss about [Why aren’t they compatible yet](https://twitter.com/micahhausler/status/1238496944684597248?lang=en)
+* Firecracker with Kubernetes is a new thing but I don't find it appealing cause using Pod to group containers is already fast and secure. Some people gave me this useful thread discuss about why aren’t they compatible yet
+{{< tweet 1238496944684597248 >}}
 
 Here are some links I found useful when researching about Firecracker:
 

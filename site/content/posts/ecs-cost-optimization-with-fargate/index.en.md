@@ -3,61 +3,93 @@ title: "ECS Cost Optimization With Fargate"
 subtitle: ""
 date: 2022-06-25T16:57:12+07:00
 lastmod: 2022-06-25T16:57:12+07:00
-description: ""
+description: "This article shows how to create an optimal cost ECS cluster."
 
 resources:
 - name: "featured-image"
   src: "featured-image.png"
 
+tags: ["ECS", "AWS", "Fargate", "Cloudformation", "IAC"]
+categories: ["AWS"]
+
 ---
 
 Deploying individual containers is not difficult. However, when you need to coordinate many container deployments, a container management tool like ECS can greatly simplify the task (no pun intended).
 
-For serverless approach, the best combination recipe for ECS cluster is AWS on-demnd and spot Fargate. The blog will describe how we can deploy ECS cluster by infrastructure as code (IAC) with optimal cost
+For serverless approach, the best combination recipe for ECS cluster is AWS OnDemand and spot Fargate. The blog will describe how we can deploy ECS cluster by infrastructure as code (IAC) with optimal cost.
 
 <!--more-->
 
+{{< admonition note >}}
+
+**Disclaimer**, The blog is strongly inspired by the beautiful template in [widdix cloudformation](https://github.com/widdix/aws-cf-templates). If you find this blog is useful, consider give a start the origin GitHub.
+
+{{< /admonition >}}
+
 ## Introduction
 
-{{< admonition >}}
+ECS consists of a few components:
 
-AWS Fargate is a technology that you can use with Amazon ECS to run containers without having to manage servers or clusters of Amazon EC2 instances. With Fargate, you no longer have to provision, configure, or scale clusters of virtual machines to run containers. This removes the need to choose server types, decide when to scale your clusters, or optimize cluster packing. [Ref](https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html)
+* ECS Cluster: The Cluster definition itself where you will specify how many instances you would like to have and how it should scale.
+* Task Definition: ECS refers to a JSON formatted template called a Task Definition that describes one or more containers making up your application or service. The task definition is the recipe that ECS uses to run your containers as a task on your EC2 instances or AWS Fargate.
+* Service: Based on a Task Definition, is used to guarantee that you always have some number of Tasks running at all times. A Service is responsible for creating Tasks.
+
+From this blog, you will be using Docker Nginx to create a fully working solution ECS cluster with autoscaling and capacity provider strategy that mixes OnDemand and Spot for optimal cost.
+
+![ECS Architecture](ecs-fargate-architecture.png "ECS Architecture")
+
+**TL;DR:** The sources being used in this blog are available at [GitHub](https://github.com/haicheviet/blog-code/tree/main/ecs-cost-optimization-with-fargate).
+
+## Fargate OnDemand vs Spot
+
+{{< admonition abstract >}}
+
+AWS Fargate is a technology that you can use with Amazon ECS to run containers without having to manage servers or clusters of Amazon EC2 instances. With Fargate, you no longer have to provision, configure, or scale clusters of virtual machines to run containers. This removes the need to choose server types, decide when to scale your clusters or optimize cluster packing. [Ref](https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html).
 
 {{< /admonition >}}
 
 ![Fargate Overview](fargate.png "Fargate Overview")
 
-ECS consists out of a few components:
+Moreover Fargate Spot allows you to deploy your containers as you would normally in Fargate, but benefit from savings since your containers will be running on spare AWS capacity. Below is the comparation between Fargate OnDemand vs spot in *eu-west-1 region* [Ref](https://tomgregory.com/aws-fargate-spot-vs-fargate-price-comparison/).
 
-* Task Definition: ECS refers to a JSON formatted template called a Task Definition  that describes one or more containers making up your application or service. The task definition is the recipe that ECS uses to run your containers as a task on your EC2 instances or AWS Fargate.
-* ECS Cluster: The Cluster definition itself where you will specify how many instances you would like to have and how it should scale.
-* Service: Based on a Task Definition, you will deploy the container by means of a Service into your Cluster.
+{{< admonition quote >}}
 
-You will create a Docker image for a basic Nginx applicaion, upload it to ECR, create a full working solution ECS cluster with autoscaling and capacity provider strategy for optimal cost
+|     |Fargate|Fargate Spot|Fargate Spot saving|
+|:---:|:-----:|:----------:|:-----------------:|
+|CPU  |$0.04048|$0.01334053|67%|
+|Memory|$0.004445|$0.00146489|67%|
 
-![ECS Architecture](ecs-fargate-architecture.png "ECS Architecture")
+> Cost example: a 0.25 vCPU and 0.5 GB Fargate container running for 24 hours would cost **$0.29622** (calculated as 0.04048 \* 0.25 \* 24 + 0.004445 \* 0.5 \* 24).
 
-TLDR: The sources being used in this blog are available at [GitHub](https://github.com/haicheviet/blog-code/tree/main/ecs-cost%20optimization-with-fargate).
+> Cost example: a 0.25 vCPU and 0.5 GB Fargate Spot container running for 24 hours would cost **$0.09762186** (calculated as 0.01334053 \* 0.25 \* 24 + 0.00146489 \* 0.5 \* 24).
+
+{{< /admonition >}}
 
 ## Cloudforamtion IAC structure
 
-Our cloud formation was structure by these following components:
+Our Cloudformation code was structure by these following components:
 
-### Description
+### Description and Metadata
 
 The template Description enables you to provide arbitrary comments about your template. It is a literal variable string that is between 0 and 1024 bytes in length; its value cannot be based on a parameter or function.
+
+You can use the optional Metadata section to include arbitrary JSON or YAML objects that provide details about the template.
 
 ```yaml
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'VPC: public and private subnets in two availability zones'
-..
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+    - Label:
+        default: 'VPC Parameters'
+      Parameters:
+      - ClassB
 ```
 
-### Parameters and Metadata
+### Parameters
 
-The optional Parameters section enables you to pass values into your template at stack creation time. Parameters let you create templates that can be customized for each stack deployment. When you create a stack from a template containing parameters, you can specify values for those parameters. Within the template, you can use the “Ref” intrinsic function to specify those parameter values in properties values for resources. For example, you can pass parameters in the AWS CLI or you can type the values in the AWS console while creating an instance.
-
-You can use the optional Metadata section to include arbitrary JSON or YAML objects that provide details about the template. For example, you can include template implementation details about specific resources, as shown in the following snippet:
+Use the **optional Parameters** section to customize your templates. Parameters enable you to input custom values to your template each time you create or update a stack. For example, you can pass parameters in the AWS CLI or you can type the values in the AWS console while creating an instance.
 
 ```yaml
 Parameters:
@@ -68,18 +100,11 @@ Parameters:
     ConstraintDescription: 'Must be in the range [0-255]'
     MinValue: 0
     MaxValue: 255
-Metadata:
-  'AWS::CloudFormation::Interface':
-    ParameterGroups:
-    - Label:
-        default: 'VPC Parameters'
-      Parameters:
-      - ClassB
 ```
 
 ### Resouce
 
-In the Resources section you declare the AWS resources you want as part of your stack. Each resource must have a logical name unique within the template. This is the name you use elsewhere in the template as a dereference argument. Because constraints on the names of resources vary by service, all resource logical names must be alphanumeric [a-zA-Z0-9] only. You must specify the type for each resource. Type names are fixed according to those listed in [Resource Property Types](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html) reference on the AWS website. If a resource does not require any properties to be declared, you can omit the Properties section of that resource.
+In the **Resources section**, you declare the AWS resources you want as part of your stack. Each resource must have a logical name unique within the template. This is the name you use elsewhere in the template as a dereference argument. Because constraints on the names of resources vary by service, all resource logical names must be alphanumeric **[a-zA-Z0-9]** only. You must specify the type for each resource. Type names are fixed according to those listed in [Resource Property Types](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html) reference on the AWS website. If a resource does not require any properties to be declared, you can omit the Properties section of that resource.
 
 ```yaml
 Resources:
@@ -97,7 +122,7 @@ Resources:
 
 ### Outputs
 
-The optional **Outputs section** declares output values that you can import into other stacks (to create cross-stack references), return in response (to describe stack calls), or view on the AWS CloudFormation console. For example, you can output the S3 bucket name for a stack to make the bucket easier to find.
+The optional **Outputs section** declares output values that you can import into other stacks (to create cross-stack references), return in response (to describe stack calls) or view on the AWS CloudFormation console. For example, you can output the S3 bucket name for a stack to make the bucket easier to find.
 
 ```yaml
 Outputs:
@@ -110,10 +135,10 @@ Outputs:
 
 ## Image registry
 
-ECS support both public image and private image [ECR](https://aws.amazon.com/ecr/). For simplicity, we will use public registry [nginx](https://hub.docker.com/_/nginx).
-To create private image ECR is somewhat simple, you can follwing [this guide](https://www.youtube.com/watch?v=Brm21SWac-I) to create private repositories
+ECS supports both public image and private image [ECR](https://aws.amazon.com/ecr/). For simplicity, we will use the public registry [nginx](https://hub.docker.com/_/nginx) for our main image.
+To create a private image ECR is somehow simple, you can following [this guide](https://www.youtube.com/watch?v=Brm21SWac-I) to create private repositories.
 
-## Create VPC and Client-sg network
+## VPC and Client-sg network
 
 ### VPC network
 
@@ -123,13 +148,13 @@ A VPC is a virtual network inside AWS where you can isolate your workload. A VPC
 
 ### Client Security Group network
 
-Some data stores are integrated into the VPC, others are only accessible via the AWS API. For VPC integration, you have to create a Client Security Group stack. The stack is used as a parent stack for security group ElastiCache, Elasticsearch, and RDS. To expand communicate with the data store from a EC2 instance, you have to attach the Client Security Group to the EC2 instance. The Security Group does not have any rules, but it marks traffic. The marked traffic is then allowed to enter the data store.
+Some data stores are integrated into the VPC, others are only accessible via the AWS API. For VPC integration, you have to create a Client Security Group stack. The stack is used as a parent stack for security groups ElastiCache, Elasticsearch, and RDS. To expand communication with the data store from an EC2 instance, you have to attach the Client Security Group to the EC2 instance. The Security Group does not have any rules, but it marks traffic. The marked traffic is then allowed to enter the data store.
 
 ![target-group](target-group.png "Security best practices")
 
-With this appoarch, we can well seperace concern and security our app. Only service that subscribers to our client sg can communicate in cluster stack.
+With this appoarch, we can well [separate of concerns](https://en.wikipedia.org/wiki/Separation_of_concerns) and security our app. Only service that subscribers to our client sg can communicate in cluster stack.
 
-The aws vpc and client security group yaml can find in github repo, below is bash cli to run these stack
+The full template file is in GitHub repo [vpc-2azs.yml](https://github.com/haicheviet/blog-code/blob/main/ecs-cost%20optimization-with-fargate/aws/vpc-2azs.yml) and [client-sg.yml](https://github.com/haicheviet/blog-code/blob/main/ecs-cost%20optimization-with-fargate/aws/client-sg.yml), below is bash CLI to run these stack.
 
 `bash aws-init-vpc.sh`
 
@@ -157,20 +182,26 @@ aws cloudformation deploy \
     --tags $PROJECT_NAME-$APP_ENV-cluster=client
 ```
 
-The cloudformation stack can be display in CloudFormation and navigate to &*Stack section**. In the Events tab of the stack, the progress of creating the stack can be followed.
+The Cloudformation stack can be displayed in CloudFormation and navigate to the **Stack section**. In the **Events tab** of the stack, the progress of creating the stack can be followed.
 
 ![progress](progress.png "Cloudformation progress")
 
 ### Outputs
 
-* VPC with public and private subnets in two availability zones
-* Client security group
+{{< admonition success >}}
 
-## Add ECS cluster and load balancer
+* VPC with public and private subnets in two availability zones.
+* Internet Gateway.
+* Route tables and Network ACLs.
+* Client security group.
+
+{{< /admonition >}}
+
+## ECS cluster and Load Balancer
 
 ### ECS cluster
 
-This file starts from the template_task_definition.yaml file where you will add the cluster configuration. The official AWS documentation for creating the ECS Cluster will be the main source of information.
+This file starts from the [cluster-fargate.yml](https://github.com/haicheviet/blog-code/blob/main/ecs-cost%20optimization-with-fargate/aws/cluster-fargate.yml) file where you will add the cluster configuration.
 
 ```yaml
 Resources:
@@ -186,7 +217,9 @@ Resources:
 
 ### Application load balancer (ALB)
 
-The ALB configuration requires the configuration of the subnets to use. We will define ALB with enable both http/https and logging
+The ALB configuration requires the configuration of the subnets to use. We will define ALB with enable both HTTP/HTTPS and S3 logging.
+
+![ALB-ECS](alb-visualize.png "ALB log store")
 
 ```yaml
   LoadBalancer:
@@ -238,9 +271,9 @@ The ALB configuration requires the configuration of the subnets to use. We will 
 ...
 ```
 
-To start ecs cluster stack, run the below command
+To start ecs cluster stack, run the below command.
 
-`aws-init-cluster.sh`
+`bash aws-init-cluster.sh`
 
 ```bash
 PROJECT_NAME=${PROJECT_NAME?Variable not set}
@@ -259,20 +292,25 @@ aws cloudformation deploy \
 
 ### Outputs
 
-* ECS cluster with enable both fargate spot and on-demand provider
-* Dedicate load balancer for this specific cluster
-* HTTP/HTTPS ALB
-* Logging to s3 (*Optional*)
-* CloudWatch alarm 5xx and maximum number of connections (*Optional*)
+{{< admonition success >}}
+
+* ECS cluster with enabling both Fargate OnDemand and Spot provider.
+* Dedicate load balancer for this specific cluster.
+* HTTP/HTTPS ALB.
+* Logging to s3 (*Optional*).
+* CloudWatch alarm 5xx and maximum number of connections (*Optional*).
+
+{{< / admonition  >}}
 
 ![ecs-cluster](ecs-cluster.png "ECS cluster")
 
-The red retangle is domain dns for our application that will be used in task definition
+The red rectangle is domain DNS for our application that will be used in task definition.
 
-## Task definitions
+## Task Definitions and Autoscaling
 
-Configure task and ecs service in cloudformation.
- Set the property RequiresCompatibilities to FARGATE because of course you will run the task in a Fargate cluster.
+### Task Definitions
+
+Configure task and ECS service in Cloudformation with mix provider strategy.
 
 ```yaml
 Resources:
@@ -282,7 +320,6 @@ Resources:
       ContainerDefinitions:
       - Name: app
         Image: !Ref AppImage
-        Command: !If [HasAppCommand, !Split [',', !Ref AppCommand], !Ref 'AWS::NoValue']
         PortMappings:
         - ContainerPort: !Ref AppPort
           Protocol: tcp
@@ -290,7 +327,7 @@ Resources:
       # Define resource
       Cpu: !FindInMap [CpuMap, !Ref Cpu, Cpu]
       Memory: !FindInMap [MemoryMap, !Ref Memory, Memory]
-      NetworkMode: awsvpc
+      NetworkMode: awsvpc # simplifies container networking
       RequiresCompatibilities: [FARGATE]
       ...
   Service:
@@ -313,7 +350,17 @@ Resources:
           Rollback: true
       TaskDefinition: !Ref TaskDefinition
       HealthCheckGracePeriodSeconds: !Ref HealthCheckGracePeriod
-      ...
+...
+```
+
+### Autoscaling
+
+You can increase or decrease your desired task count by integrating Amazon ECS on Fargate with Amazon CloudWatch alarms and Application Auto Scaling. Then, you can use CloudWatch metrics to configure your CloudWatch alarms and only scale if CPU utilization higher/lower than certain threshold.
+
+![Autoscaling-cluster](autoscaling.jpeg "Autoscaling node")
+
+```yaml
+Resources:
   ScalableTarget:
     Condition: HasAutoScaling
     Type: 'AWS::ApplicationAutoScaling::ScalableTarget'
@@ -321,15 +368,12 @@ Resources:
       MaxCapacity: !Ref MaxCapacity
       MinCapacity: !Ref MinCapacity
       ResourceId: !Sub
-      - 'service/${Cluster}/${Service}'
-      - Cluster: {'Fn::ImportValue': !Sub '${ParentClusterStack}-Cluster'}
-        Service: !GetAtt 'Service.Name'
-      RoleARN: !GetAtt 'ScalableTargetRole.Arn'
       ScalableDimension: 'ecs:service:DesiredCount'
       ServiceNamespace: ecs
+...
 ```
 
-To start ecs service, run the below command
+To start ecs service, run the below command with [app-demo.yml](https://github.com/haicheviet/blog-code/blob/main/ecs-cost%20optimization-with-fargate/aws/task-definition/app-production.yml).
 
 `bash aws-init-task.sh`
 
@@ -358,17 +402,21 @@ aws cloudformation deploy \
 
 ### Outputs
 
-{{< admonition >}}
+{{< admonition success >}}
 
-* ECS task with nginx image
+* ECS task with nginx image.
 
-* Fargate task with strategy `2(on-demand): 1(on-spot)`, task running should be `n+1` for [voting policy](https://www.continuent.com/resources/blog/why-does-mysql-mariadb-cluster-require-odd-number-nodes)
+* Fargate task with strategy `2(OnDemand): 1(Spot)`, task running should be `n+1` for [voting policy](https://www.continuent.com/resources/blog/why-does-mysql-mariadb-cluster-require-odd-number-nodes)
 
-* Autoscaling group and healthcheck
+* Autoscaling group and healthcheck.
 
 {{< /admonition >}}
 
-Navigate to the cluster-stack, retrieve the public IP in Output section and verify whether the containers can be reached and return their host IP and a welcome message
+Navigate to the cluster-stack, retrieve the public DNS in **Output section** and verify whether the containers can be reached and a welcome message from Nginx.
+
+![Nginx succeed](alb-succeed.png "Nginx succeed")
+
+We can run the following command to see how tasks spread across capacity providers.
 
 ```bash
 aws ecs describe-tasks \
@@ -389,53 +437,49 @@ The output of the above command should display a table as below.
 
 ## Cleanup
 
-Cleaning up the resources is fairly easy now. Navigate to the Stack and click the Delete button. The progress of deletion can be tracked in the Events tab. This will take some minutes, but the good news is, that no manual deletion of resources must be done. Everything which has been created with the template is automatically removed.
+Cleaning up the resources is fairly easy now. Navigate to the **Stack** and click the **Delete button**. The progress of deletion can be tracked in the **Events tab**. This will take some minutes, but the good news is, that no manual deletion of resources must be done. Everything which has been created with the template is automatically removed.
 
-## Summary
+## TL;DR
 
 The ecs cluster can be shortly describe with these step:
 
-`Step 1`: Export all the needed enviroment
+`Step 1`: Export all the needed enviroment.
 
 ```bash
+git clone https://github.com/haicheviet/blog-code.git
+cd blog-code/ecs-cost-optimization-with-fargate
+
+# Export all the needed enviroment
 export APP_ENV=demo
 export PROJECT_NAME=nginx
 export APP_IMAGE=nginx:latest
-```
 
-`Step 2`: Create VPC and Client-sg stack
-
-```bash
+# VPC and Client-sg stack
 bash aws-init-vpc.sh
-```
 
-`Step 3`: Create ECS cluster stack
-
-```bash
+# ECS cluster stack
 bash aws-init-cluster.sh
-```
 
-`Step 4`: Create ECS service stack
-
-```bash
+# ECS service stack
 bash aws-init-task.sh
 ```
 
-`Step 5`: Verify ecs stack working
+Verify ECS stack working.
 
 ![ECS task running](task-running-ecs.png "ECS task running")
 
-![Nginx succeed](alb-succeed.png "Nginx succeed")
+Congratulations! you have reached the end of the blog. We covered a lot of ground learning how to apply ECS Fargate Spot best practices such as diversification, as well as the use of capacity providers.
 
-## Conclusion
+In the blog, we have covered:
 
-Congratulations! you have reached the end of the workshop. We covered a lot of ground learning how to apply EC2 Spot best practices such as diversification, as well as the use of capacity providers.
+* Deployed a CloudFormation Stack that prepared our environment, including our VPC and a Client-SG environment.
+* Created and configured an ECS cluster with ALB.
+* Created Auto Scaling Groups and Capacity Providers associated with them for OnDemand and Spot.
+* Configured a Capacity provider strategy that mixes OnDemand and Spot.
+* Learned how ECS Cluster Scaling works with Capacity Providers.
 
-In the session, we have:
+## Some afterthought
 
-Deployed a CloudFormation Stack that prepared our environment, including our VPC and a Cloud9 environment.
-Created and configured an ECS cluster from the scratch.
-Created Auto Scaling Groups and Capacity Providers associated with them for OnDemand and Spot instances, and applied EC2 Spot Diversification srategies.
-Configured a Capacity provider strategy that mixes OnDemand and Spot
-Learned how ECS Cluster Scaling works with Capacity Providers
-Deployed Services both on Fargate Capacity Providers and EC2 Capacity providers
+* Fargate Spot is configured automatically to capture Spot Interruptions and set the task in **DRAINING** mode, a **SITERM** is sent to the task and containers and the application. That's why the service application have to be handle graceful timeout, if you should use gunicorn like me, here is the [link](https://docs.gunicorn.org/en/stable/settings.html?highlight=graceful#graceful-timeout) to configure deployment option.
+* Choosing Fargate task sizes sometimes is tricky, you have to monitor your application's usual usage and should set memory tasks always below 75% utilization to get the best performance [Ref](https://nathanpeck.com/amazon-ecs-scaling-best-practices/).
+* The combined technique ECS-Fargate is so great and cost-effective that making k8s is too complicated for small-medium team size.
