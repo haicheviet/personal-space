@@ -13,8 +13,8 @@ categories: ["Container"]
 
 ---
 
-Recently I was asked to join the recruitment process and onboarding of new members. As the team and our project grow both in size and complexity, our document to hand on projects is complicated and only work in certain operating system.
-So to make sure the onboarding process is fast and reproducible, I have to come up with a new plan to create an isolate enviroment for coding and less learning curve as possible.
+Gần đây, mình được yêu cầu tham gia vào quá trình tuyển dụng và onboarding bạn mới. Khi team và dự án phát triển cả về quy mô và độ phức tạp, tài liệu để chuyển giao giữa các dự án cũng càng thêm phức tạp và chỉ hoạt động trong một số hệ điều hành nhất định.
+Vì vậy, để đảm bảo quá trình tích hợp diễn ra nhanh chóng và có thể sử dụng lại, mình phải đưa ra một hướng mới để tạo ra một môi trường cô lập và đơn giản nhất có thể.
 
 <!--more-->
 
@@ -22,27 +22,27 @@ So to make sure the onboarding process is fast and reproducible, I have to come 
 
 > An isolate enviroment where every member get their own resource and custom preinstall package
 
-Our project in [Jobhopin](https://jobhopin.com/) combines multiple languages (Rust, Python, ...) and the process of creating virtualenv is quite tedious with multiple attempts to make it work. Usually, It took 2-3 weeks for newcomers to learn about our current projects and work effectively
+Dự án hiện tại ở cty [Jobhopin](https://jobhopin.com/) mình đang làm  kết hợp nhiều ngôn ngữ như (Rust, Python, ...) và quá trình dựng virtualenv khá dài dòng với phải thử nhiều cách mới chạy được ở máy của bạn mới. Thông thường thì người mới phải mất đến 2-3 tuần để tìm hiểu về các dự án hiện tại của và làm việc một cách hiệu quả
 
 ## Why not use containers image?
 
-Firstly I encourage the team to use Docker and docker-compose to code and debug projects but our team has both engineer and scientist members. The science team find it hard to debug in docker and took a lot of time for new members to learn and make use of docker's image.
-Furthermore I wanted to mimic a real production machine that the member has root access to – wanted folks to be able to set sysctls, install new packages, make iptables rules, configure networking with ip, run perf, basically literally anything with strong isolation.
+Bước đầu, mình khuyến khích team sử dụng Docker và docker-compose để code và debug project nhưng AI team thường có cả thành viên là engineer và data scientist. Team data scientist cảm thấy khó debug trong docker và mất rất nhiều thời gian để các thành viên mới tìm hiểu và sử dụng docker's image.
+Hơn nữa, tôi muốn tạo một máy ảo (VM) thực sự mà thành viên có quyền truy cập root - mọi người có thể thiết lập sysctls, cài đặt gói mới, tạo quy tắc iptables, cấu hình mạng bằng ip, chạy perf, về cơ bản là bất cứ thứ gì có họ có thể làm như trên personal device của họ.
 
 ## Why not use virtual machine?
 
-I've tried some VM vendors (Qemu and Vmware) to create per VM per member but too many problems in the process:
+Mình đã thử một số nhà cung cấp VM (Qemu và Vmware) để tạo cho mỗi VM cho mỗi thành viên nhưng quá nhiều vấn đề gặp phải trong quá trình này:
 
-* VM boosting time is slow plus the snapshot size is too large
-* Lack of API and the snapshot VM have to be manual created without any reproduce code
+* Thời gian khởi động VM chậm cộng với kích thước VM quá lớn
+* Thiếu API và VM backup phải được tạo thủ công mà không có cách nào document và sử dụng lại được
 
-I want our members only need to provide their credentials with custom VM size and instantly launch a fresh virtual machine.
+Mình muốn các thành viên của team chỉ cần cung cấp thông tin đăng nhập của họ và kích thước VM => submit thông tin là sẽ có ngay một con VM hoàn chỉnh.
 
 ## Firecracker can start a VM in less than a second with base OCI container
 
-Initially when I read about Firecracker being released, I thought it was just a tool for cloud providers to use that provide security rather than bare docker, but I didn’t think that it was something that I could directly use it to create a dev VM.
+Ban đầu khi tôi đọc về việc Firecracker khi nó mới launch, tôi nghĩ nó chỉ là một tool cho các cloud vendor sử dụng để cung cấp bảo mật hơn là chạy trên thuần docker, nhưng tôi không nghĩ rằng mình lại có thể sử dụng luôn được để tạo một microVM.
 
-After a few reading information, I just impress with how fast and convenient Firecracker is in boosting VM
+Sau khi đọc một vài thông tin, tôi ấn tượng với khả năng tạo VM nhanh chóng và tiện lợi của Firecracker
 
 {{< admonition >}}
 
@@ -50,7 +50,7 @@ The VMM process starts up in around 12ms on AWS EC2 I3.metal instances. Though t
 
 {{< /admonition >}}
 
-Some comperations between Firecracker and QEMU
+Một vài so sánh giữa Firecracker và QEMU
 
 {{< admonition >}}
 
@@ -59,7 +59,7 @@ By comparison: Firecracker is purpose-built in Rust for this one task, provides 
 
 {{< /admonition >}}
 
-Firecracker integrates with existing container tooling, making adoption rather painless and easy to use. I choose to use [Ignite](https://github.com/weaveworks/ignite) that CLI command is very similar to docker
+Firecracker tích hợp với nhiều tool để quản lý container, làm cho việc áp dụng khá dễ dàng và dễ sử dụng. Tôi chọn sử dụng service [Ignite](https://github.com/weaveworks/ignite) mà lệnh CLI rất giống với docker
 
 {{< admonition >}}
 
@@ -69,9 +69,9 @@ With Ignite, you pick an OCI-compliant image (Docker image) that you want to run
 
 ## How to use Firecracker with ignite
 
-Install ignite and start a fresh VM is very simple, there’s basically 3 steps:
+Cài đặt Ignite và khởi động máy ảo mới rất đơn giản, về cơ bản có 3 bước:
 
-`Step 1`: Check your system is enable KVM virtualization and install Ignite in here [Installing-guide](https://github.com/weaveworks/ignite/blob/main/docs/installation.md)
+`Step 1`: Kiểm tra xem hệ thống của bạn đã bật ảo hóa KVM chưa và cài đặt Ignite tại đây [Installing-guide](https://github.com/weaveworks/ignite/blob/main/docs/installation.md)
 
 ```bash
 $ ignite version
@@ -80,7 +80,7 @@ Firecracker version: v0.22.4
 Runtime: containerd
 ```
 
-`Step 2`: Create a VM sample config.yaml
+`Step 2`: Tạo một con VM mẫu config.yaml
 
 ```yaml
 apiVersion: ignite.weave.works/v1alpha4
@@ -96,7 +96,7 @@ spec:
   ssh: true
 ```
 
-`Step 3`: Start your VM server under 125 ms
+`Step 3`: Khởi động máy chủ VM của bạn dưới 125 mili giây
 
 {{< admonition >}}
 
@@ -112,8 +112,8 @@ $ sudo ignite run --config config.yaml
 INFO[0001] Created VM with ID "3c5fa9a18682741f" and name "haiche-vm" 
 ```
 
-Wolla :tada: :tada: :tada: you've succeedfully created a new VM.
-To list the running VMs, enter:
+Wolla :tada: :tada: :tada: bạn đã tạo thành công một máy ảo mới.
+Để liệt kê các máy ảo đang chạy, hãy nhập:
 
 ```bash
 $ ignite ps
@@ -121,7 +121,7 @@ VM ID                   IMAGE                           KERNEL                  
 3c5fa9a18682741f        weaveworks/ignite-ubuntu:latest weaveworks/ignite-kernel:5.10.51        63m ago 4.0 GB  2       1.0 GB          Running 172.17.0.3              haiche-vm
 ```
 
-Once the VM is booted, it will have its network configured and will be accessible from the host via password-less SSH and with sudo permissions
+Sau khi máy ảo được khởi động, nó sẽ được cấu hình mạng và có thể truy cập được từ máy chủ thông qua SSH không cần mật khẩu và với quyền sudo
 
 ## SSH into the VM
 
@@ -134,11 +134,11 @@ Welcome to Ubuntu 18.04.2 LTS (GNU/Linux 5.10.51 x86_64)
 root@3c5fa9a18682741f:~#
 ```
 
-To exit SSH, just quit the shell process with exit.
+Để thoát khỏi SSH, chỉ cần logout khỏi shell như Ctrl+C hoặc gõ exit.
 
 ### Via ssh cli and rsa key
 
-add your public key to `~/.ssh/authorized_keys` in new boosted VM or update config and create new VM with default path to public key
+Thêm public key của bạn vào `~/.ssh/allow_keys` trong máy ảo mới được tạo hoặc cập nhập config máy ảo và tạo máy ảo mới với đường dẫn mặc định đến public key
 
 ```yaml
 spec:
@@ -146,7 +146,7 @@ spec:
   ssh: path/your/id_rsa.pub
 ```
 
-and then ssh to your VM
+Và cuối cùng sử dụng ssh để truy cập vào máy ảo
 
 ```bash
 $ ssh -i path/your/id_rsa root@172.17.0.3
@@ -157,7 +157,7 @@ root@3c5fa9a18682741f:~#
 
 ### Secure bastion host
 
-Final wrapping with bastion host technique to fully secure ssh to VM host
+Sử dụng bastion host để bảo mật hoàn toàn ssh cho máy chủ VM
 
 `~/.ssh/config`
 
@@ -174,7 +174,7 @@ Host haiche-vm
     IdentityFile ~/.ssh/id_rsa
 ```
 
-Add the config above to your ssh folder and run `ssh haiche-vm` to access VM host from your client
+Thêm cấu hình ở trên vào thư mục ssh của bạn và chạy `ssh haiche-vm` để truy cập máy chủ VM từ máy client
 
 {{< mermaid >}}
 
@@ -188,7 +188,7 @@ graph LR
 
 ## How I extend container to reduce repeatable setup process
 
-After successfully creating VM, mostly I will install conda and some packages to run my project. But I don't want to repeatedly install conda and create a new environment each time I create VM. Here is my step to extend the base Ubuntu image and use it to create a better VM experience
+Sau khi tạo VM thành công, chủ yếu là tôi sẽ cài đặt conda và một số tool mà tôi hay xài lên đó. Nhưng tôi không muốn cài đặt nhiều lần conda và tạo môi trường mới mỗi lần tạo lại VM. Đây là các bước để mở rộng image base Ubuntu và sử dụng nó để tạo trải nghiệm VM tốt hơn
 
 `Dockerfile`
 
@@ -236,8 +236,9 @@ spec:
   ssh: path/your/id_rsa.pub
 ```
 
-Here are some tricky parts, the current ignite doesn't support local docker image build. I have to push the image to the public register [Docker Hub](https://hub.docker.com/) to successfully import ignite's image.
-To start a new VM
+Đây là một số phần phức tạp, version Ignite hiện tại không hỗ trợ xây dựng image docker từ local. Tôi phải đẩy image vào [Docker Hub](https://hub.docker.com/) để import thành công image mới vào Ignite.
+
+Để tạo một máy ảo với Docker image mới
 
 ```bash
 $ sudo ignite run --config miniconda-vm.yaml
@@ -246,9 +247,9 @@ INFO[0002] Created image with ID "cae0ac317cca74ba" and name "haiche/ubuntu-minc
 INFO[0004] Created VM with ID "c1ab652804e664ed" and name "haiche-minconda-vm" 
 ```
 
-If you use a private registry such as ECR, run the command above with `--runtime=docker` to pull the private registry
+Nếu bạn sử dụng private registry như ECR, hãy chạy lệnh trên với `--runtime docker` để pull image từ private registry
 
-Test our new VM with conda environment
+Kiểm tra máy ảo với môi trường conda mới
 
 ```bash
 $ ssh -i path/your/id_rsa root@172.17.0.4
@@ -263,31 +264,31 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>
 ```
 
-I liked the configuration file approach so far and it is easier to be able to see everything all in one place. Now the member simply provides the config file and public key to create a fresh VM with all needed environments in instant
+Tôi thích cách tiếp cận sử dụng config file để tạo VM và có thể xem tất cả mọi config ở một nơi. Bây giờ thành viên của team chỉ cần cung cấp config file và public key, tôi chỉ cần gõ 1 câu lệnh là một máy ảo mới với có sẵn tất cả các môi trường cần thiết. Họ có thể vọc vạc và run code ngay lập tức không cần phải học về cách setup môi trường
 
 ## Cloud supports nested virtualization
 
-Another question I had in mind: “ok, where am I going to run these Firecracker VMs in production?“. The funny thing about running a VM in the cloud is that cloud instances are already VMs. Running a VM inside a VM is called “nested virtualization” and not all cloud providers support it – for example, AWS only supports nested virtualization in **Bare-metal** instances which are ridiculously high prices.
+Một câu hỏi khác mà tôi đã nghĩ đến: “được rồi, tôi sẽ chạy những máy ảo Firecracker này ở đâu trong môi trường Production?”. Điều thú vị khi chạy một máy ảo trên cloud là các cloud instances đã là máy ảo. Việc chạy một máy ảo bên trong một máy ảo được gọi là “nested virtualization” và không phải tất cả các nhà cung cấp dịch vụ cloud đều hỗ trợ - ví dụ: AWS chỉ hỗ trợ nested virtualization trong các phiên bản **Bare-metal** có giá cao ngất ngưởng.
 
-GCP supports nested virtualization but not on default, you have to enable this feature in creating VM section. DigitalOcean support nested virtualization on default even on their smallest droplets
+GCP hỗ trợ nested virtualization nhưng không hỗ trợ mặc định, bạn phải bật tính năng này trong phần tạo instance. DigitalOcean hỗ trợ nested virtualization mặc định ngay cả trên instance rẻ nhất.
 
 ## Some afterthought
 
-A few things still stuck in my mind with this approach:
+Một số điều vẫn tôi còn thấy lấn cấn với cách tiếp cận tạo VM này:
 
-* Currently firecracker doesn't support snapshot restore but will support in near future <https://github.com/firecracker-microvm/firecracker/issues/1184>
+* Hiện tại Firecracker không hỗ trợ khôi phục và backup snapshot nhưng sẽ hỗ trợ trong tương lai gần <https://github.com/firecracker-microvm/firecracker/issues/1184>
 
-* Can't easy upgrade base image like `docker pull`. I was dealing with this by making a copy every time, but that’s kind of slow and it felt really inefficient. But there’s some solution online that I will try later [Device mapper to manage firecracker images](https://jvns.ca/blog/2021/01/27/day-47--using-device-mapper-to-manage-firecracker-images/)
+* Không thể dễ dàng nâng cấp base image như `docker pull`. Tôi đã giải quyết vấn đề này bằng cách tạo bản copy mới, nhưng điều đó khá chậm và thực sự không hiệu quả. Có một số giải pháp mà tôi tìm được và sẽ thử sau lại sau [Device mapper to manage firecracker images](https://jvns.ca/blog/2021/01/27/day-47--using-device-mapper-to-manage-firecracker-images/)
 
-* I don’t know if it’s possible to run graphical applications in Firecracker yet
+* Tôi không biết liệu có thể chạy các ứng dụng đồ họa trong Firecracker hay không
 
-* Firecracker with Kubernetes is a new thing but I don't find it appealing cause using Pod to group containers is already fast and secure. Some people gave me this useful thread discuss about why aren’t they compatible yet
+* Firecracker với Kubernetes là một trend mới nhưng tôi không thấy hấp dẫn vì việc sử dụng Pod để nhóm các vùng chứa đã nhanh chóng và an toàn. Một số người đã cho tôi một thread hữu ích này thảo luận về lý do tại sao chúng chưa tương thích với nhau
 {{< tweet 1238496944684597248 >}}
 
-Here are some links I found useful when researching about Firecracker:
+Dưới đây là một số links tôi thấy hữu ích khi nghiên cứu về Firecracker:
 
-* [How AWS Firecracker works: a deep dive](https://unixism.net/2019/10/how-aws-firecracker-works-a-deep-dive/) that demonstrates some of the concepts with a tiny version of Firecracker
+* [How AWS Firecracker works: a deep dive](https://unixism.net/2019/10/how-aws-firecracker-works-a-deep-dive/) trình bày một số khái niệm về Firecracker
 
-* AWS Fargate and Lambda was back by [Firecracker serverless computing](https://aws.amazon.com/blogs/aws/firecracker-lightweight-virtualization-for-serverless-computing/)
+* AWS Fargate và Lambda được tạo bởi [Firecracker serverless computing](https://aws.amazon.com/blogs/aws/firecracker-lightweight-virtualization-for-serverless-computing/)
 
-* Comparing other isolation technique [Sandboxing and Workload Isolation](https://fly.io/blog/sandboxing-and-workload-isolation/)
+* So sánh kỹ thuật isolation khác [Sandboxing and Workload Isolation](https://fly.io/blog/sandboxing-and-workload-isolation/)
