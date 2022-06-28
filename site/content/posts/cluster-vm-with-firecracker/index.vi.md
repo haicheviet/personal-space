@@ -1,8 +1,8 @@
 ---
-title: "Cluster VMs with Firecracker"
+title: "Hệ thống máy ảo với framework Firecracker"
 date: 2022-06-23T21:57:40+08:00
 lastmod: 2022-06-23T16:45:40+08:00
-description: "This article shows how to use Firecracker to create cluster VMs with container."
+description: "Bài báo này hướng dẫn cách sử dụng Firecracker để tạo một hệ thống máy ảo với container."
 resources:
 - name: "featured-image"
   src: "featured-image.png"
