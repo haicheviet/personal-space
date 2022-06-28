@@ -33,8 +33,8 @@ Hơn nữa, tôi muốn tạo một máy ảo (VM) thực sự mà thành viên 
 
 Mình đã thử một số nhà cung cấp VM (Qemu và Vmware) để tạo cho mỗi VM cho mỗi thành viên nhưng quá nhiều vấn đề gặp phải trong quá trình này:
 
-* Thời gian khởi động VM chậm cộng với kích thước VM quá lớn
-* Thiếu API và VM backup phải được tạo thủ công mà không có cách nào document và sử dụng lại được
+* Thời gian khởi động VM chậm cộng với kích thước VM quá lớn.
+* Thiếu API và VM backup phải được tạo thủ công mà không có cách nào document và sử dụng lại các step đã khởi tạo được.
 
 Mình muốn các thành viên của team chỉ cần cung cấp thông tin đăng nhập của họ và kích thước VM => submit thông tin là sẽ có ngay một con VM hoàn chỉnh.
 
