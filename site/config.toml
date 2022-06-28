@@ -404,7 +404,7 @@ enableEmoji = true
         Udemy = ""
         RSS = true
         [languages.vi.params.social.Jobhopin]
-          id = "en"
+          id = "vi"
           prefix = "https://www.jobhopin.com/"
 
 [params]
