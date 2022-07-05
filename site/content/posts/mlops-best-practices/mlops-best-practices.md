@@ -17,6 +17,9 @@ categories: ["AWS"]
 
 <!--more-->
 
+https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment
+
+## Format model
 
 ## Dockerize
 
