@@ -7,7 +7,7 @@ description: "This article shows how to create an optimal cost ECS cluster."
 
 resources:
 - name: "featured-image"
-  src: "featured-image.png"
+  src: "featured-image.webp"
 
 tags: ["ECS", "AWS", "Fargate", "Cloudformation", "IAC"]
 categories: ["AWS"]
