@@ -36,7 +36,7 @@ ECS consists of a few components:
 
 From this blog, you will be using Docker Nginx to create a fully working solution ECS cluster with autoscaling and capacity provider strategy that mixes OnDemand and Spot for optimal cost.
 
-![ECS Architecture](ecs-fargate-architecture.png "ECS Architecture")
+![ECS Architecture](ecs-fargate-architecture.webp "ECS Architecture")
 
 **TL;DR:** The sources being used in this blog are available at [GitHub](https://github.com/haicheviet/blog-code/tree/main/ecs-cost-optimization-with-fargate).
 
@@ -48,7 +48,7 @@ AWS Fargate is a technology that you can use with Amazon ECS to run containers w
 
 {{< /admonition >}}
 
-![Fargate Overview](fargate.png "Fargate Overview")
+![Fargate Overview](fargate.webp "Fargate Overview")
 
 Moreover Fargate Spot allows you to deploy your containers as you would normally in Fargate, but benefit from savings since your containers will be running on spare AWS capacity. Below is the comparation between Fargate OnDemand vs spot in *eu-west-1 region* [Ref](https://tomgregory.com/aws-fargate-spot-vs-fargate-price-comparison/).
 
@@ -144,13 +144,13 @@ To create a private image ECR is somehow simple, you can following [this guide](
 
 A VPC is a virtual network inside AWS where you can isolate your workload. A VPC consists of several subnets. Each subnet is bound to an Availability Zone. A **public** subnet has a direct route to/from the Internet. As long as your service have an public IPv4/IPv6 address, they **can communicate (in and out) with the Internet**. A private subnet does not have a IPv4 route to/from the Internet but an Ipv6 route to the Internet exists. Service in **private** subnets can not be accessed from the public Internet. If you want to access the Internet from a private subnet, you need to create a NAT gateway/instance or assign an IPv6 address. You can deploy a bastion host/instance to reduce the attack surface of internal applications.
 
-![VPC-2azs](vpc-2azs.png "VPC 2azs")
+![VPC-2azs](vpc-2azs.webp "VPC 2azs")
 
 ### Client Security Group network
 
 Some data stores are integrated into the VPC, others are only accessible via the AWS API. For VPC integration, you have to create a Client Security Group stack. The stack is used as a parent stack for security groups ElastiCache, Elasticsearch, and RDS. To expand communication with the data store from an EC2 instance, you have to attach the Client Security Group to the EC2 instance. The Security Group does not have any rules, but it marks traffic. The marked traffic is then allowed to enter the data store.
 
-![target-group](target-group.png "Security best practices")
+![target-group](target-group.webp "Security best practices")
 
 With this appoarch, we can well [separate of concerns](https://en.wikipedia.org/wiki/Separation_of_concerns) and security our app. Only service that subscribers to our client sg can communicate in cluster stack.
 
@@ -184,7 +184,7 @@ aws cloudformation deploy \
 
 The Cloudformation stack can be displayed in CloudFormation and navigate to the **Stack section**. In the **Events tab** of the stack, the progress of creating the stack can be followed.
 
-![progress](progress.png "Cloudformation progress")
+![progress](progress.webp "Cloudformation progress")
 
 ### Outputs
 
@@ -219,7 +219,7 @@ Resources:
 
 The ALB configuration requires the configuration of the subnets to use. We will define ALB with enable both HTTP/HTTPS and S3 logging.
 
-![ALB-ECS](alb-visualize.png "ALB log store")
+![ALB-ECS](alb-visualize.webp "ALB log store")
 
 ```yaml
 Parameters:
@@ -315,7 +315,7 @@ aws cloudformation deploy \
 
 {{< / admonition  >}}
 
-![ecs-cluster](ecs-cluster.png "ECS cluster")
+![ecs-cluster](ecs-cluster.webp "ECS cluster")
 
 The red rectangle is domain DNS for our application that will be used in task definition.
 
@@ -395,7 +395,7 @@ Resources:
 
 You can increase or decrease your desired task count by integrating Amazon ECS on Fargate with Amazon CloudWatch alarms and Application Auto Scaling. Then, you can use CloudWatch metrics to configure your CloudWatch alarms and only scale if CPU utilization higher/lower than certain threshold.
 
-![Autoscaling-cluster](autoscaling.jpeg "Autoscaling node")
+![Autoscaling-cluster](autoscaling.webp "Autoscaling node")
 
 ```yaml
 Resources:
@@ -452,7 +452,7 @@ aws cloudformation deploy \
 
 Navigate to the cluster-stack, retrieve the public DNS in **Output section** and verify whether the containers can be reached and a welcome message from Nginx.
 
-![Nginx succeed](alb-succeed.png "Nginx succeed")
+![Nginx succeed](alb-succeed.webp "Nginx succeed")
 
 We can run the following command to see how tasks spread across capacity providers.
 
@@ -504,7 +504,7 @@ bash aws-init-task.sh
 
 Verify ECS stack working.
 
-![ECS task running](task-running-ecs.png "ECS task running")
+![ECS task running](task-running-ecs.webp "ECS task running")
 
 Congratulations! you have reached the end of the blog. We covered a lot of ground learning how to apply ECS Fargate Spot best practices such as diversification, as well as the use of capacity providers.
 
