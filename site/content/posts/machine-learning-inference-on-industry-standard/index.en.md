@@ -38,7 +38,7 @@ The serving code is somewhat simple and already in [ScriptModule](https://pytorc
 
 **Insert Image here**
 
-For futher optimize model inference time, technique such as quantization or pruning can be applied but require dive deep in investigate model architecture and sepecific for certain architecture. [TVM](https://tvm.apache.org/) framework can be used to auto pruning but required more time to choosing the right compile and GPU tuning. The optimize process is very complicated and deserve its own dedicate blog and I will talk about in another time. For pytorch model, no-braniner way is to convert to script format and gain 5->10% percent performance for free
+For futher optimize model inference time, technique such as quantization or pruning can be applied but require deep dive in investigate model architecture and each architecture have its own pruning method. [TVM](https://tvm.apache.org/) framework can be used to auto pruning but required more time to choosing the right compile and GPU tuning. The optimize process is very complicated and deserve its own dedicate blog and I will talk about in another time. For pytorch model, no-braniner way is to convert to script format and gain 5->10% percent performance for free
 
 ## Restapi and project template
 
@@ -116,11 +116,14 @@ Redis is most often selected as the foundation for the online feature store, tha
 
 Our project will use redis as backend to store data and serve if the prediction for specific text is already made. You can extend our class base Backend
 
-## Autoscale app
+## Reliable service
 
 When you are building a software application or a service, I’m sure you’ve heard of these big words: scalability, maintainability, and reliability. Espcially in AI project that usually to predict the unknow.
 
 Building an reliable service is substainly hard even for large team. To avoid pitfall in build everything on your own, Cloud vendor is more suitable otpion to deploy and scale our app. For small and medium team size, AWS ECS service and fargate is th best candidate to service our app at optimal, you can find more in [previous blog](https://haicheviet.com/ecs-cost-optimization-with-fargate/) that we're ready discussed about how well of this architecture.
+
+![AWS deployment](ecs-fargate.webp "AWS deployment")
+
 
 By leverage cloud vendor and serverless platform, we can minmize what can go wrong in AI app add avoid three common types of faults:
 
@@ -128,7 +131,7 @@ By leverage cloud vendor and serverless platform, we can minmize what can go wro
 
 - Scalability: AWS Auto Scaling monitors our applications and automatically adjusts capacity to maintain steady, predictable performance at the lowest possible cost and dynamic by traffic.
 
-- Maintainability: By leverate IAC and logs group, manage cluster can not be esier. Every service and configuration is managed in git allow us to review and automation all process.
+- Maintainability: By leverate IAC and logs group, manage cluster can not be esier. AWS CloudFormation is a service that helps you model and set up your AWS resources so that you can spend less time managing those resources and more time focusing on your applications that run in AWS.
 
 ## Monitoring and aggrage log
 
