@@ -5,7 +5,7 @@ lastmod: 2022-06-23T16:45:40+08:00
 description: "Bài báo này hướng dẫn cách sử dụng Firecracker để tạo một hệ thống máy ảo với container."
 resources:
 - name: "featured-image"
-  src: "featured-image.png"
+  src: "featured-image.webp"
 
 tags: ["Firecracker", "Container", "QEMU", "Ignite"]
 categories: ["Container"]

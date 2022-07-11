@@ -5,7 +5,7 @@ lastmod: 2022-06-23T16:45:40+08:00
 description: "This article shows how to use Firecracker to create cluster VMs with container."
 resources:
 - name: "featured-image"
-  src: "featured-image.png"
+  src: "featured-image.webp"
 
 tags: ["Firecracker", "Container", "QEMU", "Ignite"]
 categories: ["Container"]
