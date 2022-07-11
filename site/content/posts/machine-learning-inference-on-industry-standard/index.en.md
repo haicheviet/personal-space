@@ -10,7 +10,7 @@ description: "This article shows how to create ML service on Industry-standard."
 resources:
 - name: "featured-image"
   src: "featured-image.webp"
-
+  
 tags: ["Machine Learning", "FastAPI", "ECS", "Feature Store", "IAC"]
 categories: ["Machine Learning"]
 ---

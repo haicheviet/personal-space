@@ -14,7 +14,7 @@
         />
     </a>
 {{- else -}}
-    <img loading="lazy" decoding="async"
+    <img decoding="async"
          {{ with .Class }}class="{{ . }}"{{ end }}
          src="{{ .Src | safeURL }}"
          alt="{{ $alt }}"
