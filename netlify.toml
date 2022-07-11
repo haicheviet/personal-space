@@ -3,7 +3,7 @@ publish = "site/public"
 command = "cd site && hugo --themesDir ../.."
 
 [build.environment]
-HUGO_VERSION = "0.78.2"
+HUGO_VERSION = "0.83.0"
 HUGO_THEME = "repo"
 HUGO_BASEURL = "https://haicheviet.com"
 
