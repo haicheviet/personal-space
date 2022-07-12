@@ -70,7 +70,7 @@
                     </ol>
                 </div>
             {{ end }}
-            {{- range $pages.Pages -}}
+            {{- range (where $pages.Pages ".Params.unlisted" "!=" "True") -}}
                 {{- .Render "summary" -}}
             {{- end -}}
             {{- partial "paginator.html" . -}}

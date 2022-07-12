@@ -3,7 +3,7 @@ title: "Machine-learning inference on Industry-standard"
 subtitle: ""
 date: 2022-07-05T14:38:51+07:00
 lastmod: 2022-07-05T14:38:51+07:00
-draft: True
+unlisted: True
 
 description: "This article shows how to create ML service on Industry-standard."
 
@@ -29,7 +29,6 @@ The idea of project is getting metadata from twitter url and analyst sentiment o
 The service can be descriped in the diagram below and avaialable in our [github repo](https://github.com/haicheviet/blog-code/tree/main/machine-learning-inference-on-industry-standard)
 
 ![Inference Design](ml-inference.webp "Inference Design")
-
 
 ## Choosing the right format model
 
@@ -78,7 +77,34 @@ exclude = .git,__pycache__,__init__.py,.mypy_cache,.pytest_cache,.eggs,.idea,.py
 ignore = E722,W503,E203
 ```
 
-## Dockerize
+The deep learning model usully loadding to mem is slow and we can not reload model with every request that will cause a lot of overhead. We will load it once in app context and pass already loaded model into each request via [Request obj](https://fastapi.tiangolo.com/advanced/using-request-directly/)
+
+```python
+app = FastAPI(
+    title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
+)
+
+model_params = {
+    "model": get_model(),
+    "tokenizer": get_tokenizer(),
+}
+app.model_params = model_params  # type: ignore
+app.logger.info("Done loading model")  # type: ignore
+...
+
+@app.get("/inference", response_model=SentimentResponse)
+@async_log_response
+async def inference(
+    request: Request,
+    ...
+):
+  model = request.app.model_params["model"]
+  tokenizer = request.app.model_params["tokenizer"]
+  
+...
+```
+
+## Dockerize application
 
 After we pick the right format model, we will use Docker to package our code and serve to end user. The tradition Docker build is not dynamic caching and huge in image size that [cost a lot in develoment](https://renovacloud.com/how-to-reduce-your-docker-image-size-for-a-faster-build-deploy/?lang=en).
 It was actually very common to have one Dockerfile to use for development (which contained everything needed to build your application), and a slimmed-down one to use for production, which only contained your application and exactly what was needed to run it. This has been referred to as the [builder pattern](https://refactoring.guru/design-patterns/builder). Maintaining two Dockerfiles is not ideal.
@@ -90,19 +116,20 @@ An AI project's Docker usually is constructed by three steps:
 - Install require package
 - Serving AI model
 
-**insert image**
+![AI Docker Image](multi-stage-build.png "AI Docker Image")
 
-The traditional approach is listing all step in linear and each next step depend in the previous. That is why when we increase version of AI model, we have to rebuild all docker step and can not leverate old install package step even we only change AI model.
+The traditional approach is listing all step in linear fashion and each next step depend in the previous build. That is why when we increase version of AI model, we have to rebuild all docker step and can not leverate old install package step even we only change AI model.
 
 Multi-stage build enable us to seperate each step to seperate docker that can be reuse and independend. Making each step can be esiy cached and we only rebuild what we changed. Here is some comparison of tradition vs multi-stage build:
 
-|     |Multi-stage |Traditional|
+|     |Multi-stage |Traditional|Saving|
 |:---:|:-----:|:----------:|
-|Change AI model|11s|31s|
-|Last Image size|||
+|Change AI model|11s|31s|64.5%|
+|Last Image size|2.75GB|5.4GB|49%|
 
-As you can see, the Multi-stage build save us a lot of time in building image and more lightweight serving.
-...
+![Docker build](docker-build.png "Docker build")
+
+As you can see, the Multi-stage build save us a lot of time in building image and more lightweight serving. Docker multi-stage can be descriped in [build.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build.sh) and [build-push](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build-push.sh) to docker hub. For more in-dept tutorial in docker multi-stage, you should checkout the [full guide here](https://pythonspeed.com/articles/smaller-python-docker-images/)
 
 ## Feature Store
 
@@ -118,7 +145,85 @@ Redis is most often selected as the foundation for the online feature store, tha
 
 ![Feature Store](feature-store.webp "Feature Store")
 
-Our project will use redis as backend to store data and serve if the prediction for specific text is already made. You can extend our class base Backend
+Our project will use redis as backend to store data and serve if the prediction for specific text is already made. You can extend our class base Backend in the [project template](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/app/feature_store/backends/__init__.py) and can be esasy change new backend data store.
+
+We will discuss feature store in this following code snipet
+
+```python
+@router.get("/inference", response_model=SentimentResponse)
+@async_log_response
+async def inference(
+    request: Request,
+    tweetUrl: HttpUrl,
+    background_tasks: BackgroundTasks,
+    feature_store: Backend = Depends(get_backend),
+    twitter_api: API = Depends(get_twitter_api),
+):
+    tweet = twitter_api.get_status(tweetUrl.split("/")[-1])
+    key = Keys(tweet=tweet)
+    data = await get_cache(keys=key, feature_store=feature_store)
+    if not data:
+        request.app.logger.info("Prediction is not exist in feature store")
+        twitter_sentiment = TwitterSentiment(**request.app.model_params)
+
+        prediction = twitter_sentiment.prediction(tweet.text)
+        if prediction:
+            result = SentimentResponse(
+                sentiment_analyst=prediction, text_input=tweet.text
+            )
+            background_tasks.add_task(set_cache, result.dict(), key, feature_store)
+        else:
+            raise HTTPException(status_code=400, detail="Empty prediction")
+    else:
+        request.app.logger.info("Prediction hits")
+        result = SentimentResponse(**data)
+
+    return result
+```
+
+### Writing data to Feature Store
+
+In FastAPI, you can run code outside of a web request after returning a response. This feature is called [background tasks](https://fastapi.tiangolo.com/tutorial/background-tasks/).
+
+This is not as robust as using a background task library like Celery. Instead, Background Tasks are a simple way to run code outside of a web request, which is a great fit for things like updating a cache.
+
+```python
+background_tasks.add_task(set_cache, result.dict(), key, feature_store)
+```
+
+When you call add_task(), you pass in a function and a list of arguments. Here, we pass in set_cache(). This function saves the prediction result to Redis. Let's look at how it works:
+
+```python
+async def set_cache(data, keys: Keys, feature_store: Backend):
+    await feature_store.set(
+        keys.cache_key(),
+        json.dumps(data),
+        expire=SIXTY_DAYS,
+    )
+```
+
+First, we serialize the data to JSON and save it to feature_store. We use the expire parameter to set the expiration time for the data to sixty days.
+
+### Reading Data from Feature Store
+
+To use the endpoint `inference`, clients make a GET request to /inference with link tweet. Then we try to get the feature from Feature Store. If the prediction is not existed yet, we calculate the prediction, return it, and then save it outside of the web request.
+
+```python
+data = await get_cache(keys=key, feature_store=feature_store)
+if not data:
+  request.app.logger.info("Prediction is not exist in feature store")
+  twitter_sentiment = TwitterSentiment(**request.app.model_params)
+
+  prediction = twitter_sentiment.prediction(tweet.text)
+  if prediction:
+      result = SentimentResponse(
+          sentiment_analyst=prediction, text_input=tweet.text
+      )
+      background_tasks.add_task(set_cache, result.dict(), key, feature_store)
+else:
+  request.app.logger.info("Prediction hits")
+  result = SentimentResponse(**data)
+```
 
 ## Reliable service
 
