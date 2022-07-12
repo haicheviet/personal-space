@@ -128,35 +128,6 @@ async def inference(
 ...
 ```
 
-## Dockerize application
-
-After we pick the right format model, we will use Docker to package our code and serve to end user. The single file Docker build is not dynamic caching and huge in image size that [cost a lot in develoment](https://renovacloud.com/how-to-reduce-your-docker-image-size-for-a-faster-build-deploy/?lang=en).
-It was actually very common to have one Dockerfile to use for development (which contained everything needed to build your application), and a slimmed-down one to use for production, which only contained your application and exactly what was needed to run it. This has been referred to as the [builder pattern](https://refactoring.guru/design-patterns/builder). Maintaining two Dockerfiles is not ideal.
-To maintain only on docker file, keep inference size low and enable caching for faster re-build, we will use [multi-stage builds](https://pythonspeed.com/articles/smaller-python-docker-images/) to dockerize AI service
-
-An AI project's Docker usually is constructed in three steps and can be built to three different images:
-
-- Download the AI model
-- Install requires package
-- Serving AI model
-
-![AI Docker Image](multi-stage-build.png "AI Docker Image")
-
-The traditional approach is built as a sequence of layers and each layer builds on top of the previous one. That is why when we increase the version of the AI model, we have to rebuild all docker laỷe and can not leverage independent layer even we only change AI model.
-
-Multi-stage build enable us to seperate each step to seperate docker that can be reuse and independend. Making each step can be esiy cached and we only rebuild what we changed. Here is some comparison of tradition vs multi-stage build:
-
-|     |Multi-stage |Traditional|Saving|
-|:---:|:-----:|:----------:|:----------:|
-|Change AI model|11s|31s|64.5%|
-|Last Image size|2.75GB|5.4GB|49%|
-
-As you can see, the Multi-stage build save us a lot of time in building image and more lightweight serving. I can not overstate how frustrating and counter-productive in slow pipeline cause the amount of time wasted waiting for builds to complete adds up to 10s of thousands USD/year wasted even for small teams.
-
-![Waiting pipeline](waiting-for-pipeline-to-finish-running.jpeg "Not Funny Meme")
-
-Docker multi-stage steps can be described in [build.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build.sh) and [build-push](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build-push.sh) to docker hub. For a more in-dept tutorial in docker multi-stage, you should check out the [full guide here](https://pythonspeed.com/articles/smaller-python-docker-images/)
-
 ## Feature Store
 
 The natural of AI inference is lots of computing usage and timing, to maintain a healthy app and low latency serving API. We have to use a [feature store db](https://www.tecton.ai/blog/what-is-a-feature-store/) to deliver a real-time experience for end-user and save data.
@@ -253,6 +224,35 @@ else:
   request.app.logger.info("Prediction hits")
   result = SentimentResponse(**data)
 ```
+
+## Dockerize application
+
+After we pick the right format model, we will use Docker to package our code and serve to end user. The single file Docker build is not dynamic caching and huge in image size that [cost a lot in develoment](https://renovacloud.com/how-to-reduce-your-docker-image-size-for-a-faster-build-deploy/?lang=en).
+It was actually very common to have one Dockerfile to use for development (which contained everything needed to build your application), and a slimmed-down one to use for production, which only contained your application and exactly what was needed to run it. This has been referred to as the [builder pattern](https://refactoring.guru/design-patterns/builder). Maintaining two Dockerfiles is not ideal.
+To maintain only on docker file, keep inference size low and enable caching for faster re-build, we will use [multi-stage builds](https://pythonspeed.com/articles/smaller-python-docker-images/) to dockerize AI service
+
+An AI project's Docker usually is constructed in three steps and can be built to three different images:
+
+- Download the AI model
+- Install requires package
+- Serving AI model
+
+![AI Docker Image](multi-stage-build.png "AI Docker Image")
+
+The traditional approach is built as a sequence of layers and each layer builds on top of the previous one. That is why when we increase the version of the AI model, we have to rebuild all docker laỷe and can not leverage independent layer even we only change AI model.
+
+Multi-stage build enable us to seperate each step to seperate docker that can be reuse and independend. Making each step can be esiy cached and we only rebuild what we changed. Here is some comparison of tradition vs multi-stage build:
+
+|     |Multi-stage |Traditional|Saving|
+|:---:|:-----:|:----------:|:----------:|
+|Change AI model|11s|31s|64.5%|
+|Last Image size|2.75GB|5.4GB|49%|
+
+As you can see, the Multi-stage build save us a lot of time in building image and more lightweight serving. I can not overstate how frustrating and counter-productive in slow pipeline cause the amount of time wasted waiting for builds to complete adds up to 10s of thousands USD/year wasted even for small teams.
+
+![Waiting pipeline](waiting-for-pipeline-to-finish-running.jpeg "Not Funny Meme")
+
+Docker multi-stage steps can be described in [build.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build.sh) and [build-push](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build-push.sh) to docker hub. For a more in-dept tutorial in docker multi-stage, you should check out the [full guide here](https://pythonspeed.com/articles/smaller-python-docker-images/)
 
 ## Reliable service
 
