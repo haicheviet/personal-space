@@ -15,35 +15,36 @@ tags: ["Machine Learning", "FastAPI", "ECS", "Feature Store", "IAC"]
 categories: ["Machine Learning"]
 ---
 
-Machine learning inference have evolved tremendously in the past several years. With a wide variety of tools and frameworks out there to simplify deployment and logging. But offently, the inference step is usually bypassed and not shiny as building ML model. However in the ML cycle, training ML model only took 20 perentage of full pipeline ML project. Especially serving AI model in end user is rather simple and only for MVC phase. Therefore how we can server AI model in real world and make AI infernce cycle fast both in implement stage, logging and rebuild. We will dive deep in some best-practices in software development and how it can be implemented in AI respective.
+Machine learning inference has evolved tremendously in the past several years. With a wide variety of tools and frameworks out there to simplify deployment and logging. But often, the inference step is usually bypassed and not shiny as building ML model. However in the ML cycle, the training ML model only took 20 percent of the full pipeline ML project. Especially serving AI model in end-user is rather simple and only for MVC phase. Therefore how we can server AI model in the real world and make the AI inference cycle fast both in the implementation stage, logging, and rebuilding. We will dive deep into some best practices in software development and how they can be implemented in AI respective.
 
 <!--more-->
 ## Introduction
 
-For the simple AI project, we will use twitter sentiment analyst to demonstrate our project.
+For the hands-on AI project, we will use Twitter sentiment analyst to demonstrate our project.
 
 ![Twitter Sentiment](twitter-sentiment.webp "Twitter Sentiment")
+The idea of the project is to get metadata from Twitter URL and sentiment analyst content. After that, we will aggregate sentiment text from the individual user to analyze more sentiment for each user.
 
-The idea of project is getting metadata from twitter url and analyst sentiment of text. After that we will aggregate sentiment text from indivual user to analyst more sentiment for each user.
+{{< admonition info >}}
 
-The service can be descriped in the diagram below and avaialable in our [github repo](https://github.com/haicheviet/blog-code/tree/main/machine-learning-inference-on-industry-standard)
+The service can be described in the diagram below and full project available in our [github repo](https://github.com/haicheviet/blog-code/tree/main/machine-learning-inference-on-industry-standard)
+
+{{< / admonition >}}
 
 ![Inference Design](ml-inference.webp "Inference Design")
 
 ## Choosing the right format model
 
-For this project, we will use [transformer roberta model](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment) to analyst text sentiment
+The model I pick is [transformer roberta model](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment) to analyst text sentiment
 Firstly, we will find optimize model format to boost inference and standardized our inference code. For pytorch model, we used [torch script](https://pytorch.org/docs/stable/jit.html) to tranform our model to jit format. The translate code is in my [github](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/generate_torch_script.py), you can reproduce and testing by yourself.
 
 ![Pytorch comparison](torch-comparison.webp "Pytorch comparison")
 
 The performance boost is not much but for [GPU model](https://www.educba.com/pytorch-jit/) the runtime of torchscript proves to be better than PyTorch.
 
-The serving code is somewhat simple and already in [ScriptModule](https://pytorch.org/docs/stable/generated/torch.jit.ScriptModule.html#torch.jit.ScriptModule) format that will not change even we change our base model.
+The serving code is somewhat simple `torch.jit.load` and already in [ScriptModule](https://pytorch.org/docs/stable/generated/torch.jit.ScriptModule.html#torch.jit.ScriptModule) format that will not change even we change our base model.
 
-**Insert Image here**
-
-For futher optimize model inference time, technique such as quantization or pruning can be applied but require deep dive in investigate model architecture and each architecture have its own pruning method. [TVM](https://tvm.apache.org/) framework can be used to auto pruning but required more time to choosing the right compile and GPU tuning. The optimize process is very complicated and deserve its own dedicate blog and I will talk about in another time. For pytorch model, no-braniner way is to convert to script format and gain 5->10% percent performance for free
+To further optimize model inference time, a technique such as quantization or pruning can be applied but require deep dive into investigating model architecture and each architecture has its pruning method. [TVM](https://tvm.apache.org/) framework can be used for auto pruning but required more time to choose the right compile and GPU tuning. The optimized process is very complicated and deserves its dedicated blog and I will talk about it at another time. For the PyTorch model, the no-brainer way is to convert to script format and gain 5->10% percent performance for free
 
 ## Restapi and project template
 
@@ -59,7 +60,11 @@ For serving AI model, the most common protocol is Rest API and we will use [Fast
 
 {{< / admonition >}}
 
-The project template you can checkout in github repo and coding in project have to be followed by standard style and lint check if member violate coding style. You can find auto format script in [format.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/format.sh) and [lint.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/lint.sh) check in github. For more python code style, we use [google python code style](https://google.github.io/styleguide/pyguide.html) for this project and here are some brief configurations guide
+![FastAPI Swagger](swagger.png "FastAPI Swagger")
+
+### Project code style
+
+Coding in project have to be followed by standard style and lint check if member violate coding style. You can find auto format script in [format.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/format.sh) and [lint.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/lint.sh) check in github. For more python code style, we use [google python code style](https://google.github.io/styleguide/pyguide.html) for this project and here are some brief configurations guide
 
 ```toml
 [tool.mypy]
@@ -77,7 +82,27 @@ exclude = .git,__pycache__,__init__.py,.mypy_cache,.pytest_cache,.eggs,.idea,.py
 ignore = E722,W503,E203
 ```
 
-The deep learning model usully loadding to mem is slow and we can not reload model with every request that will cause a lot of overhead. We will load it once in app context and pass already loaded model into each request via [Request obj](https://fastapi.tiangolo.com/advanced/using-request-directly/)
+### Environment managment
+
+Using a .env file will enable you to use environment variables for local development without polluting the global environment namespace. It will also keep your environment variable names and values isolated to the same project that utilizes them.
+
+```env
+APP_ENV=demo
+TWITTER_CONSUMER_KEY=...
+TWITTER_CONSUMER_SECRET=...
+TWITTER_ACCESS_TOKEN_KEY=...
+TWITTER_ACCESS_TOKEN_SECRET=...
+FIRST_SUPERUSER=...
+FIRST_SUPERUSER_PASSWORD=...
+REDIS_HOST=...
+REDIS_PORT=...
+```
+
+One of the benefits of using a .env file is that it becomes much easier to develop with environment variables in mind early on. Thinking about these things at an earlier stage of the development process will make it easier for you to get your application ready for production.
+
+### AI project tips
+
+The deep learning model loading process is slow and we can not reload the model with every request which will cause a lot of overhead. We should load it once in the app context and pass the already loaded model into each request via [Request obj](https://fastapi.tiangolo.com/advanced/using-request-directly/)
 
 ```python
 app = FastAPI(
@@ -100,40 +125,41 @@ async def inference(
 ):
   model = request.app.model_params["model"]
   tokenizer = request.app.model_params["tokenizer"]
-  
 ...
 ```
 
 ## Dockerize application
 
-After we pick the right format model, we will use Docker to package our code and serve to end user. The tradition Docker build is not dynamic caching and huge in image size that [cost a lot in develoment](https://renovacloud.com/how-to-reduce-your-docker-image-size-for-a-faster-build-deploy/?lang=en).
+After we pick the right format model, we will use Docker to package our code and serve to end user. The single file Docker build is not dynamic caching and huge in image size that [cost a lot in develoment](https://renovacloud.com/how-to-reduce-your-docker-image-size-for-a-faster-build-deploy/?lang=en).
 It was actually very common to have one Dockerfile to use for development (which contained everything needed to build your application), and a slimmed-down one to use for production, which only contained your application and exactly what was needed to run it. This has been referred to as the [builder pattern](https://refactoring.guru/design-patterns/builder). Maintaining two Dockerfiles is not ideal.
-To maintain only on docker file, keep inference size low,  doc and enable caching for faster re-build, we will use [multi-stage builds](https://pythonspeed.com/articles/smaller-python-docker-images/) to dockerize AI service
+To maintain only on docker file, keep inference size low and enable caching for faster re-build, we will use [multi-stage builds](https://pythonspeed.com/articles/smaller-python-docker-images/) to dockerize AI service
 
-An AI project's Docker usually is constructed by three steps:
+An AI project's Docker usually is constructed in three steps and can be built to three different images:
 
-- Download AI model
-- Install require package
+- Download the AI model
+- Install requires package
 - Serving AI model
 
 ![AI Docker Image](multi-stage-build.png "AI Docker Image")
 
-The traditional approach is listing all step in linear fashion and each next step depend in the previous build. That is why when we increase version of AI model, we have to rebuild all docker step and can not leverate old install package step even we only change AI model.
+The traditional approach is built as a sequence of layers and each layer builds on top of the previous one. That is why when we increase the version of the AI model, we have to rebuild all docker laỷe and can not leverage independent layer even we only change AI model.
 
 Multi-stage build enable us to seperate each step to seperate docker that can be reuse and independend. Making each step can be esiy cached and we only rebuild what we changed. Here is some comparison of tradition vs multi-stage build:
 
 |     |Multi-stage |Traditional|Saving|
-|:---:|:-----:|:----------:|
+|:---:|:-----:|:----------:|:----------:|
 |Change AI model|11s|31s|64.5%|
 |Last Image size|2.75GB|5.4GB|49%|
 
-![Docker build](docker-build.png "Docker build")
+As you can see, the Multi-stage build save us a lot of time in building image and more lightweight serving. I can not overstate how frustrating and counter-productive in slow pipeline cause the amount of time wasted waiting for builds to complete adds up to 10s of thousands USD/year wasted even for small teams.
 
-As you can see, the Multi-stage build save us a lot of time in building image and more lightweight serving. Docker multi-stage can be descriped in [build.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build.sh) and [build-push](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build-push.sh) to docker hub. For more in-dept tutorial in docker multi-stage, you should checkout the [full guide here](https://pythonspeed.com/articles/smaller-python-docker-images/)
+![Waiting pipeline](waiting-for-pipeline-to-finish-running.jpeg "Not Funny Meme")
+
+Docker multi-stage steps can be described in [build.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build.sh) and [build-push](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build-push.sh) to docker hub. For a more in-dept tutorial in docker multi-stage, you should check out the [full guide here](https://pythonspeed.com/articles/smaller-python-docker-images/)
 
 ## Feature Store
 
-The natural of AI inference is lots of compute usage and timing, to maintain a healthy app and low latency serving API. We have to use a [feature store db](https://www.tecton.ai/blog/what-is-a-feature-store/) to deliver real-time experience for end-user and saving data.
+The natural of AI inference is lots of computing usage and timing, to maintain a healthy app and low latency serving API. We have to use a [feature store db](https://www.tecton.ai/blog/what-is-a-feature-store/) to deliver a real-time experience for end-user and save data.
 
 {{< admonition info >}}
 
@@ -145,7 +171,7 @@ Redis is most often selected as the foundation for the online feature store, tha
 
 ![Feature Store](feature-store.webp "Feature Store")
 
-Our project will use redis as backend to store data and serve if the prediction for specific text is already made. You can extend our class base Backend in the [project template](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/app/feature_store/backends/__init__.py) and can be esasy change new backend data store.
+Our project will use redis as backend to store data and serve if the prediction for specific text is already made. You can extend our class base Backend in the [project template](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/app/feature_store/backends/__init__.py) and can be esasy replace with new data store.
 
 We will discuss feature store in this following code snipet
 
@@ -159,7 +185,10 @@ async def inference(
     feature_store: Backend = Depends(get_backend),
     twitter_api: API = Depends(get_twitter_api),
 ):
-    tweet = twitter_api.get_status(tweetUrl.split("/")[-1])
+    try:
+        tweet = twitter_api.get_status(tweetUrl.split("/")[-1])
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error{type(e).__name__}: {e}")
     key = Keys(tweet=tweet)
     data = await get_cache(keys=key, feature_store=feature_store)
     if not data:
@@ -191,7 +220,7 @@ This is not as robust as using a background task library like Celery. Instead, B
 background_tasks.add_task(set_cache, result.dict(), key, feature_store)
 ```
 
-When you call add_task(), you pass in a function and a list of arguments. Here, we pass in set_cache(). This function saves the prediction result to Redis. Let's look at how it works:
+When you call `add_task()`, you pass in a function and a list of arguments. Here, we pass in set_cache(). This function saves the prediction result to Redis. Let's look at how it works:
 
 ```python
 async def set_cache(data, keys: Keys, feature_store: Backend):
@@ -241,6 +270,8 @@ By leverage cloud vendor and serverless platform, we can minmize what can go wro
 
 - Maintainability: AWS CloudFormation as IAC that helps us model and set up our AWS resources so that we can spend less time managing those resources and more time focusing on our applications that run in AWS.
 
+The desciption steps to deploy AI application to ECS is in [here](https://github.com/haicheviet/blog-code/tree/main/machine-learning-inference-on-industry-standard/deploy/aws)
+
 ## Monitoring and aggrage log
 
 CloudWatch collects monitoring and operational data in the form of logs, metrics, and events, and visualizes it using automated dashboards so you can get a unified view of your AWS resources, applications, and services that run on AWS.
@@ -251,7 +282,7 @@ Keys monitoring metric in AI service:
 - Task autoscaling
 - Feature Store hits
 - Failure rate
-- Prediction distribution
+- Logging
 
 **insert dashboard here**
 
@@ -263,8 +294,8 @@ We can visualize how sentiment tweet of each user by using feature store.
 
 ## Some afterthought
 
-- We haven't talk about A/B testing model cause A/B test is very expensive both in platform cost and engineer resource. Hands on project should not care too much in A/B test except you already had few thousand of active users to make A/B testing effective.
+- We haven't talked about the A/B testing model cause A/B test is very expensive both in platform cost and engineer resources. A hands-on project should not care too much about A/B test except if you already had a few thousand active users to make A/B testing effective.
 
-- Kubernate cluster is more popular than ECS but need more maintance and a dedicate platform engineer to manage cluster. We think AI team should focus on model and metric rather than platform management, beside it is better to adopt kubernate in large scale training rather than simple inference.
+- Kubernetes cluster is more popular than ECS but needs more maintenance and a dedicated platform engineer to manage a cluster. We think the AI team should focus on model and metric rather than platform management, it is better to adopt Kubernetes in large-scale training rather than simple inference.
 
-- Data drift and Concept drift is very importance to monitor how well of your AI model. But the scope of this blog is already intensive. We will dive more in these concept in later blog.
+- Data drift and Concept drift are very important to monitor how well your AI model is. But the scope of this blog is already intensive. We will dive more into these concepts in a later blog.
