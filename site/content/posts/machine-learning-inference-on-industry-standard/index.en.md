@@ -36,7 +36,7 @@ The service can be described in the diagram below and full project available in 
 ## Choosing the right format model
 
 The model I pick is [transformer roberta model](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment) to analyst text sentiment
-Firstly, we will find optimize model format to boost inference and standardized our inference code. For pytorch model, we used [torch script](https://pytorch.org/docs/stable/jit.html) to tranform our model to jit format. The translate code is in my [github](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/generate_torch_script.py), you can reproduce and testing by yourself.
+Firstly, we will find optimize model format to boost inference and standardized our inference code. For pytorch model, we used [torch script](https://pytorch.org/docs/stable/jit.html) to tranform our model to jit format. The translate code is in my [github](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/visulization/generate_torch_script.py), you can reproduce and testing by yourself.
 
 ![Pytorch comparison](torch-comparison.webp "Pytorch comparison")
 
