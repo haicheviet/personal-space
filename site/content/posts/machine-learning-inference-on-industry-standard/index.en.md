@@ -286,7 +286,7 @@ Keys monitoring metric in AI service:
 
 ![Dashboard Service](aws-cloudwatch.webp "Dashboard Service")
 
-We can visualize how sentiment tweet of each user by using feature store.
+We can visualize how sentiment tweet of each user by using feature store and the generate code is in [here](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/visulization/tutorial.ipynb).
 
 <img src="top_active_user.webp" width="425" title="Top Active User Sentiment" alt="Top Active User Sentiment"/> <img src="bitcoin_sentiment.webp" width="425" title="Bitcoin Sentiment" alt="Bitcoin Sentiment"/>
 
