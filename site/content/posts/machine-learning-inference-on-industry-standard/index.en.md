@@ -60,7 +60,7 @@ For serving AI model, the most common protocol is Rest API and we will use [Fast
 
 {{< / admonition >}}
 
-![FastAPI Swagger](swagger.png "FastAPI Swagger")
+![FastAPI Swagger](swagger.webp "FastAPI Swagger")
 
 ### Project code style
 
@@ -237,7 +237,7 @@ An AI project's Docker usually is constructed in three steps and can be built to
 - Install requires package
 - Serving AI model
 
-![AI Docker Image](multi-stage-build.png "AI Docker Image")
+![AI Docker Image](multi-stage-build.webp "AI Docker Image")
 
 The traditional approach is built as a sequence of layers and each layer builds on top of the previous one. That is why when we increase the version of the AI model, we have to rebuild all docker laỷe and can not leverage independent layer even we only change AI model.
 
@@ -250,7 +250,7 @@ Multi-stage build enable us to seperate each step to seperate docker that can be
 
 As you can see, the Multi-stage build save us a lot of time in building image and more lightweight serving. I can not overstate how frustrating and counter-productive in slow pipeline cause the amount of time wasted waiting for builds to complete adds up to 10s of thousands USD/year wasted even for small teams.
 
-![Waiting pipeline](waiting-for-pipeline-to-finish-running.jpeg "Not Funny Meme")
+![Waiting pipeline](waiting-for-pipeline-to-finish-running.webp "Not Funny Meme")
 
 Docker multi-stage steps can be described in [build.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build.sh) and [build-push](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build-push.sh) to docker hub. For a more in-dept tutorial in docker multi-stage, you should check out the [full guide here](https://pythonspeed.com/articles/smaller-python-docker-images/)
 
@@ -270,7 +270,7 @@ By leverage cloud vendor and serverless platform, we can minmize what can go wro
 
 - Maintainability: AWS CloudFormation as IAC that helps us model and set up our AWS resources so that we can spend less time managing those resources and more time focusing on our applications that run in AWS.
 
-The desciption steps to deploy AI application to ECS is in [here](https://github.com/haicheviet/blog-code/tree/main/machine-learning-inference-on-industry-standard/deploy/aws)
+The desciption steps to deploy AI application to ECS is in [here](https://github.com/haicheviet/blog-code/tree/main/machine-learning-inference-on-industry-standard/README.md)
 
 ## Monitoring and aggrage log
 
@@ -284,13 +284,13 @@ Keys monitoring metric in AI service:
 - Failure rate
 - Logging
 
-**insert dashboard here**
+![Dashboard Service](aws-cloudwatch.webp "Dashboard Service")
 
 We can visualize how sentiment tweet of each user by using feature store.
 
-**Insert aggerate sentiment of one user**
+<img src="top_active_user.webp" width="425" title="Top Active User Sentiment" alt="Top Active User Sentiment"/> <img src="bitcoin_sentiment.webp" width="425" title="Bitcoin Sentiment" alt="Bitcoin Sentiment"/>
 
-**Top tweeting user in time frame and their sentiment**
+<!-- ![alt-text-1](top_active_user.webp "title-1") ![alt-text-2](bitcoin_sentiment.webp "title-2") -->
 
 ## Some afterthought
 
