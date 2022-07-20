@@ -101,7 +101,7 @@ Một trong những lợi ích của việc sử dụng tệp .env là giúp ch�
 
 ### AI project tips
 
-Quá trình load mô hình Deep Learning thường rất lâu và tốn nhiều resource. Mình thường thấy các dự án AI nhiều bạn thường load model ở ngay lúc endpoint requrest làm khả năng tính toán rất chậm vì cần phải load model trước. Cách tốt nhất là chúng ta load model chỉ một lần ở app context và pass object đó qua các request [Request obj](https://fastapi.tiangolo.com/advanced/using-request-directly/).
+Quá trình tải mô hình Deep Learning lên ram thường rất lâu và tốn nhiều resource. Mình thường thấy các dự án AI nhiều bạn thường load model ở ngay code endpoint requrest làm khả năng tính toán rất chậm vì cần phải load model trước. Cách tốt nhất là chúng ta nên load model chỉ một lần ở app context và pass object đó qua các request [Request obj](https://fastapi.tiangolo.com/advanced/using-request-directly/).
 
 ```python
 app = FastAPI(
