@@ -43,11 +43,11 @@ Khả năng tính toán không được cải thiện nhiều ở CPU usage như
 
 Code load model rất đơn giản và được standardize `torch.jit.load`, mô hình cũng được lưu thành [ScriptModule](https://pytorch.org/docs/stable/generated/torch.jit.ScriptModule.html#torch.jit.ScriptModule) format và sẽ không thay đổi cách load kể cả khi mình thay đổi hoàn toàn model.
 
-Để tối ưu hóa hơn nữa khả năng tính toán của mô hình, các kỹ thuật như quantization hoặc pruning có thể được áp dụng nhưng yêu cầu đi sâu vào nghiên cứu kiến trúc mô hình và mỗi kiến trúc có phương pháp pruning riêng.[TVM](https://tvm.apache.org/) framework có thể được sử dụng để tự động lựa chọn optmized mô hình nhưng cần nhiều thời gian và tài nguyên GPU để chọn trình biên dịch và điều chỉnh kiến trúc phù hợp. Quá trình tối ưu hóa thật rất phức tạp và refer một blog dành riêng của nó và mình sẽ đề cập khi khác. Đối với mô hình PyTorch, cách đơn giản nhất chuyển đổi sang định dạng JIT và đạt được hiệu suất 5-> 10% phần trăm rất dễ
+Để tối ưu hóa hơn nữa khả năng tính toán của mô hình, các kỹ thuật như quantization hoặc pruning có thể được áp dụng nhưng yêu cầu đi sâu vào nghiên cứu kiến trúc mô hình và mỗi kiến trúc có phương pháp pruning riêng. [TVM](https://tvm.apache.org/) framework có thể được sử dụng để tự động lựa chọn optmized mô hình nhưng cần nhiều thời gian và tài nguyên GPU để chọn trình biên dịch và điều chỉnh kiến trúc phù hợp. Quá trình tối ưu hóa thật rất phức tạp và refer một blog dành riêng của nó và mình sẽ đề cập khi khác. Đối với mô hình PyTorch, cách đơn giản nhất là chuyển đổi sang định dạng JIT và dễ dàng đạt được hiệu suất 5-> 10%
 
 ## RestAPI and project template
 
-Để triển khai AI model, giao thức phổ biến nhất là Rest API và mình sẽ sử dụng [FastAPI](https://fastapi.tiangolo.com/) cho serving framwork của chúng ta. FastAPI là framework đứng thứ 3 trong danh sách được yêu thích nhất ở [Stack Overflow 2021 Developer Survey](https://insights.stackoverflow.com/survey/2021/#section-most-loved-dreaded-and-wanted-web-frameworks) và hỗ trợ [OpenAPI](https://github.com/OAI/OpenAPI-Specification). Hơn nữa, sự kết hợp giữa Pydantic và FastAPI hỗ trợ typing system và rất nhanh, mình khuyến khích ai đang code python thì đều nên dùng thử.
+Để triển khai AI model, giao thức phổ biến nhất là Rest API và mình sẽ sử dụng [FastAPI](https://fastapi.tiangolo.com/) cho serving framwork. FastAPI là framework đứng thứ 3 trong danh sách framework được yêu thích nhất ở [Stack Overflow 2021 Developer Survey](https://insights.stackoverflow.com/survey/2021/#section-most-loved-dreaded-and-wanted-web-frameworks) và hỗ trợ [OpenAPI](https://github.com/OAI/OpenAPI-Specification). Hơn nữa, sự kết hợp giữa Pydantic và FastAPI hỗ trợ typing system và readability, mình khuyến khích ai đang code python thì đều nên dùng thử.
 
 {{< admonition info >}}
 
@@ -206,7 +206,7 @@ async def set_cache(data, keys: Keys, feature_store: Backend):
 
 ### Reading Data from Feature Store
 
-Để sử dụng endpoint `/inference`, clients sẽ thực hiện yêu cầu GET đến `/inference` với link tweet. Sau đó, ta sẽ cố gắng lấy feature từ Feature Store. Nếu dự đoán chưa tồn tại, máy sẽ tính toán dự đoán, trả lại kết quả và sau đó lưu dự đoán đó bên ngoài web context.
+Để sử dụng endpoint `/inference`, clients sẽ thực hiện yêu cầu GET đến `/inference` với link tweet. Sau đó, ta sẽ cố gắng lấy dự đoán từ Feature Store. Nếu dự đoán chưa tồn tại, máy sẽ tính toán dự đoán, trả lại kết quả và sau đó lưu dự đoán đó bên ngoài web context.
 
 ```python
 data = await get_cache(keys=key, feature_store=feature_store)
@@ -232,7 +232,7 @@ Sau khi xong phần coding, mình sẽ sử dụng Docker để đóng gói proj
 Thực tế thì rất phổ biến khi có một Dockerfile để sử dụng cho phát triển (chứa mọi thứ cần thiết để xây dựng ứng dụng), và một bản thu gọn để sử dụng cho production, mà chỉ chứa ứng dụng và chính xác những gì cần thiết để chạy nó. Pattern này đã được gọi là [builder pattern](https://refactoring.guru/design-patterns/builder). Nhưng duy trì hai file Dockerfile không phải là lý tưởng và rất dễ rối cho developer sử dụng.
 Để chỉ duy trì trên file docker, giữ kích thước image ở mức thấp và enable caching để tạo lại docker nhanh hơn, ta sẽ sử dụng [multi-stage builds](https://pythonspeed.com/articles/smaller-python-docker-images/) để dockerize AI service
 
-Docker của một dự án AI thường được xây dựng theo ba bước và có thể được xây dựng thành ba images khác nhau:
+Docker image của một dự án AI thường được xây dựng theo ba bước và có thể được xây dựng thành ba images khác nhau:
 
 - Tải mô hình AI model
 - Cài đặt framework cần thiết
@@ -249,7 +249,7 @@ Multi-stage build cho phép chúng ta phân tách từng bước để tách ri�
 |Change AI model|11s|31s|64.5%|
 |Last Image size|2.75GB|5.4GB|49%|
 
-Như bạn có thể thấy, Multi-stage build giúp tiết kiệm rất nhiều thời gian trong việc xây dựng hình ảnh và image size nhỏ hơn rất nhiều. Mình thường thấy các team chỉ xây dựng Docker đơn giản rồi cho Live vì theo lý luận của họ là `docker image to nhỏ cũng không làm app chạy nhanh hơn`. Thật sự mình rất thất vọng với lối suy nghĩ như vậy và không hề nói quá về việc CI-CD chậm khiến lượng thời gian lãng phí chờ đợi của developer có thể lên tới 10 nghìn USD / năm ngay cả đối với các nhóm nhỏ.
+Như bạn có thể thấy, Multi-stage build giúp tiết kiệm rất nhiều thời gian trong việc xây dựng hình ảnh và image size nhỏ hơn rất nhiều. Mình thường thấy các team chỉ xây dựng Docker đơn giản rồi cho Live vì theo lý luận của họ là **docker image to nhỏ cũng không làm app chạy nhanh hơn**. Thật sự mình rất thất vọng với lối suy nghĩ như vậy và không hề nói quá về việc CI-CD chậm khiến lượng thời gian lãng phí chờ đợi của developer có thể lên tới 10 nghìn USD / năm ngay cả đối với các nhóm nhỏ.
 Khi CI-CD cần tốn 10 phút để hoàn thành thì ta đã tốn hơn ++10 phút ở developer time.
 
 ![Waiting pipeline](waiting-for-pipeline-to-finish-running.webp "Not Funny Meme")
@@ -267,8 +267,6 @@ Bằng cách tận dụng Cloud Vendor và Serverless, chúng ta có thể giả
 - Reliability: Fargate cho phép chúng ta tập trung vào việc xây dựng các ứng dụng mà không cần quản lý máy chủ. Mọi vấn đề về phần cứng hoặc phần mềm chưa biết khiến ứng dụng không hoạt động sẽ được thông báo và thay thế. ECS control plan sẽ loại bỏ node bị lỗi và xây dựng lại bỏ mới cho cluster thay cho developer.
 
 - Scalability: AWS Auto Scaling giám sát các ứng dụng và tự động điều chỉnh dung lượng để duy trì hiệu suất ổn định, có thể dự đoán được với chi phí thấp nhất có thể và năng động theo lưu lượng truy cập.
-
-AWS CloudFormation dưới dạng IAC giúp thành lập mô hình và thiết lập các tài nguyên AWS của mình để chúng ta có thể dành ít thời gian hơn để quản lý các tài nguyên đó và nhiều thời gian hơn để tập trung vào các ứng dụng chạy trong AWS
 
 - Maintainability: AWS CloudFormation dưới dạng IAC giúp thành lập mô hình và thiết lập các tài nguyên AWS của mình để chúng ta có thể dành ít thời gian hơn để quản lý các tài nguyên đó và nhiều thời gian hơn để tập trung vào các ứng dụng chạy trong AWS.
 
