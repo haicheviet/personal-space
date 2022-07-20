@@ -3,7 +3,6 @@ title: "Machine-learning inference on Industry-standard"
 subtitle: ""
 date: 2022-07-05T14:38:51+07:00
 lastmod: 2022-07-05T14:38:51+07:00
-unlisted: True
 
 description: "This article shows how to create ML service on Industry-standard."
 
