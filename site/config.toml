@@ -681,7 +681,7 @@ enableEmoji = true
       enable = true
       Twitter = true
       Facebook = true
-      Linkedin = false
+      Linkedin = true
       Whatsapp = false
       Pinterest = false
       Tumblr = false
@@ -727,7 +727,7 @@ enableEmoji = true
       images = ["/images/avatar.png"]
       # Publisher info
       [params.page.seo.publisher]
-        name = "xxxx"
+        name = "hai che viet"
         logoUrl = "/images/avatar.png"
 
   # Site verification code for Google/Bing/Yandex/Pinterest/Baidu
@@ -839,7 +839,7 @@ enableEmoji = true
 # Author config
 # 作者配置
 [author]
-  name = "upagge.en"
+  name = "hai che viet"
 
 # Sitemap config
 # 网站地图配置
