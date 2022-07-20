@@ -43,11 +43,11 @@ The performance boost is not much but for [GPU model](https://www.educba.com/pyt
 
 The serving code is somewhat simple `torch.jit.load` and already in [ScriptModule](https://pytorch.org/docs/stable/generated/torch.jit.ScriptModule.html#torch.jit.ScriptModule) format that will not change even we change our base model.
 
-To further optimize model inference time, a technique such as quantization or pruning can be applied but require deep dive into investigating model architecture and each architecture has its pruning method. [TVM](https://tvm.apache.org/) framework can be used for auto pruning but required more time to choose the right compile and GPU tuning. The optimized process is very complicated and deserves its dedicated blog and I will talk about it at another time. For the PyTorch model, the no-brainer way is to convert to script format and gain 5->10% percent performance for free
+To further optimize model inference time, some techniques such as quantization or pruning can be applied but require deep dive into investigating model architecture and each architecture has its pruning method. [TVM](https://tvm.apache.org/) framework can be used for auto pruning but required more time and GPU resource to choose the right compile and inference architecture. The optimized process is very complicated and deserves its dedicated blog and I will talk about it at another time. For the PyTorch model, the no-brainer way is to convert to script format and gain 5->10% percent performance for free
 
-## Restapi and project template
+## RestAPI and project template
 
-For serving AI model, the most common protocol is Rest API and we will use [FastAPI](https://fastapi.tiangolo.com/) for our serving framwork. FastAPI was the third most loved web framework in [Stack Overflow 2021 Developer Survey](https://insights.stackoverflow.com/survey/2021/#section-most-loved-dreaded-and-wanted-web-frameworks) and support [OpenAPI](https://github.com/OAI/OpenAPI-Specification) out of the box. Furthermore, the combination of Pydantic and Fastapi is very smooth and strong that I encourage most python developer should use.
+For serving AI model, the most common protocol is Rest API and we will use [FastAPI](https://fastapi.tiangolo.com/) for our serving framwork. FastAPI was the third most loved web framework in [Stack Overflow 2021 Developer Survey](https://insights.stackoverflow.com/survey/2021/#section-most-loved-dreaded-and-wanted-web-frameworks) and support [OpenAPI](https://github.com/OAI/OpenAPI-Specification) out of the box. Furthermore, the combination of Pydantic and Fastapi is very smooth for readability and fast that I encourage most python developer should use.
 
 {{< admonition info >}}
 
@@ -83,7 +83,7 @@ ignore = E722,W503,E203
 
 ### Environment managment
 
-Using a .env file will enable you to use environment variables for local development without polluting the global environment namespace. It will also keep your environment variable names and values isolated to the same project that utilizes them.
+Using a environment file will enable us to easy switch local development without polluting the global environment namespace. It will also keep your environment variable names and values isolated to the same project that utilizes them.
 
 ```env
 APP_ENV=demo
@@ -129,7 +129,7 @@ async def inference(
 
 ## Feature Store
 
-The natural of AI inference is lots of computing usage and timing, to maintain a healthy app and low latency serving API. We have to use a [feature store db](https://www.tecton.ai/blog/what-is-a-feature-store/) to deliver a real-time experience for end-user and save data.
+The natural of AI inference is lots of computing usage and timing, to maintain a healthy app and low latency serving API. We have to use a [feature store db](https://www.tecton.ai/blog/what-is-a-feature-store/) to store data and deliver a real-time experience for end-user.
 
 {{< admonition info >}}
 
@@ -137,7 +137,7 @@ The feature store provides a high throughput batch API for creating point-in-tim
 
 {{< / admonition >}}
 
-Redis is most often selected as the foundation for the online feature store, thanks to its ability to deliver ultra-low latency with high throughput at scale.
+Redis database is most often selected as the foundation for the online feature store, thanks to its ability to deliver ultra-low latency with high throughput at scale.
 
 ![Feature Store](feature-store.webp "Feature Store")
 
@@ -190,7 +190,7 @@ This is not as robust as using a background task library like Celery. Instead, B
 background_tasks.add_task(set_cache, result.dict(), key, feature_store)
 ```
 
-When you call `add_task()`, you pass in a function and a list of arguments. Here, we pass in set_cache(). This function saves the prediction result to Redis. Let's look at how it works:
+When you call `add_task()`, you pass in a function and a list of arguments. Here, we pass in `set_cache()` function. This function saves the prediction result to Redis. Let's look at how it works:
 
 ```python
 async def set_cache(data, keys: Keys, feature_store: Backend):
@@ -205,7 +205,7 @@ First, we serialize the data to JSON and save it to feature_store. We use the ex
 
 ### Reading Data from Feature Store
 
-To use the endpoint `inference`, clients make a GET request to /inference with link tweet. Then we try to get the feature from Feature Store. If the prediction is not existed yet, we calculate the prediction, return it, and then save it outside of the web request.
+To use the endpoint `inference`, clients make a GET request to `/inference` with link tweet. Then we try to get the feature from Feature Store. If the prediction is not existed yet, we calculate the prediction, return it, and then save it outside of the web request.
 
 ```python
 data = await get_cache(keys=key, feature_store=feature_store)
@@ -226,7 +226,7 @@ else:
 
 ## Dockerize application
 
-After we pick the right format model, we will use Docker to package our code and serve to end user. The single file Docker build is not dynamic caching and huge in image size that [cost a lot in develoment](https://renovacloud.com/how-to-reduce-your-docker-image-size-for-a-faster-build-deploy/?lang=en).
+After done coding section, we will use Docker to package our code and serve to end user. But the traditional Docker build is not dynamic caching and huge in image size that [cost a lot in develoment](https://renovacloud.com/how-to-reduce-your-docker-image-size-for-a-faster-build-deploy/?lang=en).
 It was actually very common to have one Dockerfile to use for development (which contained everything needed to build your application), and a slimmed-down one to use for production, which only contained your application and exactly what was needed to run it. This has been referred to as the [builder pattern](https://refactoring.guru/design-patterns/builder). Maintaining two Dockerfiles is not ideal.
 To maintain only on docker file, keep inference size low and enable caching for faster re-build, we will use [multi-stage builds](https://pythonspeed.com/articles/smaller-python-docker-images/) to dockerize AI service
 
@@ -238,11 +238,11 @@ An AI project's Docker usually is constructed in three steps and can be built to
 
 ![AI Docker Image](multi-stage-build.webp "AI Docker Image")
 
-The traditional approach is built as a sequence of layers and each layer builds on top of the previous one. That is why when we increase the version of the AI model, we have to rebuild all docker laỷe and can not leverage independent layer even we only change AI model.
+The traditional approach is built as a sequence of layers and each layer builds on top of the previous one. That is why when we increase the version of the AI model, we have to rebuild all docker layer and can not leverage independent layer even we only change AI model.
 
-Multi-stage build enable us to seperate each step to seperate docker that can be reuse and independend. Making each step can be esiy cached and we only rebuild what we changed. Here is some comparison of tradition vs multi-stage build:
+Multi-stage build enable us to seperate each step to seperate docker that can be reuse and independend with each other. Making each step can be esiy cached and we only need to rebuild what we changed. Here is some comparison of tradition vs multi-stage build:
 
-|     |Multi-stage |Traditional|Saving|
+|     |Multi-stage|Traditional|Saving|
 |:---:|:-----:|:----------:|:----------:|
 |Change AI model|11s|31s|64.5%|
 |Last Image size|2.75GB|5.4GB|49%|
@@ -255,9 +255,7 @@ Docker multi-stage steps can be described in [build.sh](https://github.com/haich
 
 ## Reliable service
 
-When you are building a software application or a service, I’m sure you’ve heard of these big words: scalability, maintainability, and reliability. Espcially in AI project that usually to predict the unknow.
-
-Building an reliable service is substainly hard even for large team. To avoid pitfall in build everything on your own, Cloud vendor is more suitable otpion to deploy and scale our app. For small and medium team size, AWS ECS service and fargate is the best candidate to service our app at optimal cost, you can find more in [previous blog](https://haicheviet.com/ecs-cost-optimization-with-fargate/) that we're ready discussed about how well of this architecture.
+When you are building a software application or a service, I’m sure you’ve heard of these big words: scalability, maintainability, and reliability. Espcially in AI project that usually to predict the unknow. Building an reliable service and SLA 99.99% uptime is substainly hard even for large team. To avoid pitfall in build everything on your own, Cloud vendor is more suitable otpion to deploy and scale our app. For small and medium team size, AWS ECS service and fargate is the best candidate to service our app at optimal cost and less maintenance, you can find more in [previous blog](https://haicheviet.com/ecs-cost-optimization-with-fargate/) that we're ready discussed about how well and suited of this architecture for small and medium team.
 
 ![AWS deployment](ecs-fargate.webp "AWS deployment")
 
@@ -285,7 +283,7 @@ Keys monitoring metric in AI service:
 
 ![Dashboard Service](aws-cloudwatch.webp "Dashboard Service")
 
-We can visualize how sentiment tweet of each user by using feature store and the generate code is in [here](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/visulization/tutorial.ipynb).
+We can visualize how sentiment tweet of each user by using feature store. Notebook visualize is in [here](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/visulization/tutorial.ipynb).
 
 <img src="top_active_user.webp" width="425" title="Top Active User Sentiment" alt="Top Active User Sentiment"/> <img src="bitcoin_sentiment.webp" width="425" title="Bitcoin Sentiment" alt="Bitcoin Sentiment"/>
 
