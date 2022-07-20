@@ -276,7 +276,7 @@ Các bước mô tả để triển khai ứng dụng AI cho ECS được đề 
 
 CloudWatch giúp thu thập dữ liệu giám sát và hoạt động dưới dạng logs, metrics, và events, đồng thời trực quan hóa dữ liệu đó bằng cách sử dụng trang dashboard để bạn có thể có được cái nhìn thống nhất về các tài nguyên, ứng dụng và dịch vụ chạy trên AWS của mình.
 
-Các Keys monitoring metric ở AI service:
+Các keys monitoring metric ở AI service:
 
 - CPU and Ram usage
 - Task autoscaling
