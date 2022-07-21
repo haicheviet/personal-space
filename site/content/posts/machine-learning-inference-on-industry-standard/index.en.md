@@ -10,7 +10,7 @@ resources:
 - name: "featured-image"
   src: "featured-image.webp"
   
-tags: ["Machine Learning", "FastAPI", "ECS", "Feature Store", "IAC"]
+tags: ["Machine Learning", "FastAPI", "Docker", "Feature Store", "Multi-stage", "Project Template"]
 categories: ["Machine Learning"]
 ---
 
@@ -247,7 +247,7 @@ Multi-stage build enable us to seperate each step to seperate docker that can be
 |Change AI model|11s|31s|64.5%|
 |Last Image size|2.75GB|5.4GB|49%|
 
-As you can see, the Multi-stage build save us a lot of time in building image and more lightweight serving. I can not overstate how frustrating and counter-productive in slow pipeline cause the amount of time wasted waiting for builds to complete adds up to 10s of thousands USD/year wasted even for small teams.
+As you can see, the Multi-stage build save us a lot of time in building image and more lightweight serving. I can not overstate how frustrating and counter-productive in slow pipeline cause the amount of time wasted waiting for builds to complete adds up to 10 of thousands USD/year wasted even for small teams.
 
 ![Waiting pipeline](waiting-for-pipeline-to-finish-running.webp "Not Funny Meme")
 

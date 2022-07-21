@@ -10,7 +10,7 @@ resources:
 - name: "featured-image"
   src: "featured-image.webp"
   
-tags: ["Machine Learning", "FastAPI", "ECS", "Feature Store", "IAC"]
+tags: ["Machine Learning", "FastAPI", "Docker", "Feature Store", "Multi-stage", "Project Template"]
 categories: ["Machine Learning"]
 ---
 Sự phát triển của Machine learning đã có nhiều bước đột phá và được sử dụng rộng rãi trong những năm gần đây. Với sự giúp đỡ của nhiều tools và frameworks để đơn giản hóa việc inference và logging service. Nhưng thông thường, bước triển khai ML service thường bị bỏ qua và không được biết đến rộng rãi như dựng mô hình ML. Tuy nhiên trong ML cycle, traing ML model chỉ chiếm 20 phần trăm của dự án. Đặc biệt, khi deploy mô hình AI cho người dùng cuối thường khá sơ sài và target chính để demo ở MVC phase. Do đó, làm thế nào chúng ta có thể quản lý mô hình AI trong thực tế và làm cho AI cycle được triển khai nhanh chóng. Chúng ta sẽ đi sâu vào một số phương pháp best practices trong phát triển phần mềm và cách được ứng dụng vào dự án AI tương ứng.
