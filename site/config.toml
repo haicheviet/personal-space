@@ -578,13 +578,14 @@ enableEmoji = true
     # Utterances comment config (https://utteranc.es/)
     # Utterances comment 评论系统设置 (https://utteranc.es/)
     [params.comment.utterances]
-      enable = false
+      enable = true
       # owner/repo
-      repo = ""
+      repo = "haicheviet/blog-comment"
       issueTerm = "pathname"
       label = ""
       lightTheme = "github-light"
-      darkTheme = "github-dark"
+      darkTheme = "github-dark-orange"
+      crossorigin = "anonymous"
   # Page config
   # 文章页面配置
   [params.page]
