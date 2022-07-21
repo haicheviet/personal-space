@@ -291,7 +291,7 @@ We can visualize how sentiment tweet of each user by using feature store. Notebo
 
 ## Some afterthought
 
-- We haven't talked about the A/B testing model cause A/B test is very expensive both in platform cost and engineer resources. A hands-on project should not care too much about A/B test except if you already had a few thousand active users to make A/B testing effective.
+- We haven't talked about the A/B testing model cause A/B test is very expensive both in platform cost and engineer resources. A hands-on project should not care too much about A/B test except if you already had a few hundred thousand active users to make A/B testing effective.
 
 - Kubernetes cluster is more popular than ECS but needs more maintenance and a dedicated platform engineer to manage a cluster. We think the AI team should focus on model and metric rather than platform management, it is better to adopt Kubernetes in large-scale training rather than simple inference.
 

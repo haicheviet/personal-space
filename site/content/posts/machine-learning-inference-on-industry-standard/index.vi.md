@@ -294,7 +294,7 @@ Ta có thể visualize sentiment về tweet mỗi người dùng bằng cách s�
 
 ## Some afterthought
 
-- Chúng ta chưa nói về mô hình thử nghiệm A/B vì A/B test rất tốn kém cả về chi phí nền tảng và nguồn lực developer. Một dự án mới launch không nên quan tâm quá nhiều đến A/B tesngoại trừ trường hợp bạn đã có một vài nghìn người dùng đang hoạt động để thực hiện A/B test hiệu quả.
+- Chúng ta chưa nói về mô hình thử nghiệm A/B vì A/B test rất tốn kém cả về chi phí nền tảng và nguồn lực developer. Một dự án mới launch không nên quan tâm quá nhiều đến A/B tesngoại trừ trường hợp bạn đã có một vài trăm nghìn người dùng đang hoạt động để thực hiện A/B test hiệu quả.
 
 - Kubernetes cluster phổ biến hơn ECS nhưng cần bảo trì nhiều hơn và một platform-developer chỉ tập trung vào quản lý cluster. Mình nghĩ rằng AI team nên tập trung vào mô hình và số liệu hơn là quản lý nền tảng, tốt hơn là nên áp dụng Kubernetes trong large-scale training hơn là triển khai mô hình.
 
