@@ -85,7 +85,7 @@ enableEmoji = true
       # site description
       description = "About Hai Che Blog"
       # site keywords
-      keywords = ["Theme", "Hugo", "hai che", "AI", "machine learning"]
+      keywords = ["data science", "blog", "hai che", "AI", "machine learning"]
       # App icon config
       [languages.en.params.app]
         # optional site title override for the app when added to an iOS home screen or Android launcher
