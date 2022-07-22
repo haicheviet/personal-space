@@ -47,7 +47,7 @@ Code load model rất đơn giản và được standardize `torch.jit.load`, m�
 
 Để tối ưu hóa hơn nữa khả năng tính toán của mô hình, các kỹ thuật như quantization hoặc pruning có thể được áp dụng nhưng yêu cầu đi sâu vào nghiên cứu kiến trúc mô hình và mỗi kiến trúc có phương pháp pruning riêng. [TVM](https://tvm.apache.org/) framework có thể được sử dụng để tự động lựa chọn optmized mô hình nhưng cần nhiều thời gian và tài nguyên GPU để chọn trình biên dịch và điều chỉnh kiến trúc phù hợp. Quá trình tối ưu hóa thật rất phức tạp và refer một blog dành riêng của nó và mình sẽ đề cập khi khác. Đối với mô hình PyTorch, cách đơn giản nhất là chuyển đổi sang định dạng JIT và dễ dàng đạt được hiệu suất 5-> 10%
 
-## RestAPI and project template
+## RestAPI and Project Template
 
 Để triển khai AI model, giao thức phổ biến nhất là Rest API và mình sẽ sử dụng [FastAPI](https://fastapi.tiangolo.com/) cho serving framwork. FastAPI là framework đứng thứ 3 trong danh sách framework được yêu thích nhất ở [Stack Overflow 2021 Developer Survey](https://insights.stackoverflow.com/survey/2021/#section-most-loved-dreaded-and-wanted-web-frameworks) và hỗ trợ [OpenAPI](https://github.com/OAI/OpenAPI-Specification). Hơn nữa, sự kết hợp giữa Pydantic và FastAPI hỗ trợ typing system và readability, mình khuyến khích ai đang code python thì đều nên dùng thử.
 
@@ -144,7 +144,7 @@ Redis database thường được chọn làm nền tảng cho feature-store, nh
 
 ![Feature Store](feature-store.webp "Feature Store")
 
-Mình sẽ sử dụng redis làm feature-store để lưu trữ dữ liệu và phân phát nếu dự đoán cho một tweet thể đã được thực hiện. Bạn có thể mở rộng feature-store khác dựa trên [project template](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/app/feature_store/backends/__init__.py)
+Mình sẽ sử dụng redis làm feature-store để lưu trữ dữ liệu và phân phát nếu dự đoán cho một tweet thể đã được thực hiện. Bạn có thể mở rộng feature-store khác dựa trên [Project Template](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/app/feature_store/backends/__init__.py)
 
 Đây là một đoạn code sử dụng feature-store để dựng API
 

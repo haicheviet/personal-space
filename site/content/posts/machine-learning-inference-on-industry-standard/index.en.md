@@ -47,7 +47,7 @@ The serving code is somewhat simple `torch.jit.load` and already in [ScriptModul
 
 To further optimize model inference time, some techniques such as quantization or pruning can be applied but require deep dive into investigating model architecture and each architecture has its pruning method. [TVM](https://tvm.apache.org/) framework can be used for auto pruning but required more time and GPU resource to choose the right compile and inference architecture. The optimized process is very complicated and deserves its dedicated blog and I will talk about it at another time. For the PyTorch model, the no-brainer way is to convert to script format and gain 5->10% percent performance for free
 
-## RestAPI and project template
+## RestAPI and Project Template
 
 For serving AI model, the most common protocol is Rest API and we will use [FastAPI](https://fastapi.tiangolo.com/) for our serving framwork. FastAPI was the third most loved web framework in [Stack Overflow 2021 Developer Survey](https://insights.stackoverflow.com/survey/2021/#section-most-loved-dreaded-and-wanted-web-frameworks) and support [OpenAPI](https://github.com/OAI/OpenAPI-Specification) out of the box. Furthermore, the combination of Pydantic and Fastapi is very smooth for readability and fast that I encourage most python developer should use.
 
@@ -143,7 +143,7 @@ Redis database is most often selected as the foundation for the online feature s
 
 ![Feature Store](feature-store.webp "Feature Store")
 
-Our project will use redis as backend to store data and serve if the prediction for specific text is already made. You can extend our class base Backend in the [project template](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/app/feature_store/backends/__init__.py) and can be esasy replace with new data store.
+Our project will use redis as backend to store data and serve if the prediction for specific text is already made. You can extend our class base Backend in the [Project Template](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/app/feature_store/backends/__init__.py) and can be esasy replace with new data store.
 
 We will discuss feature store in this following code snipet
 
