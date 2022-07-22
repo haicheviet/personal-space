@@ -207,7 +207,7 @@ First, we serialize the data to JSON and save it to feature_store. We use the ex
 
 ### Reading Data from Feature Store
 
-To use the endpoint `inference`, clients make a GET request to `/inference` with link tweet. Then we try to get the feature from Feature Store. If the prediction is not existed yet, we calculate the prediction, return it, and then save it outside of the web request.
+To use the endpoint inference, clients make a GET request to `/inference` with link tweet. Then we try to get the feature from Feature Store. If the prediction is not existed yet, we calculate the prediction, return it, and then save it outside of the web request.
 
 ```python
 data = await get_cache(keys=key, feature_store=feature_store)

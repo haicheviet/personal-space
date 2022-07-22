@@ -208,7 +208,7 @@ async def set_cache(data, keys: Keys, feature_store: Backend):
 
 ### Reading Data from Feature Store
 
-Để sử dụng endpoint `/inference`, clients sẽ thực hiện yêu cầu GET đến `/inference` với link tweet. Sau đó, ta sẽ cố gắng lấy dự đoán từ Feature Store. Nếu dự đoán chưa tồn tại, máy sẽ tính toán dự đoán, trả lại kết quả và sau đó lưu dự đoán đó bên ngoài web context.
+Để sử dụng endpoint inference, clients sẽ thực hiện yêu cầu GET đến `/inference` với link tweet. Sau đó, ta sẽ cố gắng lấy dự đoán từ Feature Store. Nếu dự đoán chưa tồn tại, máy sẽ tính toán dự đoán, trả lại kết quả và sau đó lưu dự đoán đó bên ngoài web context.
 
 ```python
 data = await get_cache(keys=key, feature_store=feature_store)
