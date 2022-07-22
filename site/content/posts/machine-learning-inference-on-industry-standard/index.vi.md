@@ -274,7 +274,7 @@ Bằng cách tận dụng Cloud Vendor và Serverless, chúng ta có thể giả
 
 Các bước mô tả để triển khai ứng dụng AI cho ECS được đề cập ở [đây](https://github.com/haicheviet/blog-code/tree/main/machine-learning-inference-on-industry-standard/README.md)
 
-## Monitoring and aggrage log
+## Monitoring and aggregate log
 
 CloudWatch giúp thu thập dữ liệu giám sát và hoạt động dưới dạng logs, metrics, và events, đồng thời trực quan hóa dữ liệu đó bằng cách sử dụng trang dashboard để bạn có thể có được cái nhìn thống nhất về các tài nguyên, ứng dụng và dịch vụ chạy trên AWS của mình.
 

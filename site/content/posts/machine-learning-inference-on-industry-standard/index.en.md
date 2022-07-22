@@ -271,7 +271,7 @@ By leverage cloud vendor and serverless platform, we can minmize what can go wro
 
 The desciption steps to deploy AI application to ECS is in [here](https://github.com/haicheviet/blog-code/tree/main/machine-learning-inference-on-industry-standard/README.md)
 
-## Monitoring and aggrage log
+## Monitoring and aggregate log
 
 CloudWatch collects monitoring and operational data in the form of logs, metrics, and events, and visualizes it using automated dashboards so you can get a unified view of your AWS resources, applications, and services that run on AWS.
 
