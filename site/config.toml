@@ -813,8 +813,8 @@ enableEmoji = true
   [markup.highlight]
     codeFences = true
     guessSyntax = true
-    lineNos = true
-    lineNumbersInTable = true
+    lineNos = false
+    lineNumbersInTable = false
     noClasses = false
   # Goldmark is from Hugo 0.60 the default library used for Markdown
   # Goldmark 是 Hugo 0.60 以来的默认 Markdown 解析库
