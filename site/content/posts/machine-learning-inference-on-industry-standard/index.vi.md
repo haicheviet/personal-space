@@ -28,7 +28,7 @@ Mình chọn bài toàn phân tích ngữ nghĩa của twitter cho hands-on Proj
 
 {{< admonition info >}}
 
-Service architecture được miêu tả trong sơ đồ bên dưới và project đã được public ở [github repo của mình](https://github.com/haicheviet/blog-code/tree/main/machine-learning-inference-on-industry-standard)
+Service architecture được miêu tả trong sơ đồ bên dưới và project đã được public ở [github repo của mình](https://github.com/haicheviet/fullstack-machine-learning-inference)
 
 {{< / admonition >}}
 
@@ -37,19 +37,19 @@ Service architecture được miêu tả trong sơ đồ bên dưới và projec
 ## Choosing the right format model
 
 Mô hình được chọn lựa là [transformer roberta model](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment) để analyst sentiment của text
-Đầu tiên, chúng ta sẽ tìm định dạng để mô hình được tối ưu hóa nhằm giảm thiểu thời gian tính toán và chuẩn hóa cách load mô hình. Cho mô hình pytorch, mình dùng [torch script](https://pytorch.org/docs/stable/jit.html) để transform mô hình về định dạng jit format. Code transform mọi người có thể tìm ở đây [github](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/visulization/generate_torch_script.py), và bạn có thể run lại nếu muốn.
+Đầu tiên, chúng ta sẽ tìm định dạng để mô hình được tối ưu hóa nhằm giảm thiểu thời gian tính toán và chuẩn hóa cách load mô hình. Cho mô hình pytorch, mình dùng torch script để transform mô hình về định dạng jit format. Code transform mọi người có thể tìm ở đây [github](https://github.com/haicheviet/fullstack-machine-learning-inference/tree/master/visulization/generate_torch_script.py), và bạn có thể run lại nếu muốn.
 
 ![Pytorch comparison](torch-comparison.webp "Pytorch comparison")
 
 Khả năng tính toán không được cải thiện nhiều ở CPU usage nhưng [GPU model](https://www.educba.com/pytorch-jit/) cho ta thấy được the runtime of torchscript tốt hơn nhiều so với mô hình thuần PyTorch.
 
-Code load model rất đơn giản và được standardize `torch.jit.load`, mô hình cũng được lưu thành [ScriptModule](https://pytorch.org/docs/stable/generated/torch.jit.ScriptModule.html#torch.jit.ScriptModule) format và sẽ không thay đổi cách load kể cả khi mình thay đổi hoàn toàn model.
+Code load model rất đơn giản và được standardize `torch.jit.load`, mô hình cũng được lưu thành ScriptModule format và sẽ không thay đổi cách load kể cả khi mình thay đổi hoàn toàn model.
 
-Để tối ưu hóa hơn nữa khả năng tính toán của mô hình, các kỹ thuật như quantization hoặc pruning có thể được áp dụng nhưng yêu cầu đi sâu vào nghiên cứu kiến trúc mô hình và mỗi kiến trúc có phương pháp pruning riêng. [TVM](https://tvm.apache.org/) framework có thể được sử dụng để tự động lựa chọn optmized mô hình nhưng cần nhiều thời gian và tài nguyên GPU để chọn trình biên dịch và điều chỉnh kiến trúc phù hợp. Quá trình tối ưu hóa thật rất phức tạp và refer một blog dành riêng của nó và mình sẽ đề cập khi khác. Đối với mô hình PyTorch, cách đơn giản nhất là chuyển đổi sang định dạng JIT và dễ dàng đạt được hiệu suất 5-> 10%
+Để tối ưu hóa hơn nữa khả năng tính toán của mô hình, các kỹ thuật như quantization hoặc pruning có thể được áp dụng nhưng yêu cầu đi sâu vào nghiên cứu kiến trúc mô hình và mỗi kiến trúc có phương pháp pruning riêng. TVM framework có thể được sử dụng để tự động lựa chọn optmized mô hình nhưng cần nhiều thời gian và tài nguyên GPU để chọn trình biên dịch và điều chỉnh kiến trúc phù hợp. Quá trình tối ưu hóa thật rất phức tạp và refer một blog dành riêng của nó và mình sẽ đề cập khi khác. Đối với mô hình PyTorch, cách đơn giản nhất là chuyển đổi sang định dạng JIT và dễ dàng đạt được hiệu suất 5-> 10%
 
 ## RestAPI and Project Template
 
-Để triển khai AI model, giao thức phổ biến nhất là Rest API và mình sẽ sử dụng [FastAPI](https://fastapi.tiangolo.com/) cho serving framwork. FastAPI là framework đứng thứ 3 trong danh sách framework được yêu thích nhất ở [Stack Overflow 2021 Developer Survey](https://insights.stackoverflow.com/survey/2021/#section-most-loved-dreaded-and-wanted-web-frameworks) và hỗ trợ [OpenAPI](https://github.com/OAI/OpenAPI-Specification). Hơn nữa, sự kết hợp giữa Pydantic và FastAPI hỗ trợ typing system và readability, mình khuyến khích ai đang code python thì đều nên dùng thử.
+Để triển khai AI model, giao thức phổ biến nhất là Rest API và mình sẽ sử dụng FastAPI cho serving framwork. FastAPI là framework đứng thứ 3 trong danh sách framework được yêu thích nhất ở [Stack Overflow 2021 Developer Survey](https://insights.stackoverflow.com/survey/2021/#section-most-loved-dreaded-and-wanted-web-frameworks) và hỗ trợ OpenAPI. Hơn nữa, sự kết hợp giữa Pydantic và FastAPI hỗ trợ typing system và readability, mình khuyến khích ai đang code python thì đều nên dùng thử.
 
 {{< admonition info >}}
 
@@ -65,7 +65,7 @@ Code load model rất đơn giản và được standardize `torch.jit.load`, m�
 
 ### Project code style
 
-Việc coding trong dự án phải được tuân theo tiêu chuẩn và cần constantly kiểm tra xem thành viên có vi phạm tiêu chuẩn đã đề ra hay không. Code để autocheck format code đã được mình viết sẵn ở [format.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/format.sh) và [lint.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/lint.sh) trong github. Standard tiêu chuẩn mình thường chọn lựa là [google python code style](https://google.github.io/styleguide/pyguide.html) và dưới đây là vài cách set tiêu chuẩn ở config file
+Việc coding trong dự án phải được tuân theo tiêu chuẩn và cần constantly kiểm tra xem thành viên có vi phạm tiêu chuẩn đã đề ra hay không. Code để autocheck format code đã được mình viết sẵn ở [format.sh](https://github.com/haicheviet/fullstack-machine-learning-inference/tree/master/scripts/format.sh) và [lint.sh](https://github.com/haicheviet/fullstack-machine-learning-inference/tree/master/scripts/lint.sh) trong github. Standard tiêu chuẩn mình thường chọn lựa là [google python code style](https://google.github.io/styleguide/pyguide.html) và dưới đây là vài cách set tiêu chuẩn ở config file
 
 ```toml
 [tool.mypy]
@@ -103,7 +103,7 @@ Một trong những lợi ích của việc sử dụng tệp .env là giúp ch�
 
 ### AI project tips
 
-Quá trình tải mô hình Deep Learning lên ram thường rất lâu và tốn nhiều resource. Mình thường thấy các dự án AI nhiều bạn thường load model ở ngay code endpoint requrest làm khả năng tính toán rất chậm vì cần phải load model trước. Cách tốt nhất là chúng ta nên load model chỉ một lần ở app context và pass object đó qua các request [Request obj](https://fastapi.tiangolo.com/advanced/using-request-directly/).
+Quá trình tải mô hình Deep Learning lên ram thường rất lâu và tốn nhiều resource. Mình thường thấy các dự án AI nhiều bạn thường load model ở ngay code endpoint requrest làm khả năng tính toán rất chậm vì cần phải load model trước. Cách tốt nhất là chúng ta nên load model chỉ một lần ở app context và pass object đó qua các request obj.
 
 ```python
 app = FastAPI(
@@ -131,8 +131,7 @@ async def inference(
 
 ## Feature Store
 
-AI service thường cần rất nhiều tài nguyên và khả năng tính toán, để giữ được một service healthy và low latency API. Chúng ta cần sử dụng một [feature-store db](https://www.tecton.ai/blog/what-is-a-feature-store/)
-để lưu trữ và mang lại trải nghiệm tốt hơn cho người dùng.
+AI service thường cần rất nhiều tài nguyên và khả năng tính toán, để giữ được một service healthy và low latency API. Chúng ta cần sử dụng một feature-store db để lưu trữ và mang lại trải nghiệm tốt hơn cho người dùng.
 
 {{< admonition info >}}
 
@@ -144,7 +143,7 @@ Redis database thường được chọn làm nền tảng cho feature-store, nh
 
 ![Feature Store](feature-store.webp "Feature Store")
 
-Mình sẽ sử dụng redis làm feature-store để lưu trữ dữ liệu và phân phát nếu dự đoán cho một tweet thể đã được thực hiện. Bạn có thể mở rộng feature-store khác dựa trên [Project Template](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/app/feature_store/backends/__init__.py)
+Mình sẽ sử dụng redis làm feature-store để lưu trữ dữ liệu và phân phát nếu dự đoán cho một tweet thể đã được thực hiện. Bạn có thể mở rộng feature-store khác dựa trên backend base class
 
 Đây là một đoạn code sử dụng feature-store để dựng API
 
@@ -232,7 +231,7 @@ else:
 Sau khi xong phần coding, mình sẽ sử dụng Docker để đóng gói project và deploy cho người dùng cuối. Nhưng bản build Docker truyền thống không có hỗ trợ dynamic caching từng lớp và docker size rất lớn nên sẽ [tốn rất nhiều resource lẫn tiền nong khi develoment](https://renovacloud.com/how-to-reduce-your-docker-image-size-for-a-faster-build-deploy/?lang=en).
 
 Thực tế thì rất phổ biến khi có một Dockerfile để sử dụng cho phát triển (chứa mọi thứ cần thiết để xây dựng ứng dụng), và một bản thu gọn để sử dụng cho production, mà chỉ chứa ứng dụng và chính xác những gì cần thiết để chạy nó. Pattern này đã được gọi là [builder pattern](https://refactoring.guru/design-patterns/builder). Nhưng duy trì hai file Dockerfile không phải là lý tưởng và rất dễ rối cho developer sử dụng.
-Để chỉ duy trì trên file docker, giữ kích thước image ở mức thấp và enable caching để tạo lại docker nhanh hơn, ta sẽ sử dụng [multi-stage builds](https://pythonspeed.com/articles/smaller-python-docker-images/) để dockerize AI service
+Để chỉ duy trì trên file docker, giữ kích thước image ở mức thấp và enable caching để tạo lại docker nhanh hơn, ta sẽ sử dụng multi-stage builds để dockerize AI service
 
 Docker image của một dự án AI thường được xây dựng theo ba bước và có thể được xây dựng thành ba images khác nhau:
 
@@ -256,7 +255,7 @@ Khi CI-CD cần tốn 10 phút để hoàn thành thì ta đã tốn hơn ++10 p
 
 ![Waiting pipeline](waiting-for-pipeline-to-finish-running.webp "Not Funny Meme")
 
-Docker multi-stage steps có thể được mô tả trong [build.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build.sh) và [build-push](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build-push.sh) để upload docker image. Để có hướng dẫn chi tiết hơn về multi-stage docker, bạn nên xem [full guide](https://pythonspeed.com/articles/smaller-python-docker-images/)
+Docker multi-stage steps có thể được mô tả trong [build.sh](https://github.com/haicheviet/fullstack-machine-learning-inference/tree/master/scripts/build.sh) và [build-push](https://github.com/haicheviet/fullstack-machine-learning-inference/tree/master/scripts/build-push.sh) để upload docker image. Để có hướng dẫn chi tiết hơn về multi-stage docker, bạn nên xem [full guide](https://pythonspeed.com/articles/smaller-python-docker-images/)
 
 ## Reliable service
 
@@ -272,7 +271,7 @@ Bằng cách tận dụng Cloud Vendor và Serverless, chúng ta có thể giả
 
 - Maintainability: AWS CloudFormation dưới dạng IAC giúp thành lập mô hình và thiết lập các tài nguyên AWS của mình để chúng ta có thể dành ít thời gian hơn để quản lý các tài nguyên đó và nhiều thời gian hơn để tập trung vào các ứng dụng chạy trong AWS.
 
-Các bước mô tả để triển khai ứng dụng AI cho ECS được đề cập ở [đây](https://github.com/haicheviet/blog-code/tree/main/machine-learning-inference-on-industry-standard/README.md)
+Các bước mô tả để triển khai ứng dụng AI cho ECS được đề cập ở [đây](https://github.com/haicheviet/fullstack-machine-learning-inference/tree/master/README.md)
 
 ## Monitoring and aggregate log
 
@@ -288,7 +287,7 @@ Các keys monitoring metric ở AI service:
 
 ![Dashboard Service](aws-cloudwatch.webp "Dashboard Service")
 
-Ta có thể visualize sentiment về tweet mỗi người dùng bằng cách sử dụng feature store. Code cho phần visualize được viết ở [đây](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/visulization/tutorial.ipynb).
+Ta có thể visualize sentiment về tweet mỗi người dùng bằng cách sử dụng feature store. Code cho phần visualize được viết ở [đây](https://github.com/haicheviet/fullstack-machine-learning-inference/tree/master/visulization/tutorial.ipynb).
 
 <img src="top_active_user.webp" width="425" title="Top Active User Sentiment" alt="Top Active User Sentiment"/> <img src="bitcoin_sentiment.webp" width="425" title="Bitcoin Sentiment" alt="Bitcoin Sentiment"/>
 

@@ -28,7 +28,7 @@ The idea of the project is to get metadata from Twitter URL and sentiment analys
 
 {{< admonition info >}}
 
-The service can be described in the diagram below and full project available in our [github repo](https://github.com/haicheviet/blog-code/tree/main/machine-learning-inference-on-industry-standard)
+The service can be described in the diagram below and full project available in our [github repo](https://github.com/haicheviet/fullstack-machine-learning-inference)
 
 {{< / admonition >}}
 
@@ -37,19 +37,19 @@ The service can be described in the diagram below and full project available in 
 ## Choosing the right format model
 
 The model I pick is [transformer roberta model](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment) to analyst text sentiment
-Firstly, we will find optimize model format to boost inference and standardized our inference code. For pytorch model, we used [torch script](https://pytorch.org/docs/stable/jit.html) to tranform our model to jit format. The translate code is in my [github](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/visulization/generate_torch_script.py), you can reproduce and testing by yourself.
+Firstly, we will find optimize model format to boost inference and standardized our inference code. For pytorch model, we used torch script to tranform our model to jit format. The translate code is in my [github](https://github.com/haicheviet/fullstack-machine-learning-inference/tree/master/visulization/generate_torch_script.py), you can reproduce and testing by yourself.
 
 ![Pytorch comparison](torch-comparison.webp "Pytorch comparison")
 
 The performance boost is not much but for [GPU model](https://www.educba.com/pytorch-jit/) the runtime of torchscript proves to be better than PyTorch.
 
-The serving code is somewhat simple `torch.jit.load` and already in [ScriptModule](https://pytorch.org/docs/stable/generated/torch.jit.ScriptModule.html#torch.jit.ScriptModule) format that will not change even we change our base model.
+The serving code is somewhat simple `torch.jit.load` and already in ScriptModule format that will not change even we change our base model.
 
-To further optimize model inference time, some techniques such as quantization or pruning can be applied but require deep dive into investigating model architecture and each architecture has its pruning method. [TVM](https://tvm.apache.org/) framework can be used for auto pruning but required more time and GPU resource to choose the right compile and inference architecture. The optimized process is very complicated and deserves its dedicated blog and I will talk about it at another time. For the PyTorch model, the no-brainer way is to convert to script format and gain 5->10% percent performance for free
+To further optimize model inference time, some techniques such as quantization or pruning can be applied but require deep dive into investigating model architecture and each architecture has its pruning method. TVM framework can be used for auto pruning but required more time and GPU resource to choose the right compile and inference architecture. The optimized process is very complicated and deserves its dedicated blog and I will talk about it at another time. For the PyTorch model, the no-brainer way is to convert to script format and gain 5->10% percent performance for free
 
 ## RestAPI and Project Template
 
-For serving AI model, the most common protocol is Rest API and we will use [FastAPI](https://fastapi.tiangolo.com/) for our serving framwork. FastAPI was the third most loved web framework in [Stack Overflow 2021 Developer Survey](https://insights.stackoverflow.com/survey/2021/#section-most-loved-dreaded-and-wanted-web-frameworks) and support [OpenAPI](https://github.com/OAI/OpenAPI-Specification) out of the box. Furthermore, the combination of Pydantic and Fastapi is very smooth for readability and fast that I encourage most python developer should use.
+For serving AI model, the most common protocol is Rest API and we will use FastAPI for our serving framwork. FastAPI was the third most loved web framework in [Stack Overflow 2021 Developer Survey](https://insights.stackoverflow.com/survey/2021/#section-most-loved-dreaded-and-wanted-web-frameworks) and support OpenAPI out of the box. Furthermore, the combination of Pydantic and Fastapi is very smooth for readability and fast that I encourage most python developer should use.
 
 {{< admonition info >}}
 
@@ -65,7 +65,7 @@ For serving AI model, the most common protocol is Rest API and we will use [Fast
 
 ### Project code style
 
-Coding in project have to be followed by standard style and lint check if member violate coding style. You can find auto format script in [format.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/format.sh) and [lint.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/lint.sh) check in github. For more python code style, we use [google python code style](https://google.github.io/styleguide/pyguide.html) for this project and here are some brief configurations guide
+Coding in project have to be followed by standard style and lint check if member violate coding style. You can find auto format script in [format.sh](https://github.com/haicheviet/fullstack-machine-learning-inference/tree/master/scripts/format.sh) and [lint.sh](https://github.com/haicheviet/fullstack-machine-learning-inference/tree/master/scripts/lint.sh) check in github. For more python code style, we use [google python code style](https://google.github.io/styleguide/pyguide.html) for this project and here are some brief configurations guide
 
 ```toml
 [tool.mypy]
@@ -103,7 +103,7 @@ One of the benefits of using a .env file is that it becomes much easier to devel
 
 ### AI project tips
 
-The deep learning model loading process is slow and we can not reload the model with every request which will cause a lot of overhead. We should load it once in the app context and pass the already loaded model into each request via [Request obj](https://fastapi.tiangolo.com/advanced/using-request-directly/)
+The deep learning model loading process is slow and we can not reload the model with every request which will cause a lot of overhead. We should load it once in the app context and pass the already loaded model into each request via request obj.
 
 ```python
 app = FastAPI(
@@ -131,7 +131,7 @@ async def inference(
 
 ## Feature Store
 
-The natural of AI inference is lots of computing usage and timing, to maintain a healthy app and low latency serving API. We have to use a [feature store db](https://www.tecton.ai/blog/what-is-a-feature-store/) to store data and deliver a real-time experience for end-user.
+The natural of AI inference is lots of computing usage and timing, to maintain a healthy app and low latency serving API. We have to use a feature store db to store data and deliver a real-time experience for end-user.
 
 {{< admonition info >}}
 
@@ -143,7 +143,7 @@ Redis database is most often selected as the foundation for the online feature s
 
 ![Feature Store](feature-store.webp "Feature Store")
 
-Our project will use redis as backend to store data and serve if the prediction for specific text is already made. You can extend our class base Backend in the [Project Template](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/app/feature_store/backends/__init__.py) and can be esasy replace with new data store.
+Our project will use redis as backend to store data and serve if the prediction for specific text is already made. You can extend our class base Backend and can be esasy replace with new data store.
 
 We will discuss feature store in this following code snipet
 
@@ -230,7 +230,7 @@ else:
 
 After done coding section, we will use Docker to package our code and serve to end user. But the traditional Docker build is not dynamic caching and huge in image size that [cost a lot in develoment](https://renovacloud.com/how-to-reduce-your-docker-image-size-for-a-faster-build-deploy/?lang=en).
 It was actually very common to have one Dockerfile to use for development (which contained everything needed to build your application), and a slimmed-down one to use for production, which only contained your application and exactly what was needed to run it. This has been referred to as the [builder pattern](https://refactoring.guru/design-patterns/builder). Maintaining two Dockerfiles is not ideal.
-To maintain only on docker file, keep inference size low and enable caching for faster re-build, we will use [multi-stage builds](https://pythonspeed.com/articles/smaller-python-docker-images/) to dockerize AI service
+To maintain only on docker file, keep inference size low and enable caching for faster re-build, we will use multi-stage builds to dockerize AI service
 
 An AI project's Docker usually is constructed in three steps and can be built to three different images:
 
@@ -253,7 +253,7 @@ As you can see, the Multi-stage build save us a lot of time in building image an
 
 ![Waiting pipeline](waiting-for-pipeline-to-finish-running.webp "Not Funny Meme")
 
-Docker multi-stage steps can be described in [build.sh](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build.sh) and [build-push](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/scripts/build-push.sh) to docker hub. For a more in-dept tutorial in docker multi-stage, you should check out the [full guide here](https://pythonspeed.com/articles/smaller-python-docker-images/)
+Docker multi-stage steps can be described in [build.sh](https://github.com/haicheviet/fullstack-machine-learning-inference/tree/master/scripts/build.sh) and [build-push](https://github.com/haicheviet/fullstack-machine-learning-inference/tree/master/scripts/build-push.sh) to docker hub. For a more in-dept tutorial in docker multi-stage, you should check out the [full guide here](https://pythonspeed.com/articles/smaller-python-docker-images/)
 
 ## Reliable service
 
@@ -269,7 +269,7 @@ By leverage cloud vendor and serverless platform, we can minmize what can go wro
 
 - Maintainability: AWS CloudFormation as IAC that helps us model and set up our AWS resources so that we can spend less time managing those resources and more time focusing on our applications that run in AWS.
 
-The desciption steps to deploy AI application to ECS is in [here](https://github.com/haicheviet/blog-code/tree/main/machine-learning-inference-on-industry-standard/README.md)
+The desciption steps to deploy AI application to ECS is in [here](https://github.com/haicheviet/fullstack-machine-learning-inference/tree/master/README.md)
 
 ## Monitoring and aggregate log
 
@@ -285,7 +285,7 @@ Keys monitoring metric in AI service:
 
 ![Dashboard Service](aws-cloudwatch.webp "Dashboard Service")
 
-We can visualize how sentiment tweet of each user by using feature store. Notebook visualize is in [here](https://github.com/haicheviet/blog-code/blob/main/machine-learning-inference-on-industry-standard/visulization/tutorial.ipynb).
+We can visualize how sentiment tweet of each user by using feature store. Notebook visualize is in [here](https://github.com/haicheviet/fullstack-machine-learning-inference/tree/master/visulization/tutorial.ipynb).
 
 <img src="top_active_user.webp" width="425" title="Top Active User Sentiment" alt="Top Active User Sentiment"/> <img src="bitcoin_sentiment.webp" width="425" title="Bitcoin Sentiment" alt="Bitcoin Sentiment"/>
 
