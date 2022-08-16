@@ -9,7 +9,7 @@ resources:
 
 tags: ["Design Choice", "Coding", "10x developer", "Business Impace"]
 categories: ["Thought"]
-
+draft: true
 
 ---
 
