@@ -49,7 +49,7 @@ Replacing to new protocol gave us a huge benefit both in performance and cost. T
 
 {{< /admonition >}}
 
-The process I describe may be too vivid and complicated for anyone to mimic and apply in practice. But this process actually has a particular scientific term, and some great books talk about it `Second-Order thinking`.
+The process I describe may be too vivid and complicated for anyone to mimic and apply in practice. Actually this process has a particular scientific term, and some great books talk about it `Second-Order thinking`.
 
 ## Second-Order thinking
 
