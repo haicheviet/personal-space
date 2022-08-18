@@ -45,7 +45,7 @@ It turns out users rarely use our service but only when they open their recruitm
 
 {{< admonition success >}}
 
-Replacing to new protocol gave us a huge benefit both in performance and cost. The service handle very well with our users' unusual traffic thanks to serverless autoscaling. Even more, our cloud cost is half of what we are paying before because we only pay for what users use, with no more cost for an idle server.
+Replacing to new protocol gave us a huge benefit both in performance and cost. The service handle very well our users' unusual traffic thanks to serverless autoscaling. Even more, our cloud cost is half of what we are paying before because we only pay for what users use, with no more cost for an idle server.
 
 {{< /admonition >}}
 
