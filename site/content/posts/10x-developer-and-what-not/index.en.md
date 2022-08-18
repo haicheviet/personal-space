@@ -36,20 +36,20 @@ So rather than spend months optimizing costs via coding or cloud configuration t
 
 Similar to the interview, recently, I had a problem that I want to share that maybe you can find existing. My current company offers a SAS solution for parsing and ATS system. Our service mainly aims to automate the process of inputting candidate info and scoring the user's talent pool to their available jobs.
 
-We had a problem that our platform resource does not meet the demand from the customers, requests die very frequently, and of course, the customers do not feel happy about it. So I was assigned to optimize the platform for a better user experience. And my first thought, maybe is everyone first thought, to analyze the code and scaling technique to check for improvement. But I had some doubt and rethought the constraint of the engineering aspect. What if I had done all fancy thing to optimized code and platform, but then what next? How much can I squeeze out from the code enough to achieve KPI, can my optimized code be bug-free, and if not, can I deliver the code that won't break the existing platform ...etc? The engineering aspect's constraint is enormous, but the reward is not foreseen. That's why rather than continue diving more into coding, I thought about why our platform failed to deliver, what users expect from our platform and how much traffic we are talking about. After a whole day of debugging the network and analyst log, I saw the abnormal trend in our user traffic that caused our platform can not scale quickly enough to handle. The reality is each user has very different traffic; sometimes, they don't send any requests for the whole week but send a few thousand requests in only five minutes.
+We had a problem that our platform resource does not meet the demand from the customers, requests die very frequently, and of course, the customers do not feel happy about it. So I was assigned to optimize the platform for a better user experience. And my first thought, maybe is everyone first thought, to analyze the code and scaling technique to check for improvement. But I had some doubt and rethought the constraint of the engineering aspect. What if I had done all fancy things to optimized code and platform, but then what next? How much can I squeeze out from the code enough to achieve KPI, can my optimized code be bug-free, and if not, can I deliver the code that won't break the existing platform ...etc? The engineering aspect's constraint is enormous, but the reward is not foreseen. That's why rather than continue diving more into coding, I thought about why our platform failed to deliver, what users expect from our platform and how much traffic we are talking about. After a whole day of debugging the network and analyst logs, I saw the abnormal trend in our user traffic that caused our platform can not scale quickly enough to handle. The reality is each user has very different traffic; sometimes, they don't send any requests for the whole week but send a few thousand requests in only five minutes.
 
-It turns out users rarely use our service but only when they open their recruitment events; therefore, each event generates thousands of new candidates to our platform for analysis in only a short period. Of course, our service stutter to keep up with the API protocol. And the other case is newly signed users; they migrate their talent pools to our service and cause a dozen thousands of new traffic but rarely have any new candidates afterward. After seeing these abnormal trends, I propose to migrate our service from API Protocol to Queue System that can break out into two queues:
+It turns out users rarely use our service but only when they open their recruitment events; therefore, each event generates thousands of new candidates to our platform for analysis in only a short period. Of course, our service stutter to keep up with the API protocol. And the other case is newly signed users; they migrate their talent pools to our service and cause a dozen thousands of new traffic but rarely have any new candidates afterward. After seeing these unusual trends, I propose to migrate our service from API Protocol to Queue System that can break out into two queues:
 
 - Short queue (1 -> 50 candidates) using Lambda to serve
 - Long queue (50> candidates) using ECS-Fargate to serve
 
 {{< admonition success >}}
 
-Replacing the new protocol gave us a huge benefit both in performance and cost. The service handle very well our users' unusual traffic thanks to serverless. Even more, our cloud cost is half of what we are paying before because we only pay for what users use, with no more cost for an idle server.
+Replacing to new protocol gave us a huge benefit both in performance and cost. The service handle very well with our users' unusual traffic thanks to serverless autoscaling. Even more, our cloud cost is half of what we are paying before because we only pay for what users use, with no more cost for an idle server.
 
 {{< /admonition >}}
 
-The process I describe may be too vivid and complicated for anyone to mimic and apply in practice. But this process has a particular scientific term, and some great books talk about it `Second-Order thinking.`
+The process I describe may be too vivid and complicated for anyone to mimic and apply in practice. But this process actually has a particular scientific term, and some great books talk about it `Second-Order thinking`.
 
 ## Second-Order thinking
 
@@ -81,6 +81,6 @@ Second-order thinking is a great mental model to have and helps us address some 
 
 {{< /admonition >}}
 
-[Applied Economics: Thinking Beyond Stage One by economist Thomas Sowell](https://www.amazon.com/Applied-Economics-Thinking-Beyond-Stage/dp/0465003451) explores this in good detail, applying it to political and economic policies. You should check out his book for more insight and very well written.
+[Applied Economics: Thinking Beyond Stage One by economist Thomas Sowell](https://www.amazon.com/Applied-Economics-Thinking-Beyond-Stage/dp/0465003451) explores this in good detail, applying it to political and economic policies. You should check out his book for more insight and better explanations.
 
 Thinking is a process rather than intuition; it takes a lot of work to finalize the process and be quick in second-order thinking. However, doing so is a smart way to separate yourself from the masses.
