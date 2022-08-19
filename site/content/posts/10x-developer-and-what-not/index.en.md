@@ -2,12 +2,12 @@
 title: "10x Developer and What not"
 date: 2022-08-13T21:57:40+08:00
 lastmod: 2022-08-14T16:45:40+08:00
-description: "This article shows how to use Firecracker to create cluster VMs with container."
+description: "This article shows how to be 10x developer and Second Order of thinking."
 resources:
 - name: "featured-image"
   src: "featured-image.webp"
 
-tags: ["Design Choice", "Coding", "10x developer", "Business Impace"]
+tags: ["Design Choice", "Second-rrder of thinking", "10x developer", "Productivity", "Business Impact"]
 categories: ["Thought"]
 
 ---
