@@ -1,8 +1,8 @@
 ---
-title: "10x Developer and What not"
+title: "10x Developer and Second-Order thinking"
 date: 2022-08-13T21:57:40+08:00
 lastmod: 2022-08-14T16:45:40+08:00
-description: "This article shows how to be 10x developer and Second Order of thinking."
+description: "This article shows how to be 10x developer and Second Order thinking."
 resources:
 - name: "featured-image"
   src: "featured-image.webp"
