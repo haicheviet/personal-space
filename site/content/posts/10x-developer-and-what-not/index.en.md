@@ -7,7 +7,7 @@ resources:
 - name: "featured-image"
   src: "featured-image.webp"
 
-tags: ["Design Choice", "Second-rrder of thinking", "10x developer", "Productivity", "Business Impact"]
+tags: ["Design Choice", "Second-Order thinking", "10x developer", "Productivity", "Business Impact"]
 categories: ["Thought"]
 
 ---
@@ -24,7 +24,7 @@ Last week, I watched a video about how one engineer can get four promotions in j
 
 I will summarize some ideas I got from the interview. The impact of your outcome is the most concrete KPI for one to leverage between promotions; here is an example.
 
-When the company reaches a certain scale, that needs to optimize the cost in a cloud vendor. Most developers' first intuition is to optimize coding, use cheaper cloud vendors, research service cloud offerings, and tuning configurations. But the engineer mentioned in the video has a very different approach. Rather than dive deep into technology that will cost multiple months to analyze and deploy, he analyst the traffic and investigate the cloud cost between all users. Find out that many users use the service incorrectly and even cost the company money rather than generate the outcome. When he is done with the analysis and lists out some users' costs the most, he reaches out to other departments to alert them and brainstorm to optimize cost. After a few weeks, he successfully reduced cloud cost to nearly the target KPI only on his own.
+When the company reaches a certain scale, that needs to optimize the cost in a cloud vendor. Most developers' first intuition is to optimize coding, use cheaper cloud vendors, research service cloud offerings, and tuning configurations. But the engineer mentioned in the video has a very different approach. Rather than dive deep into technology that will cost multiple months to analyze and deploy, he monitor the traffic and investigate the cloud cost between all users. Find out that many users use the service incorrectly and even cost the company money rather than generate the revenue. When he is done with the analysis and lists out some users' costs the most, he reaches out to other departments to alert them and brainstorm to optimize cost. After a few weeks, he successfully reduced cloud cost to nearly the target KPI only on his own.
 
 {{< admonition success >}}
 
@@ -36,9 +36,9 @@ So rather than spend months optimizing costs via coding or cloud configuration t
 
 Similar to the interview, recently, I had a problem that I want to share that maybe you can find existing. My current company offers a SAS solution for parsing and ATS system. Our service mainly aims to automate the process of inputting candidate info and scoring the user's talent pool to their available jobs.
 
-We had a problem that our platform resource does not meet the demand from the customers, requests die very frequently, and of course, the customers do not feel happy about it. So I was assigned to optimize the platform for a better user experience. And my first thought, maybe is everyone first thought, to analyze the code and scaling technique to check for improvement. But I had some doubt and rethought the constraint of the engineering aspect. What if I had done all fancy things to optimized code and platform, but then what next? How much can I squeeze out from the code enough to achieve KPI, can my optimized code be bug-free, and if not, can I deliver the code that won't break the existing platform ...etc? The engineering aspect's constraint is enormous, but the reward is not foreseen. That's why rather than continue diving more into coding, I thought about why our platform failed to deliver, what users expect from our platform and how much traffic we are talking about. After a whole day of debugging the network and analyst logs, I saw the abnormal trend in our user traffic that caused our platform can not scale quickly enough to handle. The reality is each user has very different traffic; sometimes, they don't send any requests for the whole week but send a few thousand requests in only five minutes.
+We had a problem that our platform resource does not meet the demand from the customers, requests die very frequently, and of course, the customers do not feel happy about it. So I was assigned to optimize the platform for a better user experience. And my first thought maybe is everyone first thought, to read the code, scaling technique and find room for improvement. But I had some doubts and rethought the constraint of the engineering aspect. What if I had done all fancy things to optimize code and platform, but then what next? How much can I squeeze out from the code enough to achieve KPI, can my optimized code be bug-free, and if not, can I deliver the code that won't break the existing platform ...etc? The engineering aspect's constraint is enormous, but the reward is not foreseen. That's why rather than continue diving more into coding, I thought about why our platform failed to deliver, what users expect from our platform and how much traffic we are talking about. After a whole day of debugging the network and examining the log output, I saw the abnormal trend in our user traffic that caused our platform can not scale quickly enough to handle. The reality is each user has very different traffic; sometimes, they don't send any requests for the whole week but send a few thousand requests in only five minutes.
 
-It turns out users rarely use our service but only when they open their recruitment events; therefore, each event generates thousands of new candidates to our platform for analysis in only a short period and obviously our API protocol struggle to keep up. The other case is newly signed users; they migrate their talent pools to our service and cause a dozen thousands of new traffic but rarely have any new candidates afterward. After seeing these unusual trends, I propose to migrate our service from API Protocol to Queue System that can break out into two queues:
+It turns out users rarely use our service but only when they open their recruitment events; therefore, each event generates thousands of new candidates to our platform for parsing in only a short period and obviously our API protocol struggle to keep up. The other case is newly signed users; they migrate their talent pools to our service and cause a dozen thousands of new traffic but rarely have any new candidates afterward. After seeing these unusual trends, I propose to migrate our service from API Protocol to Queue System that can break out into two queues:
 
 - Short queue (1 -> 50 candidates) using Lambda to serve
 - Long queue (50> candidates) using ECS-Fargate to serve
@@ -81,6 +81,7 @@ Second-order thinking is a great mental model to have and helps us address some 
 
 {{< /admonition >}}
 
-[Applied Economics: Thinking Beyond Stage One by economist Thomas Sowell](https://www.amazon.com/Applied-Economics-Thinking-Beyond-Stage/dp/0465003451) explores this in good detail, applying it to political and economic policies. You should check out his book for more insight and better explanations.
+[Applied Economics: Thinking Beyond Stage One by economist Thomas Sowell](https://www.amazon.com/Applied-Economics-Thinking-Beyond-Stage/dp/0465003451) explores this in good detail, applying it to political and economic policies. You should check out his book for more insight and better expl
+ltions.
 
 Thinking is a process rather than intuition; it takes a lot of work to finalize the process and be quick in second-order thinking. However, doing so is a smart way to separate yourself from the masses.
