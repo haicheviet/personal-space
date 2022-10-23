@@ -295,10 +295,6 @@
     </article>
     {{ end }}
 
-    {{- if not $params.Page.hiddenNewLetters -}}
-        {{- partial "newsletter.html" . -}}
-    {{- end -}}
-
     {{- if not $params.Page.hiddenUnderPost -}}
         {{- partial "under-post.html" . -}}
     {{- end -}}

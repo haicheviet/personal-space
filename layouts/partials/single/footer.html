@@ -8,6 +8,10 @@
 </div>
 {{ end }}
 
+{{- if not $params.Page.hiddenNewLetters -}}
+    {{- partial "newsletter.html" . -}}
+{{- end -}}
+
 <div class="post-share">
     {{- partial "plugin/share.html" . -}}
 </div>
@@ -31,3 +35,4 @@
     {{- end -}}
 </div>
 {{- end -}}
+
