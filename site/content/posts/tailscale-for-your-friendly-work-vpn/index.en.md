@@ -199,4 +199,4 @@ The Windows, macOS, Android, iOS, etc clients all accept advertised routes by de
 
 - Using Tailscale has been so blessed that I can not return to the traditional way anymore. Every service can be accessed by its private domain, no more mess up the environment cause the network switch or port is already in use.
 - Tailscale is a paid service, and you must depend on Tailscale to manage the admin server. Thankfully, Taiscale also provides a solution to open-source hosting [Headscale](https://github.com/juanfont/headscale), and you can configure all the admin server on your own.
-- For the final wrap-up, you can use [Terraform](https://registry.terraform.io/modules/hardfinhq/tailscale-subnet-router/aws/latest?tab=resources) to manage Tailscale and automate all the processes I listed above.
+- For the final wrap-up, you can use [Terraform](https://registry.terraform.io/modules/hardfinhq/tailscale-subnet-router/aws/latest?tab=resources) to manage Tailscale and automate all the processes to setup subnet router that I listed above.
