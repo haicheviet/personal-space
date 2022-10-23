@@ -99,7 +99,7 @@ The magic of Tailscale happens when it’s installed on multiple devices. Add mo
 
 Add more machines to your network by repeating step 2 or by [inviting others to join your network](https://tailscale.com/kb/1064/invite-team-members/).
 
-Even more, you can sharing files between device and team member via [TailDrop](https://tailscale.com/kb/1106/taildrop/#enabling-taildrop-for-your-network)
+Even more, you can sharing files between devices and team members via [TailDrop](https://tailscale.com/kb/1106/taildrop/#enabling-taildrop-for-your-network)
 
 {{< video src="https://tailscale.com/kb/1106/taildrop/taildrop.mp4" loop=true autoplay=true >}}
 
