@@ -7,7 +7,7 @@ resources:
 - name: "featured-image"
   src: "featured-image.webp"
 
-tags: ["Tailscale", "VPN", "Work Tool", "Bastion Host", "Cloud Security"]
+tags: ["Tailscale", "VPN", "Work Tool", "Bastion Host", "Cloud Security", "Subnet Router"]
 categories: ["VPN"]
 
 
@@ -109,7 +109,7 @@ Tailscale support `subnet router` (previously called a relay node or relaynode) 
 
 ![Subnet router](subnets.webp "Subnet router")
 
-Setting up a subnet router is realtive easy and you can read [this guide](https://tailscale.com/kb/1019/subnets/#setting-up-a-subnet-router) for more specific. Below is the detail process that I setup in AWS cloud.
+Setting up a subnet router is relatively easy and you can read [this guide](https://tailscale.com/kb/1019/subnets/#setting-up-a-subnet-router) for more specifics. Below is the detailed process that I set up in the AWS cloud.
 
 ### Step 1: Create an EC2 instance router
 
