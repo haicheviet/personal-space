@@ -43,7 +43,7 @@ Hình trên là những devices mà mình đang sử dụng, mỗi device đư�
 
 ## Tailscale device register
 
-Tailscale giúp bạn kết nối các thiết bị của mình với nhau. Để đăng ký thiết bị của bạn thành Tailscale cluster, tải Tailscale ở máy client của bạn và device bạn muốn register. Tailscale hiện tại support rất nhiều hdh như Linux, Windows, macOS, Raspberry Pi, Android, Synology, v.v. [Tải xuống Tailscale](https://tailscale.com/download) và đăng nhập trên thiết bị dựa trên script.
+Tailscale giúp bạn kết nối các thiết bị của mình với nhau. Để đăng ký thiết bị lên Tailscale cluster, tải Tailscale ở máy client của bạn và device bạn muốn register. Tailscale hiện tại support rất nhiều hdh như Linux, Windows, macOS, Raspberry Pi, Android, Synology, v.v. [Tải xuống Tailscale](https://tailscale.com/download) và đăng nhập trên thiết bị dựa trên script.
 
 Còn đây là cách Mình thiết lập ở máy Fedora:
 
@@ -73,7 +73,7 @@ sudo tailscale up --authkey tskey-abcdef1432341818
 
 ### Step 3: Verify your connection
 
-Kiểm tra xem bạn có thể ping tới thiết bị mới register từ máy của bạn được không. IP của thiết bị mới có thể tìm ở [admin console](https://login.tailscale.com/admin/machines), hoặc bạn có thể run câu lệnh sau ở thiết bị mới để show IP.
+Kiểm tra xem có thể ping tới thiết bị mới register từ máy client được không. IP của thiết bị mới có thể tìm ở [admin console](https://login.tailscale.com/admin/machines), hoặc bạn có thể run câu lệnh sau ở thiết bị mới để show IP.
 
 ```bash
 $ tailscale ip -4
@@ -96,11 +96,11 @@ Vậy là bạn đã hoàn thành đăng ký thiết bị mới lên Tailscale c
 
 Thêm nhiều thiết bị vào cluster bằng cách tiếp tục từ step 2 hoặc [mời nhưng member truy cập vào network của bạn](https://tailscale.com/kb/1064/invite-team-members/). Và hơn thế nữa, Tailscale support chia sẻ files từ các devices và user với nhau khi bạn enable [TailDrop](https://tailscale.com/kb/1106/taildrop/#enabling-taildrop-for-your-network)
 
-{{< video src="https://tailscale.com/kb/1106/taildrop/taildrop.mp4" loop=true autoplay=true >}}
+{{< video src="https://tailscale.com/kb/1106taildrop/taildrop.mp4" loop=true autoplay=true >}}
 
 ## Tailscale as a network layer
 
-Taiscale hổ trợ cả `subnet router` (trước đây gọi là relay node hoặc relaynode) để access tới thiết bị mạng private từ TailScale. **Bộ định tuyến hoạt động như một cổng chuyển tiếp**, chuyển tiếp lưu lượng truy cập từ mạng Tailscale của bạn vào private network vật lý của bạn. Bộ định tuyến có các tính năng như chính sách kiểm soát truy cập, giúp dễ dàng di chuyển một mạng lớn sang Tailscale mà không cần cài đặt ứng dụng trên mọi thiết bị.
+Taiscale hổ trợ cả `subnet router` (trước đây gọi là relay node hoặc relaynode) để access tới thiết bị mạng private từ TailScale. **Bộ định tuyến hoạt động như một cổng chuyển tiếp**, chuyển tiếp lưu lượng truy cập từ mạng Tailscale của bạn vào private network vật lý. Bộ định tuyến có các tính năng như chính sách kiểm soát truy cập, giúp dễ dàng di chuyển một mạng lớn sang Tailscale mà không cần cài đặt ứng dụng trên mọi thiết bị.
 
 ![Subnet router](subnets.webp "Subnet router")
 
@@ -108,13 +108,13 @@ Việc thiết lập subnet router tương đối dễ dàng và bạn có thể
 
 ### Step 1: Create an EC2 instance router
 
-Đầu tiên, tạo một instance EC2 chạy Amazon Linux trên x86 hoặc ARM. Tailscale hỗ trợ cài đặt cho cả hai kiến trúc và bạn nên xài các phiên bản AWS ARM vì rất hiệu quả về chi phí. Khi đặt security policy, hãy `cho phép cổng UDP 41641` xâm nhập từ bất kỳ nguồn nào. Điều này sẽ cho phép kết nối trực tiếp và giảm thiểu độ trễ.
+Đầu tiên, tạo một instance EC2 chạy Amazon Linux trên x86 hoặc ARM. Tailscale hỗ trợ cài đặt cho cả hai kiến trúc và bạn nên xài các phiên bản AWS ARM vì rất hiệu quả về chi phí. Khi đặt security policy, `cho phép cổng UDP 41641` xâm nhập từ bất kỳ nguồn nào. Điều này sẽ cho phép kết nối trực tiếp và giảm thiểu độ trễ.
 
 ![Security Group](security-group.webp "Security Group")
 
 ### Step 2: Configure tailscale subnet router
 
-Sau đó, ssh vào instance và làm theo các bước để [cài đặt Tailscale trên Amazon Linux 2](https://tailscale.com/kb/1052/install-amazon-linux-2/) và định cấus subnet router. Khi chạy `tailscale up`, hãy chuyển địa chỉ mạng con VPC của bạn đến `--advertise-route`.
+Sau đó, ssh vào instance và làm theo các bước [cài đặt Tailscale trên Amazon Linux 2](https://tailscale.com/kb/1052/install-amazon-linux-2/) và thiết lập subnet router. Khi chạy `tailscale up`, hãy chuyển dải mạng VPC của instance đến `--advertise-route`.
 
 ![VPC subnet address](subnet-address.webp "VPC subnet address")
 
@@ -139,7 +139,7 @@ $ tailscale ip -4
 100.83.201.24
 ```
 
-Các step tiếp theo không cần thiết nếu bạn đã enable lựa chọn ***autoApprovers*** ở admin.
+Các step tiếp theo không cần thiết nếu bạn đã enable lựa chọn *autoApprovers* ở admin.
 
 Truy cập vào trang [admin console](https://login.tailscale.com/admin/machines), và tìm kiếm thiết bị mới mà bạn đã đăng ký subnet routes. Bạn có thể tìm kiếm ở Subnets badge trên các thiết bị được liệt kê. Sử dụng `...` icon ở cuối hàng, bấm vào `Edit route settings`. Từ đây sẽ có popup về Edit route settings panel như hình dưới.
 
@@ -167,7 +167,7 @@ traceroute to 10.0.26.12 (10.0.26.12), 64 hops max, 52 byte packets
 $ ssh /path/to/private_key ec2-user@10.0.26.12
 ```
 
-Nếu bạn cần truy cập các dịch vụ khác, chẳng hạn như các AWS RDS database được tạo mà không có khả năng truy cập công khai, tên máy chủ sẽ được giải quyết bằng địa chỉ IP riêng bên ngoài VPC. Địa chỉ IP này thuộc về các tuyến đường đã được thiết lập trên.
+Nếu bạn cần truy cập các dịch vụ khác, chẳng hạn như các AWS RDS database được tạo mà không có khả năng truy cập công khai. Tên miền của private service này sẽ được access qua các advertise route đã được thiết lập qua ở trên.
 
 Bạn có thể access RDB database từ mạng Tailscale y hệt cách các instance private truy cập.
 
@@ -189,6 +189,6 @@ Các client như Windows, macOS, Android, iOS, v.v. đều chấp nhận các ad
 
 ## Some afterthought
 
-- Sử dụng Tailscale thực sự đã đến mức mình không thể quay lại cách  dùng truyền thống nữa. Mọi dịch vụ đều có thể được truy cập bởi tên miền riêng của nó, không còn bị xáo trộn môi trường vì chuyển mạng hoặc cổng đang được sử dụng.
-- Tailscale là một dịch vụ trả phí và bạn phải phụ thuộc vào Tailscale để quản lý máy chủ. Rất may, Taiscale cũng cung cấp giải pháp cho open-source hosting [Headscale](<https://github.com/juanfont/headscale>) và bạn có thể tự cấu hình quản trị tất cả máy chủ của mình.
+- Sử dụng Tailscale thực sự đã đến mức mình không thể quay lại sử dụng cách truyền thống nữa. Mọi dịch vụ đều có thể được truy cập bởi tên miền riêng của nó, không còn bị xáo trộn môi trường vì chuyển mạng hoặc cổng đang được sử dụng.
+- Tailscale là một dịch vụ trả phí và users phải phụ thuộc vào Tailscale để quản lý máy chủ. Rất may, Taiscale cũng cung cấp giải pháp cho open-source hosting [Headscale](<https://github.com/juanfont/headscale>) và bạn có thể tự cấu hình quản trị tất cả máy chủ của mình.
 - Và cuối cùng bạn có thể sử dụng [Terraform](<https://registry.terraform.io/modules/hardfinhq/tailscale-subnet-router/aws/latest?tab=resources>) để quản lý Tailscale và tự động hóa tất cả các quy trình để thiết lập subnet router mà mình đã liệt kê ở trên.

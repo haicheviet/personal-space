@@ -20,7 +20,7 @@ The most crucial practice in cloud security is private access and a control pane
 
 Currently, my working environment requires Bastion host and VPN to access the dev server and production database. The setup is simple at first, but as the team and service grow, the complexity of the setup is growing respectively. Hands-on new dev is never easy, and despite I already set up [Dev microVM](https://haicheviet.com/cluster-vm-with-firecracker/) with all the necessary environment and packages, the network config is the most confusing and complicated to debug for junior dev. The current process's problems can be listed as:
 
-- Some [HPC servers](https://en.wikipedia.org/wiki/High-performance_computing) are in the office building, and team members can only access the servers via the office network. Emailing the administrator network for the working VPN is hostile, and even after requesting for years, my request has not been fulfilled cause of insufficient member requests :'(.
+- Some [HPC servers](https://en.wikipedia.org/wiki/High-performance_computing) are in the office building, and team members can only access the servers via the office network. Emailing the administrator network for the working VPN is hostile, and even after requesting for years, my request has not been fulfilled cause of insufficient member requests :disappointed_relieved:.
 - I have tried Cloudflare Tunnel and Ngrok, but the setup is not instructive, and the service must be registered in the specific domain, but my only need is to access the service via email, nothing more.
 - AWS cloud service of our platform is mainly in the private subnet. For the team members to access the cloud database, they must access via Bastion host or VPN.
 - Bastion host will get complicated quickly as the service grows and require nested ssh config to memorize all the service IPs.
@@ -140,7 +140,7 @@ $ tailscale ip -4
 100.83.201.24
 ```
 
-This following step is not required if using ***autoApprovers***.
+This following step is not required if using *autoApprovers* in admin page.
 
 Open the machines page in the [admin console](https://login.tailscale.com/admin/machines), and locate the device that advertised subnet routes. You can look for the Subnets badge in the machines list. Using the `...` icon at the end of the table, select `Edit route settings`. This will open up the Edit route settings panel.
 
