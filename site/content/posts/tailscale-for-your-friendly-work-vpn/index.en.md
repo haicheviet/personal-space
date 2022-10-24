@@ -13,7 +13,7 @@ categories: ["VPN"]
 
 ---
 
-The most crucial practice in cloud security is private access and a control panel for managing users with whom service users can access. However, too much control in private access and administration causes the developer's coding experience to be exponentially low. Especially more services require more maintenance from both sides, and the resource for keeping everything in standard security practice requires a lot in the workforce and net cloud cost. Tailscale is the new VPN service that offers to solve this challenge at a competitive cost.
+The most crucial practice in cloud security is private access and a control panel for managing users with whom service users can access. However, too much control in private access and administration will cause headache for every new member when hands-on coding. Especially more services require more maintenance from both maintainer and user, and the resource for keeping everything in standard security practice requires a lot in the workforce and net cloud cost. Tailscale is the new VPN service that offers to solve this challenge at a competitive cost.
 <!--more-->
 
 ## My goal
