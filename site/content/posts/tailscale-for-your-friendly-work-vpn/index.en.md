@@ -31,7 +31,7 @@ My cram about the network configuration has been built up for years, and seeing 
 
 ## Tailscale hands on
 
-Login tailscale is relative easy, go to this [Page](https://login.tailscale.com/start) to register. But currently taiscale only support creat account with certain SSO identity providers (eg Goole or Microsoft). If you need other support providers, please follow [this instruction](https://tailscale.com/kb/1013/sso-providers/).
+Login tailscale is relative easy, go to this [page](https://login.tailscale.com/start) to register. But currently taiscale only support creat account with certain SSO identity providers (eg Goole or Microsoft). If you need other support providers, please follow [this instruction](https://tailscale.com/kb/1013/sso-providers/).
 
 ![Login page](tailscale-login.webp "Login page")
 
