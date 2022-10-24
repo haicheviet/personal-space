@@ -25,10 +25,10 @@ other = "bài báo trước"
 other = "Tất cả {{ .Some }}"
 
 [tag]
-other = "Nhãn"
+other = "Tags"
 
 [tags]
-other = "Nhãn"
+other = "Tags"
 
 [category]
 other = "Danh mục"
