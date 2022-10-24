@@ -13,25 +13,25 @@ categories: ["VPN"]
 
 ---
 
-Technique quan trọng nhất trong bảo mật đám mây là private acess và admin control để quản lý người dùng và giới hạn dịch vụ họ có thể truy cập. Tuy nhiên, việc kiểm soát quá nhiều quyền truy cập và quản trị gây cản trợ và khó khăn cho việc debug của team members. Đặc biệt là càng nhiều services thì yêu cầu bảo trì nhiều hơn từ cả maintainer và user, nguồn lực để giữ mọi thứ theo tiêu chuẩn bảo mật đòi hỏi nhiều về chi phí con người lẫn cloud. Tailscale là dịch vụ VPN mới cung cấp giải pháp cho những vấn đề trên với chi phí rất cạnh tranh.
+Ưu tiên quan trọng nhất trong bảo mật đám mây là private access và admin control để quản lý người dùng và giới hạn dịch vụ họ có thể truy cập. Tuy nhiên, việc kiểm soát quá nhiều quyền truy cập và quản trị gây cản trở và khó khăn cho việc debug của team members. Đặc biệt là càng nhiều services thì yêu cầu bảo trì nhiều hơn từ cả maintainer và user, nguồn lực để giữ mọi thứ theo tiêu chuẩn bảo mật đòi hỏi nhiều về chi phí con người lẫn tiền bạc. Tailscale là dịch vụ VPN mới cung cấp giải pháp cho những vấn đề trên với chi phí rất cạnh tranh.
 
 <!--more-->
 
 ## My goal
 
-Hiện tại, môi trường làm việc của công ty yêu cầu ruy cập máy chủ và database service từ Bastion Host và VPN. Việc thiết lập ban đầu vốn rất đơn giản, nhưng khi đội ngũ và service của team phát triển, độ phức tạp của việc thiết lập sẽ tăng lên rất nhiều lần. Onboard người mới không bao giờ dễ dàng và mặc dù mình đã thiết lập [Dev microVM](https://haicheviet.com/cluster-vm-with-firecracker/) với tất cả các environment và package cần thiết, cấu hình mạng vẫn là những bước khó khăn để junior dev có thể debug local. Các vấn đề của quy trình hiện tại có thể được liệt kê như sau:
+Hiện tại, đa số môi trường làm việc của công ty yêu cầu truy cập máy chủ và database service từ Bastion Host và VPN. Việc thiết lập ban đầu vốn rất đơn giản, nhưng khi đội ngũ và service của team phát triển, độ phức tạp của việc thiết lập sẽ tăng lên rất nhiều lần. Onboard người mới không bao giờ dễ dàng và mặc dù mình đã thiết lập [Dev microVM](https://haicheviet.com/cluster-vm-with-firecracker/) với tất cả các environment và package cần thiết, cấu hình mạng vẫn là những bước khó khăn để junior dev có thể debug local. Các vấn đề của quy trình hiện tại có thể được liệt kê như sau:
 
-- Một số [HPC servers](https://en.wikipedia.org/wiki/High-performance_computing) được thiết lập ở mạng nội bộ công ty, team members chỉ có thể truy server từ mạng nội bộ và hiện tại chưa support VPN nội bộ. Email request cho admin network rất tốn thời gian và cồng kềnh vì có cả đống thủ tục mà mình thấy không liên quan mấy. Dù vậy mình cũng đã email và cung cấp các thông tin cần thiết nhưng bị từ chối request vì lý do team quá nhỏ nên không cần thiết :disappointed_relieved:.
+- Một số [HPC servers](https://en.wikipedia.org/wiki/High-performance_computing) được thiết lập ở mạng nội bộ công ty, team members chỉ có thể truy server từ mạng nội bộ và hiện tại chưa support VPN nội bộ. Email request cho admin network rất tốn thời gian và cồng kềnh vì có cả đống thủ tục mà mình phải follow để yêu cầu VPN. Dù vậy mình cũng đã cố gắng cung cấp các thông tin cần thiết nhưng bị từ chối request vì lý do teamsize quá nhỏ nên không cần thiết :disappointed_relieved:.
 - Mình đã thử Cloudflare Tunnel và Ngrok nhưng để setup được chuẩn chỉnh rất tốn công, đặc biệt mỗi service đều cần domain host riêng để public access nhưng cái mình muốn chỉ cần truy cập qua email thôi là đủ. Như vậy thì tốn công và khó sử dụng quá.
-- Hiện tại cloud platform của team đang được đặt chính ở private subnet để giảm thiểu cost network lẫn security access. Để team members có thể access vào cloud database thì cần Bastion Host và VPN.
+- Hiện tại cloud platform của team đang được đặt chính ở private subnet để giảm thiểu cost network lẫn đảm bảo bảo mật. Để team members có thể access vào cloud database thì cần Bastion Host và VPN.
 - Bastion host xài một hai services thì ok nhưng càng nhiều service thì config ssh rất phức tạp và khó transfer cho từng member hiểu được họ đang thiếu foward service nào.
-- VPN xài ổn nhưng chỉ có thể xài một VPN ở một thời điểm duy nhất. Như vậy để switch môi trường cần phải tắt bật VPN nhưng như vậy khi vào VPN mạng nội bộ thì họ không thể vào mạng VPN production hay staging được. Rất tốn thời gian và khó khăn nếu member cần access nhiều mạng một lúc.
+- VPN xài ổn nhưng chỉ có thể xài một VPN ở một thời điểm duy nhất. Như vậy để switch môi trường debug cần phải tắt bật VPN nhưng như vậy khi vào đang xài VPN staging thì họ không thể vào mạng nội bộ hoặc production được. Rất tốn thời gian và khó khăn nếu member cần access nhiều mạng một lúc.
 
-Mình đã cằn nhằn về cách cấu hình mạng hiện tại rất lâu và việc chứng kiến các junior member debug local gặp khó khăn không phải là một cảnh dễ chịu. Tailscale là giải pháp mới mình tìm được để giải quyết tất cả các vấn đề đã liệt kê. Trải nghiệm của team khi sử dụng rất tốt và mọi thứ đều có thể được truy cập và định cấu hình dễ dàng.
+Mình đã cằn nhằn về cách cấu hình mạng hiện tại rất lâu và việc chứng kiến các junior member khi debug local gặp nhiều khó khăn không phải là một cảnh dễ chịu. Tailscale là giải pháp mới mình tìm được để giải quyết tất cả các vấn đề đã liệt kê. Trải nghiệm của team khi sử dụng rất là tốt và mọi thứ đều có thể được truy cập và cấu hình dễ dàng.
 
 ## Tailscale hands on
 
-Tạo tài khoản Tailscale rất dễ dàng, mọi người có thể vào [trang này](https://login.tailscale.com/start) để đăng lý. Tài khoản đăng ký hiện tại chỉ support đang ký qua email của nhưng SSO identity providers lớn (như Gooogle hoặc Microsoft). Nếu bạn cần đăng ký email của các provider khác thì tham khảo thêm ở [đây](https://tailscale.com/kb/1013/sso-providers/) để thiết lập.
+Tạo tài khoản Tailscale rất dễ, mọi người có thể vào [trang này](https://login.tailscale.com/start) để đăng ký. Tài khoản đăng ký hiện tại chỉ support đang ký qua email của những SSO identity providers lớn (như Gooogle hoặc Microsoft). Nếu bạn cần đăng ký email của các provider khác thì tham khảo thêm ở [đây](https://tailscale.com/kb/1013/sso-providers/) để thiết lập.
 
 ![Login page](tailscale-login.webp "Login page")
 
@@ -43,9 +43,9 @@ Hình trên là những devices mà mình đang sử dụng, mỗi device đư�
 
 ## Tailscale device register
 
-Tailscale giúp bạn kết nối các thiết bị của mình với nhau. Để đăng ký thiết bị lên Tailscale cluster, tải Tailscale ở máy client của bạn và device bạn muốn register. Tailscale hiện tại support rất nhiều hdh như Linux, Windows, macOS, Raspberry Pi, Android, Synology, v.v. [Tải xuống Tailscale](https://tailscale.com/download) và đăng nhập trên thiết bị dựa trên script.
+Tailscale giúp bạn kết nối các thiết bị của mình với nhau. Để đăng ký thiết bị lên Tailscale cluster, tải Tailscale ở máy client của bạn và device bạn muốn register. Tailscale hiện tại support rất nhiều hdh như Linux, Windows, macOS, Raspberry Pi, Android, Synology, v.v. [Tải xuống Tailscale](https://tailscale.com/download) và đăng nhập trên thiết bị dựa trên auto-script.
 
-Còn đây là cách Mình thiết lập ở máy Fedora:
+Còn đây là cách mình thiết lập ở máy Fedora:
 
 ### Step 1: Install Tailscale
 
@@ -92,7 +92,7 @@ Reply from 100.83.201.24: bytes=32 time=32ms TTL=255
 Reply from 100.83.201.24: bytes=32 time=32ms TTL=255
 ```
 
-Vậy là bạn đã hoàn thành đăng ký thiết bị mới lên Tailscale cluster, từ giờ bạn có thể access ssh hoặc port tới thiết bị mới từ IPv4 mà bạn đã đăng ký ở Tailscale Admin.
+Vậy là mình đã hoàn thành đăng ký thiết bị mới lên Tailscale cluster, từ giờ member nào trong cluster cũng có thể access ssh hoặc port tới thiết bị mới từ IPv4 mà mình đã đăng ký ở Tailscale Admin.
 
 Thêm nhiều thiết bị vào cluster bằng cách tiếp tục từ step 2 hoặc [mời nhưng member truy cập vào network của bạn](https://tailscale.com/kb/1064/invite-team-members/). Và hơn thế nữa, Tailscale support chia sẻ files từ các devices và user với nhau khi bạn enable [TailDrop](https://tailscale.com/kb/1106/taildrop/#enabling-taildrop-for-your-network)
 
@@ -183,12 +183,12 @@ $ mysqlsh --uri=admin@database.xxx.ap-southeast-1.rds.amazonaws.com:3306
 
 {{< admonition tip >}}
 
-Các client như Windows, macOS, Android, iOS, v.v. đều chấp nhận các advertised routes theo mặc định, nhưng các client Linux cần thiết lập thêm  `tailscale up --accept-route = true` để sử dụng các định tuyến mạng subnet router trong AWS.
+Các client như Windows, macOS, Android, iOS, v.v. đều chấp nhận các advertised routes theo mặc định, nhưng các client Linux cần thiết lập thêm  `tailscale up --accept-route = true` để sử dụng các subnet router trong AWS.
 
 {{< /admonition >}}
 
 ## Some afterthought
 
-- Sử dụng Tailscale thực sự đã đến mức mình không thể quay lại sử dụng cách truyền thống nữa. Mọi dịch vụ đều có thể được truy cập bởi tên miền riêng của nó, không còn bị xáo trộn môi trường vì chuyển mạng hoặc cổng đang được sử dụng.
+- Sử dụng Tailscale thực sự đã đến mức mình không thể quay lại sử dụng cách truyền thống nữa. Mọi dịch vụ đều có thể được truy cập bởi tên miền riêng của nó, không còn bị xáo trộn môi trường vì chuyển mạng hoặc lỗi do cổng đang được sử dụng.
 - Tailscale là một dịch vụ trả phí và users phải phụ thuộc vào Tailscale để quản lý máy chủ. Rất may, Taiscale cũng cung cấp giải pháp cho open-source hosting [Headscale](<https://github.com/juanfont/headscale>) và bạn có thể tự cấu hình quản trị tất cả máy chủ của mình.
 - Và cuối cùng bạn có thể sử dụng [Terraform](<https://registry.terraform.io/modules/hardfinhq/tailscale-subnet-router/aws/latest?tab=resources>) để quản lý Tailscale và tự động hóa tất cả các quy trình để thiết lập subnet router mà mình đã liệt kê ở trên.
