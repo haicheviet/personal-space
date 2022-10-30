@@ -131,11 +131,11 @@ enableEmoji = true
           # Gravatar Email for preferred avatar in home page
           gravatarEmail = ""
           # URL of avatar shown in home page
-          avatarURL = "/images/avatar.png"
+          avatarURL = "avatar.png"
           # title shown in home page (HTML format is supported)
-          title = "HaiCheBlog"
+          title = "<img src='introduction.gif' alt='introduction' width='100%'>"
           # subtitle shown in home page (HTML format is supported)
-          subtitle = "My personal space"
+          subtitle = ""
           # whether to show social links
           social = true
           # disclaimer (HTML format is supported)
@@ -322,7 +322,7 @@ enableEmoji = true
           # Gravatar Email for preferred avatar in home page
           gravatarEmail = ""
           # URL of avatar shown in home page
-          avatarURL = "/images/avatar.png"
+          avatarURL = "avatar.png"
           # title shown in home page (HTML format is supported)
           title = "HaiCheBlog"
           # subtitle shown in home page (HTML format is supported)
@@ -725,11 +725,11 @@ enableEmoji = true
     # 页面 SEO 配置
     [params.page.seo]
       # image URL
-      images = ["/images/avatar.png"]
+      images = ["avatar.png"]
       # Publisher info
       [params.page.seo.publisher]
         name = "hai che viet"
-        logoUrl = "/images/avatar.png"
+        logoUrl = "avatar.png"
 
   # Site verification code for Google/Bing/Yandex/Pinterest/Baidu
   # 网站验证代码，用于 Google/Bing/Yandex/Pinterest/Baidu
