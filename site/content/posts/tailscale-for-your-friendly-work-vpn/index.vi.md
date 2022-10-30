@@ -96,7 +96,7 @@ Vậy là mình đã hoàn thành đăng ký thiết bị mới lên Tailscale c
 
 Thêm nhiều thiết bị vào cluster bằng cách tiếp tục từ step 2 hoặc [mời nhưng member truy cập vào network của bạn](https://tailscale.com/kb/1064/invite-team-members/). Và hơn thế nữa, Tailscale support chia sẻ files từ các devices và user với nhau khi bạn enable [TailDrop](https://tailscale.com/kb/1106/taildrop/#enabling-taildrop-for-your-network)
 
-{{< video src="https://tailscale.com/kb/1106taildrop/taildrop.mp4" loop=true autoplay=true >}}
+{{< video src="https://tailscale.com/kb/1106/taildrop/taildrop.mp4" loop=true autoplay=true >}}
 
 ## Tailscale as a network layer
 
