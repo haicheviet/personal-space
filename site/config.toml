@@ -133,7 +133,7 @@ enableEmoji = true
           # URL of avatar shown in home page
           avatarURL = "avatar.webp"
           # title shown in home page (HTML format is supported)
-          title = "<video autoplay loop muted playsinline> <source src='introduction.webm' type='video/webm'> </video>"
+          title = "<video autoplay loop muted playsinline> <source src='introduction.webm' type='video/webm'> <source src='introduction.mp4' type='video/mp4'> </video>"
           # subtitle shown in home page (HTML format is supported)
           subtitle = ""
           # whether to show social links
@@ -324,7 +324,7 @@ enableEmoji = true
           # URL of avatar shown in home page
           avatarURL = "avatar.webp"
           # title shown in home page (HTML format is supported)
-          title = "<video autoplay loop muted playsinline> <source src='introduction.webm' type='video/webm'> </video>"
+          title = "<video autoplay loop muted playsinline> <source src='introduction.webm' type='video/webm'> <source src='introduction.mp4' type='video/mp4'> </video>"
           # subtitle shown in home page (HTML format is supported)
           # whether to show social links
           social = true
