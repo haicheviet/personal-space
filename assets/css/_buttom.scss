@@ -87,23 +87,3 @@ a.big-grey-button:hover {
   background-color: #FFF;
   color: #666;
 }
-
-a.markdown-btn {
-  font-size: inherit;
-  font-family: inherit;
-  color: #666;
-  background-color: #FFF;
-  border-radius: 10px;
-  text-align: center;
-  padding: 5px 1em 5px 1em;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-
-  &:hover,
-  &:active {
-    text-decoration: none;
-    background-color: var(--primary-color);
-    color: var(--bg-color);
-  }
-}
