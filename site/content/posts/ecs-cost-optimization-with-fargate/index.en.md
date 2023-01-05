@@ -485,9 +485,9 @@ Cleaning up the resources is fairly easy now. Navigate to the **Stack** and clic
 
 2. Create client security group. {{< button href="https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://haiche-aws-ecs-template.s3.ap-southeast-1.amazonaws.com/client-sg.yml&stackName=client&param_ParentVPCStack=vpc" src="./launch-stack.png" >}} Launch Stack {{< /button >}}
 
-3. Create ECS Cluter. {{< button href="https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://haiche-aws-ecs-template.s3.ap-southeast-1.amazonaws.com/cluster-fargate.yml&stackName=fargate-cluster&param_ParentVPCStack=vpc" src="./launch-stack.png" >}} Launch Stack {{< /button >}}
+3. Create ECS Cluster. {{< button href="https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://haiche-aws-ecs-template.s3.ap-southeast-1.amazonaws.com/cluster-fargate.yml&stackName=fargate-cluster&param_ParentVPCStack=vpc" src="./launch-stack.png" >}} Launch Stack {{< /button >}}
 
-4. Create Nginx task {{< button href="https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://haiche-aws-ecs-template.s3.ap-southeast-1.amazonaws.com/app-demo.yml&stackName=client&param_ParentVPCStack=vpc&param_ParentClusterStack=fargate-cluster&param_ParentClientStack1=client" src="./launch-stack.png" >}} Launch Stack {{< /button >}}
+4. Create Nginx task. {{< button href="https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://haiche-aws-ecs-template.s3.ap-southeast-1.amazonaws.com/app-demo.yml&stackName=client&param_ParentVPCStack=vpc&param_ParentClusterStack=fargate-cluster&param_ParentClientStack1=client" src="./launch-stack.png" >}} Launch Stack {{< /button >}}
 
 5. Click **Next** to proceed with the next step of the wizard.
 
