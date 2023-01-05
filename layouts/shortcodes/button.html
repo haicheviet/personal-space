@@ -1,0 +1,12 @@
+{{ $ref := .Get "href" }}
+{{ $src := .Get "src" }}
+{{ $target := "" }}
+{{ with $ref }}
+{{ $target = "_blank" }}
+{{ end }}
+{{ with .Get "relref" }}
+{{ $ref = relref $ . }}
+{{ end }}
+<a {{ with $ref }}href="{{.}}" {{ end }}>
+    <img alt="{{- .Inner | safeHTML -}}" src="{{ $src }}">
+</a>
