@@ -444,7 +444,7 @@ aws cloudformation deploy \
 
 * ECS task with nginx image.
 
-* Fargate task with strategy `2(OnDemand): 1(Spot)`, task running should be `n+1` for [voting policy](https://www.continuent.com/resources/blog/why-does-mysql-mariadb-cluster-require-odd-number-nodes)
+* Fargate task with strategy **2(OnDemand): 1(Spot)**, task running should be **n+1** for [voting policy](https://www.continuent.com/resources/blog/why-does-mysql-mariadb-cluster-require-odd-number-nodes)
 
 * Autoscaling group and healthcheck.
 
@@ -479,9 +479,33 @@ Cleaning up the resources is fairly easy now. Navigate to the **Stack** and clic
 
 ## TL;DR
 
-The ecs cluster can be shortly describe with these step:
+### GUI Installation Guide
 
-`Step 1`: Export all the needed enviroment.
+1. Create VPC network. {{< button href="https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://haiche-aws-ecs-template.s3.ap-southeast-1.amazonaws.com/vpc-2azs.yml&stackName=vpc" src="./launch-stack.png" >}} Launch Stack {{< /button >}}
+
+2. Create client security group. {{< button href="https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://haiche-aws-ecs-template.s3.ap-southeast-1.amazonaws.com/client-sg.yml&stackName=client&param_ParentVPCStack=vpc" src="./launch-stack.png" >}} Launch Stack {{< /button >}}
+
+3. Create ECS Cluster. {{< button href="https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://haiche-aws-ecs-template.s3.ap-southeast-1.amazonaws.com/cluster-fargate.yml&stackName=fargate-cluster&param_ParentVPCStack=vpc" src="./launch-stack.png" >}} Launch Stack {{< /button >}}
+
+4. Create Nginx task. {{< button href="https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://haiche-aws-ecs-template.s3.ap-southeast-1.amazonaws.com/app-demo.yml&stackName=client&param_ParentVPCStack=vpc&param_ParentClusterStack=fargate-cluster&param_ParentClientStack1=client" src="./launch-stack.png" >}} Launch Stack {{< /button >}}
+
+5. Click **Next** to proceed with the next step of the wizard.
+
+6. Specify a name and all parameters for the stack.
+
+7. Click **Next** to proceed with the next step of the wizard.
+
+8. Click **Next** to skip the Options step of the wizard.
+
+9. Check the **I acknowledge that this template might cause AWS CloudFormation to create IAM resources**. checkbox.
+
+10. Click **Create** to start the creation of the stack.
+
+11. Wait until the stack reaches the state **CREATE_COMPLETE**
+
+### CLI Installation Guide
+
+Clone the code and run following command.
 
 ```bash
 git clone https://github.com/haicheviet/blog-code.git
@@ -502,7 +526,7 @@ bash aws-init-cluster.sh
 bash aws-init-task.sh
 ```
 
-Verify ECS stack working.
+Verify ECS stack working by access ALB endpoint and check status ECS running.
 
 ![ECS task running](task-running-ecs.webp "ECS task running")
 
@@ -519,7 +543,6 @@ In the blog, we have covered:
 * Learned how ECS Cluster Scaling works with Capacity Providers.
 
 {{< /admonition >}}
-
 
 ## Some afterthought
 
