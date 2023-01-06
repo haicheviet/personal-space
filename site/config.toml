@@ -402,9 +402,6 @@ enableEmoji = true
         Leanpub = ""
         Udemy = ""
         RSS = true
-        [languages.vi.params.social.Jobhopin]
-          id = "vi"
-          prefix = "https://www.jobhopin.com/"
 
 [params]
   # uBlogger theme version
