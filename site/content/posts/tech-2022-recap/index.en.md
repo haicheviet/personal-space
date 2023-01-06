@@ -17,7 +17,7 @@ resources:
 ---
 
 
-New year new me right, just stole the idea from [famous youtuber](https://www.youtube.com/watch?v=dCCaYEG5KeA) for this section.  This year I want to recap what I learn, and my current thought about it. Furthermore, planning hype tech for next year and we will see if can I learn and try it in 2023. Keeping a journal of what you learn is one of the biggest proofs to compare yourself to who you were last year.
+New year new me right, after a year of upheaval, I take some moment to look back the journey of 2022.  This year I want to recap what I learn, and my current thought about it. Furthermore, planning hype tech for next year and we will see if can I learn and try it in 2023. Keeping a journal of what you learn is one of the biggest proofs to compare yourself to who you were last year.
 <!--more-->
 
 ## Tech I learned in 2022
@@ -66,7 +66,7 @@ The detail of firecrackers was already descripted in my previous blog, you can c
 
 I've tried multiple framework deployments such as AWS Sagemaker, Neuron, and Cortex, ... but all these frameworks still missing some points that I need, plus the lock-in tech is too scary to use. Just plain old FastAPI-Pytorch is enough and all the logging, and monitoring should be using another service that was dedicated to it.
 
-Some pruning and quantization method I learned is somewhat useful but just so outdated for the new AI area. The current research on AI is always about iteration, better models were produced every week. By the time I've done optime some models, these models were already irrelevant and outdated. I think a faster iterate model process (Labeling-Training-Testing) is way more impact than tuning for faster inference time.
+Some pruning and quantization method I learned is somewhat useful but just so outdated for the new AI area. The current research on AI is always about iteration, better models were produced every week. By the time I've done optimize some models, these models were already irrelevant and outdated. I think a faster iterate model process (Labeling-Training-Testing) is way more impact than tuning for faster inference time.
 
 ### CDC framework (debezium)
 
