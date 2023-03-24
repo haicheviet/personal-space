@@ -41,7 +41,7 @@ Firstly, we will find optimize model format to boost inference and standardized 
 
 ![Pytorch comparison](torch-comparison.webp "Pytorch comparison")
 
-The performance boost is not much but for [GPU model](https://www.educba.com/pytorch-jit/) the runtime of torchscript proves to be better than PyTorch.
+The performance boost is not much but for [GPU model](https://www.educba.com/pytorch-jit/), the runtime of torchscript proves to be better than PyTorch.
 
 The serving code is somewhat simple `torch.jit.load` and already in ScriptModule format that will not change even we change our base model.
 
@@ -249,7 +249,7 @@ Multi-stage build enable us to seperate each step to seperate docker that can be
 |Change AI model|11s|31s|64.5%|
 |Last Image size|2.75GB|5.4GB|49%|
 
-As you can see, the Multi-stage build save us a lot of time in building image and more lightweight serving. I can not overstate how frustrating and counter-productive in slow pipeline cause the amount of time wasted waiting for builds to complete adds up to 10 of thousands USD/year wasted even for small teams.
+As you can see, the multi-stage build save us a lot of time in building image and more lightweight serving. I can not overstate how frustrating and counter-productive in slow pipeline cause the amount of time wasted waiting for builds to complete adds up to 10 of thousands USD/year wasted even for small teams.
 
 ![Waiting pipeline](waiting-for-pipeline-to-finish-running.webp "Not Funny Meme")
 
