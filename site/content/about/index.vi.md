@@ -15,7 +15,7 @@ He also has interest in investing both in stock and cryptocurrency. Hai enjoys g
 
 TL;DR: Just an engieneer have a lot of fun in learning and want to share it with others :relaxed: :relaxed: :relaxed:.
 
-You can find his CV here (updated 13-06-2022): [link](https://raw.githubusercontent.com/haicheviet/personal-space/main/site/assets/pdf/my_resume.pdf)
+You can find his CV here (updated 09-08-2023): [link](https://raw.githubusercontent.com/haicheviet/personal-space/main/site/assets/pdf/my_resume.pdf)
 
 ### Projects
 
@@ -23,5 +23,6 @@ Here are some tools I’ve contribute and made that you might find useful or fun
 
 * [Qdrant Database](https://github.com/qdrant/qdrant) - contribute
 * [Aws Cloudformation](https://github.com/haicheviet/aws-cf-templates) - contribute
-* [Newspaper Vietnamese](https://github.com/haicheviet/newspaper) - contribute
-* [FastAPI-Neo4j](https://github.com/haicheviet/full-stack-fastapi-neo4j) - author
+* [Fullstack ML Inference](https://github.com/haicheviet/fullstack-machine-learning-inference) - author
+* [Python Monorepo](https://github.com/haicheviet/python-monorepo) - author
+* [FastAPI Neo4j](https://github.com/haicheviet/full-stack-fastapi-neo4j) - author
