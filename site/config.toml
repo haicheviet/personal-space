@@ -212,9 +212,9 @@ enableEmoji = true
         Leanpub = ""
         Udemy = ""
         RSS = true
-        [languages.en.params.social.Jobhopin]
+        [languages.en.params.social.company]
           id = "en"
-          prefix = "https://www.jobhopin.com/"
+          prefix = "https://www.koidra.ai/"
   [languages.vi]
     weight = 1
     # language code

@@ -3,7 +3,6 @@ Output introduction.webp
 Output introduction.mp4
 
 Set Shell zsh
-Set TypingSpeed 2ms
 Set FontSize 22
 Set Width 1500
 Set Height 1000

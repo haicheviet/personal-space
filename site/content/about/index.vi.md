@@ -7,7 +7,7 @@ draft: false
 math:
   enable: true
 ---
-Hai Che is an engineer and a part-time researcher who currently work as a Lead AI Engineer in [Jobhopin](https://www.jobhopin.com/) (the #1 AI recruitment platform).
+Hai Che is an engineer and a part-time researcher who currently work as a Senior AI Engineer in [Koidra](https://www.koidra.ai) (Rated at #1 Smart Greenhouse Solutions).
 
 Hai is an enthusiastic and passionate programmer who is interested in the field of AI, software, and database. His primary interest sits at the intersections of AI research and software development, examining AI models in the context of software development and closing the feedback loop in AI integration. More broadly, he is interested in the field of natural language processing and vector database.
 
