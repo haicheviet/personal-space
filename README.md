@@ -11,3 +11,9 @@ Build Blog Locally:
 ```bash
 hugo server --source=site
 ```
+
+## Build introduction gif
+
+* Install [vhs](https://github.com/charmbracelet/vhs#installation) and [neofetch](https://github.com/dylanaraps/neofetch)
+* Update your neofetch config to file `./scripts/introduction-gif/neofetch.conf`, remember to modify this file to change to absolute path
+* Run command `vhs ./scripts/introduction-gif/introduction.tape` to generate introduction.* format
