@@ -124,7 +124,7 @@ CMD  ["/usr/local/bin/actix-api"]
 
 The final image size of 108 MB is a whopping `2285.03x improvement` over the build stage size of 2.41 GB. This means that the small image will have a significant reduction in download time and storage space.
 
-![Alt text](docker-image-size.png)
+![Alt text](docker-image-size.webp)
 
 
 In addition, the cargo-chef tool can significantly speed up Rust Docker builds. I have seen build times reduced by up to 5x in my own experience. If you are developing a Rust project, I highly recommend using cargo-chef to speed up your Docker builds.
@@ -177,8 +177,8 @@ I think it's no surprise that Rust will run much faster than the Python FastAPI 
 - Web Workers: 4
 - Command: `ali --rate=50 --duration=1m $API_ENDPOINT`
 
-![Alt text](python-benchmark.png "Python benchmark")
-![Alt text](rust-benchmark.png "Rust benchmark")
+![Alt text](python-benchmark.webp "Python benchmark")
+![Alt text](rust-benchmark.webp "Rust benchmark")
 
 Some insight:
 - Python's tail latency is more divergent and it struggles to make the p50 closely match the mean.
