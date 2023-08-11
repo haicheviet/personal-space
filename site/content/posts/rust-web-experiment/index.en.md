@@ -91,7 +91,7 @@ This is useful if you would like to use Diesel’s migration infrastructure, but
 {{< /admonition >}}
 
 
-```rust
+```javascript
 pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
 fn run_migration(connection: &mut impl MigrationHarness<diesel::pg::Pg>) {
