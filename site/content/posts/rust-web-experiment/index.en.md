@@ -14,7 +14,7 @@ resources:
   src: "featured-image.webp"
 
 tags: ["Rust", "CRUD", "Docker", "Actix", "Benchmark"]
-categories: ["Web"]
+categories: ["Web", "Rust"]
 ---
 
 I was learning Rust and thought it would be a fun idea to create a simple CRUD app to test how well Rust app frameworks work in practice. Here is my journey of exploring Rust frameworks to create a proof-of-concept CRUD app.

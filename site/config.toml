@@ -128,6 +128,7 @@ enableEmoji = true
         # Home page profile
         [languages.en.params.home.profile]
           enable = true
+          onlyToFirstPage = true
           # Gravatar Email for preferred avatar in home page
           gravatarEmail = ""
           # URL of avatar shown in home page
