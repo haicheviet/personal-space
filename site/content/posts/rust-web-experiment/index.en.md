@@ -1,16 +1,20 @@
 ---
 title: "CRUD app with Rust as an experiment"
-date: 2022-06-23T21:57:40+08:00
-lastmod: 2022-06-23T16:45:40+08:00
+subtitle: ""
+
+date: 2023-08-11T09:57:40+08:00
+lastmod: 2023-06-11T13:45:40+08:00
+
 description: "This article shows the experiment journey in rust at CRUD app."
+
 resources:
 - name: "featured-image"
   src: "featured-image.webp"
+- name: "featured-image-preview"
+  src: "featured-image.webp"
 
 tags: ["Rust", "CRUD", "Docker", "Actix", "Benchmark"]
-categories: ["Web", "Rust"]
-
-
+categories: ["Web"]
 ---
 
 I was learning Rust and thinking should I create a simple CRUD app just to test how well rust app framework in practice.
@@ -21,7 +25,7 @@ I was learning Rust and thinking should I create a simple CRUD app just to test 
 
 This project is just an experimental CRUD (Create, Read, Update, Delete) API written in Rust. The purpose of is to explore building a simple New Post CRUD application in Rust, using the popular Actix web framework and Diesel ORM. Mostly for my learning purpose.
 
-> All of the experiment code is in [my github repo](https://github.com/haicheviet/rust-actix-crud-app)
+> All of the experiment code is available at [my github repo](https://github.com/haicheviet/rust-actix-crud-app)
 
 Some highlighted improvements for this experiment:
 
@@ -29,7 +33,6 @@ Some highlighted improvements for this experiment:
 * Leverage [Diesel migration](https://docs.rs/diesel_migrations/latest/diesel_migrations/macro.embed_migrations.html) to migrate database at compile time => enable ship a single executable file.
 
 * Fun comparison with python fastapi and showing that python struggle to keep up with Rust.
-
 
 ## Cargo chef in docker multi-stage
 
@@ -70,7 +73,7 @@ CMD  ["/usr/local/bin/actix-api"]
 
 Final image size only took 108Mb compare to build stage 2.41Gb => A whooping `2285.03x times` improvement in image size, with small image we can have a significant reduction in download time and storage space.
 
-![Alt text](image.png)
+![Alt text](docker-image-size.png)
 
 
 And even more the cargo-chef tool can significantly speed up Rust Docker builds. In my own experience, I have seen build times reduced by up to 5x. If you are developing a Rust project, I would highly recommend using cargo-chef to speed up your Docker builds.
@@ -114,25 +117,25 @@ With this extension, I was able to package all CRUD app into single command `doc
 
 ## Benchmark with python fastapi for fun
 
-I thinkl we should already expect that rust will run very fast compare to python equaivlant, but for the sake of tool compare. I quickly construct some benchmark using [ali framework](https://github.com/nakabonne/ali) just for fun comparation
+I think we should already expect that rust will run very fast compare to python equaivlant, but for the sake of tool compare. I quickly construct some benchmark using [ali framework](https://github.com/nakabonne/ali) just for fun comparation
 
 - Machine: 21E300DYVN ThinkPad E14 Gen 4
 - OS: Debian GNU/Linux 12 (bookworm) x86_64
 - CPU: 12th Gen Intel i5-1235U (12) @ 4.400GHz 
 - GPU: Intel Alder Lake-UP3 GT2 [Iris Xe Graphics] 
-- Memory: 15668MiB
-- Web Worker: 4
+- Memory: 16GB
+- Web Workers: 4
 - Command: `ali --rate=50 --duration=1m $API_ENDPOINT`
 
 ![Alt text](python-benchmark.png "Python benchmark")
 ![Alt text](rust-benchmark.png "Rust benchmark")
 
 Some insight:
-- Python tail latency is more diverge and struggle to make p50 closely with mean
+- Python tail latency is more diverge and struggle to make p50 closely with mean.
 - Rust kill python perfomance and more stable, 4x performance increase in all benchmark.
 
 ## Some afterthought
 
 * Rust web app framework is mature but I find the time to develop is really long and still think you shouldn't use Rust in web app development without specific need.
-* It took me full weekend (~15 hours) to construct this experiement despite most of the code is not new and I already have some experience with rust. Compare to python code that take me only 2 hours to polish.
+* It took me a full weekend (~15 hours) to construct this experiement despite most of the code is not new and I already have some experience with rust. Compare to python code that take me only 2 hours to polish.
 * Rust crud app is somewhat mature and really worth the efforce if you want a high quality product and blazaingly fast application. But for simple CRUD app, back to general combo python-django is more effective.
