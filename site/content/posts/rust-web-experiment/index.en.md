@@ -33,11 +33,59 @@ Some highlighted improvements for this experiment:
 * A fun comparison of Python FastAPI and Rust shows that Python struggles to keep up with Rust in terms of performance and reliable.
 
 
+## Project Scopes
+
+### API Contract
+
+CRUD operations on a sample entity called Post. Each item has an id, title, body and published.
+
+**Create an Item**
+
+```
+Endpoint: POST /post
+Request Body: JSON object with title, body and optional published fields.
+{
+    "title": String,
+    "body": String,
+    "published": Optional[bool] = False,
+}
+```
+
+**Count all public Post**
+
+```
+Endpoint: GET /count-post
+```
+
+**Get a post by ID**
+
+```
+Endpoint: GET /post/:id
+```
+
+**Publish a post**
+
+```
+Endpoint: PATCH /post/:id
+```
+
+**Delete a post**
+
+```
+Endpoint: DELETE /post/:id
+```
+
+### Tech stack
+
+- Web framework: [actix-web](https://github.com/actix/actix-web)
+- Database: [Postgres-12](https://www.postgresql.org/about/news/postgresql-12-released-1976/)
+- Deployment: docker compose
+
 ## Cargo chef in docker multi-stage
 
 In general, Docker multi-stage builds are divided into two stages: build and runtime. However, for Rust, this is a bit different. Cargo build can be quite long, and enabling cache for multiple projects (ex: [huggingface-tokenizers](https://github.com/huggingface/tokenizers)) can be difficult. This is because Rust compile cache only works in one workspace, unlike Python, where you can install a single requirements.txt file and share the global dependencies in other folders.
 
-That's why the Cargo chef segment docker multi-stage to three phase:
+That's why the Cargo chef segment docker multi-stage into three phase:
 
 ### 1. Planner
 
