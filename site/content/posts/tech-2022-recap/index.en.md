@@ -72,13 +72,13 @@ Some pruning and quantization method I learned is somewhat useful but just so ou
 
 ![CDC framework](debezium.webp "CDC framework")
 
-CDC framework is ok for my need, the tech is simple to use but the monitoring Kafka service is just a pain in the ass. I was not a Kafka expert and after some rethought about design and people management, I drop the CDC framework and use simple SQS with API signal is more than I need.
+CDC framework is ok for my need, the tech is simple to use but the monitoring Kafka service is just a pain in the ass. I was not a Kafka expert and after some rethought about design and people management, I drop the CDC framework and use simple SQS with API signal is more suitable for my use case.
 
 ### Edge Cloud (Netlify/Vercel)
 
 ![Edge Cloud](edgecloud.webp "Edge Cloud")
 
-This year I want to have a personal blog to share more about my journey but I was so cheap that do not want to own a server and if the best, host freely. After some research, I find static content like my blog is serving the best in edge cloud Netlify. The implementation is dead simple and the CDN caching work so well that sometimes I still can not believe I was hosting this performance platform as free. Netlify/Vercel will be my go-to when building FE service or some simple application.
+This year I want to have a personal blog to share more about my journey but I was so cheap that do not want to own a server and if the best, everything is free. After some research, I find static content like my blog is serving the best in edge cloud Netlify. The implementation is dead simple and the CDN caching work so well that sometimes I still can not believe I was hosting this performance platform as free. Netlify/Vercel will be my go-to when building FE service or some simple application.
 
 ### Dynamodb and Single-table design
 
@@ -86,7 +86,7 @@ This year I want to have a personal blog to share more about my journey but I wa
 
 The tech stack I'm using is plain simple and effective, but what if I want a serverless system from both application and database. Dynamodb and single-table design approach is my choice for experimenting with this serverless aspect. After reading some resources and testing simple applications, I find out why it's so popular and wants to implement in our company but the 400 KB limit to upload is just big left down for me. I just want all decentralization tables but this limitation is really hard for some big applications and fat content that I was serving. Hopefully will have the chance to work with Dynamondb in 2023.
 
-### MLops tools (Wandb)
+### MLOps tools (Wandb)
 
 ![Wandb](wandb.webp "Wandb")
 
