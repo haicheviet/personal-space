@@ -1,5 +1,5 @@
 ---
-title: "Python monorepo - Part 1"
+title: "Embracing Python Monorepos: Part 1 - Tools to Shape, Oversee, and Collaborative Environments"
 subtitle: ""
 date: 2023-08-10T14:38:51+07:00
 lastmod: 2023-08-10T14:38:51+07:00
@@ -13,7 +13,7 @@ resources:
   src: "featured-image.webp"
 
 tags: ["Machine Learning", "FastAPI", "Docker", "Feature Store", "Multi-stage", "Project Template"]
-categories: ["Machine Learning"]
+categories: ["monorepo-series"]
 ---
 
 
@@ -22,11 +22,11 @@ One of the biggest problems in my throughout year of working in tech industry is
 <!--more-->
 ## Introduction
 
-Have you ever made some minor change in your code, but require to create 4 pull requests across multiple repos and reviews, half a day to test and a couple hours to release. Despite all the nonsense that you have been through, but some motherf\*ckers in other repo think your code is not needed and delete without your consent, create an outage in production just for some minor change in API schemas!!!
+Have you ever made some minor change in your code, only to have to create four pull requests across multiple repositories and get them reviewed, spend half a day testing, and then wait a couple of hours for the changes to be released? Despite all the nonsense that you have been through, some jerks in another repository might decide that your code is no longer needed and delete it without your permission, causing an outage in production just for some minor change in API schemas!!!
 
 ![Alt text](image-3.png)
 
-Yup, been there and f\*ck that. This example is not rare and using monorepo can fix this.
+Yup, been there and f\*ck that. This type of situation is not uncommon, and monorepos promise to fix it.
 
 The philosophy of monorepo is really simple, keeping all of the code for a project in a single repository. Here is a general principles of monorepo
 
@@ -42,30 +42,29 @@ The philosophy of monorepo is really simple, keeping all of the code for a proje
 
 {{< /admonition >}}
 
-![Alt text](image.png "[ref]](https://www.raftt.io/post/development-challenges-of-working-with-monorepos-and-multirepos)")
+![Alt text](image.png "src: https://www.raftt.io/post/development-challenges-of-working-with-monorepos-and-multirepos")
 
-> TLDR: Monorepo is not a new tech but I find some tooling around python is really poor and rather then a hack than a standard. My blog and [github repo](https://github.com/haicheviet/python-monorepo/blob/main/libs/ml/pyproject.toml) plan to solve that:
-
-* Poetry playwell with docker container.
-* Automated formatting and linting for the Python project.
-* Docker multi-stage CI/CD pipeline that allows sharing and cache stages between libraries.
-* Test and coverage page for whole monorepo including all subprojects.
+> TLDR: Monorepos are not a new technology, but I find that the tooling around Python monorepos is still poor and more like a hack than making standard. My blog and [github repo](https://github.com/haicheviet/python-monorepo/blob/main/libs/ml/pyproject.toml) plan to solve that: 
+> * A poetry environment playground with production release support.
+> * Automated code formatting and linting for Python projects.
+> * A Docker multi-stage CI/CD pipeline that supports sharing and caching of stages between libraries.
+> * A test and coverage page for the entire monorepo, including all subprojects.
 
 ## Problem Statement
 
-So what the problems monorepo want to solve:
+So what challenges does a monorepo address?:
 
-* Improved collaboration: Makes it easier for teams to collaborate on code. Everyone can see all of the code in the project, which makes it easier to find and understand what is going on.
-* Reduced complexity: Reduce the complexity of managing dependencies. When all of the code is in a single repository, it is easier to keep track of which dependencies are used by each component of the project.
-* Increased productivity: Increase productivity by reducing the time it takes to build and test code. When all of the code is in a single repository, it can be built and tested as a single unit.
-* Central CI-CD: Can be used to create a single test suite that tests all of the code in the project. This can help to ensure that the entire project is always working together correctly.
+* Improved collaboration: A monorepo facilitates better code collaboration among teams. With all the code visible in one place, it becomes straightforward to locate and comprehend the project's mechanics.
+* Simplified Dependency Management: Monorepos simplify the intricacies of managing dependencies. Housing all code in one repository ensures easier monitoring of dependencies used throughout the project.
+* Increased productivity: By consolidating all code into a singular repository, both build and test times can be diminished, leading to heightened productivity.
+* Central CI/CD: Monorepos can be used to create a single CI/CD pipeline that automates the build, test, and deployment of all of the code in the project. This can help to improve the reliability and stability of the project, and it can free up developers to focus on more creative work.
 
-But all the code in one place create another challanges to solve from ops side:
+However, all of the code in a single place can create new challenges for Ops teams to solve:
 
 * How can we debug, standardlize flow and make cross change effiencely between multiple projects?
 * Managing dependencies in a monorepo can be challenging, as it is important to ensure that all of the dependencies are compatible with each other. This can be especially difficult when the monorepo contains a large number of dependencies that depend each other.
-* Each service have diffent way to CI-CD and testing, how can we merge all the pipeline to one flow?
-* Monorepo promise that all test case can be tested in one place, that sounds good but painful to implement. For ex: I just change some minor code in my project but every push to MR require full re-run test suites of all projects. Seem inconvenient and too much resource wasted.
+* Each service has a different way of CI/CD and testing, so how can we merge all the pipelines into one flow?
+* Monorepos promise that all test cases can be tested in one place, which sounds good but can be painful to implement. For example, if I just change some minor code in my project, every push to a merge request requires a full rerun of the test suites for all projects. This seems inconvenient and wasteful of resources.
 
 The part one of [this series]() will discuss these items and hopefully solve some of the challanges above:
 
@@ -94,13 +93,13 @@ The part one of [this series]() will discuss these items and hopefully solve som
 │       └── poetry.lock         # Lock dependency
 ```
 
-One of the most important things to consider when setting up a monorepo is the structure of the top-level folders. These folders should be clearly named and simple, without any special naming conventions. This will make them easier to understand and navigate, even as the project matures over years and thousands of developer hours.
+One of the most important decisions you'll make when setting up a monorepo is the structure of the top-level folders. These folders should be named in a clear and concise way, without any unnecessary complexity. This will make them easier to understand and navigate over time, even as the project grows and matures.
 
 ## Project standard
 
 ### Typechecking and Linting
 
-I already talked about project code style before in [this blog](https://haicheviet.com/machine-learning-inference-on-industry-standard/#project-code-style). But currently I discover a new tool [ruff](https://github.com/astral-sh/ruff) that solve the problem with flake8. The new config will was shorten and all package in one `pyproject.toml` file.
+I already talked about project code style before in [this blog](https://haicheviet.com/machine-learning-inference-on-industry-standard/#project-code-style). However, I recently came across a new tool called [ruff](https://github.com/astral-sh/ruff) that addresses issues with flake8. With this tool, the configuration is more concise, and all packages are consolidated into a single [pyproject.toml](https://github.com/haicheviet/python-monorepo/blob/main/services/fastapi-ml/pyproject.toml#L59) file.
 
 ```toml
 [tool.mypy]
@@ -145,7 +144,7 @@ exclude = [
 
 ### Testing
 
-Every project will have folder `tests` that contain all the test case such as unit and intergration tests. The tooling for python to test is more well-know and define, pytest and pytest-cov. Pytest is for testing and pytest-cov to generate coverage report
+Every project will have folder `tests` folder that contains all of the test cases, such as unit and integration tests. The most well-known and established tooling for testing Python code is pytest and pytest-cov. Pytest is used for testing, and pytest-cov is used to generate coverage reports.
 
 ```toml
 [tool.poetry.group.test.dependencies]
@@ -161,7 +160,7 @@ testpaths = ["tests"]
 
 ## Python enviroments management and debug
 
-Python management is really [hell dependency](https://medium.com/knerd/the-nine-circles-of-python-dependency-hell-481d53e3e025#:~:text=%E2%80%9CDependency%20hell%E2%80%9D%20is%20a%20term,are%20shared%20across%20a%20project.), using bare pip package to manage large projects is beyoung my mind. I was skeptical with using [poetry](https://github.com/python-poetry/poetry) in python management but the push toward monorepo in poetry is really strong and most of my complain is already sovled.
+Managing Python can be a real journey into [dependency hell](https://medium.com/knerd/the-nine-circles-of-python-dependency-hell-481d53e3e025). The mere thought of using just the pip package for extensive projects baffles me. I initially had reservations about adopting [poetry](https://github.com/python-poetry/poetry) for Python management, but its robust support for monorepos soon won me over, addressing most of my concerns.
 
 First we will talk about how to use poetry as fully to manage our monorepo
 
@@ -173,11 +172,7 @@ We should seperate clearly between multiple dependency in our project. For ex: d
 [tool.poetry.dependencies] # Main dependency
 python = "^3.8.1"
 torch = {version = "2.0.1", source="torchcpu"}
-telemetry = {path = "../telemetry"}
-
-[tool.poetry.dev-dependencies]
-telemetry = {path = "../telemetry", develop = true} # for developing environment
-
+telemetry = {path = "../telemetry", develop = true}
 
 # Test dependency as optional to keep lightweight package
 [tool.poetry.group.test]
@@ -204,8 +199,8 @@ With this poetry config, we can easily switch dependency and minimal installalbe
 
 graph LR
     A[pyproject.toml]
-    A -->|Production|   B[poetry install]
-    A -->|Development|  C[poetry install --with dev,lint,test]
+    A -->|Simple install|   B[poetry install]
+    A -->|Development|  C[poetry install --with lint,test]
     A -->|Lint check|   D["poetry install --no-root --only lint"]
     A -->|Test check|   E["poetry install --with test"]
 
@@ -213,10 +208,9 @@ graph LR
 
 ### One python environment rule all
 
-The second interesting choice we made was to use editable installs for libraries. Using poetry, this is done with `path` dependencies: `poetry add ../../lib/grpc`. When we install an internal library this way, everything generally works the same as if we installed it from a package repository — we can import from it, and its dependencies get installed — but it also links back to the local library directory. If you edit the library locally, there’s now no need to reinstall it, solving the problem of library changes being difficult
+The second interesting choice we made was to use editable installations for libraries. With Poetry, this can be accomplished using path dependencies, as shown by the command: `poetry add ../../libs/ml`. When we set up an internal library in this manner, its behavior closely mirrors that of a library installed from a package repository. We can import from it, and its dependencies are installed. Additionally, it maintains a link to the local library directory. This means that if we modify the library locally, there's no further need for reinstallation, effectively addressing the challenges of updating the library.
 
-Using poetry, we can debug and make cross change so smoothly in this demo below
-
+In the demonstration below, you'll see how seamlessly we can debug and implement cross-changes.
 
 TODO: add gif here
 
@@ -224,6 +218,6 @@ TODO: add gif here
 
 ## Some afterthought
 
-In this blog post, we have discussed the structure and standard of a Python monorepo. We have seen how a monorepo can be used to improve collaboration, code sharing, and dependency management. We have also seen how to choose the right tooling and structure for your project.
+In this blog, we have discussed the structure and standard of a Python monorepo. We have seen how a monorepo can be used to improve collaboration, code sharing, and dependency management. We have also seen how to choose the right tooling and structure for your project.
 
-In the next part of [this serries](), we will discuss the challenges of build docker multi-stage for monorepo. Enable caching and best practice to deploy service.
+In the next part of [monorepo serries](/categories/monorepo-series/), we will discuss the challenges of build docker multi-stage for monorepo. Enable caching and best practice to deploy service.
