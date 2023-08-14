@@ -199,10 +199,10 @@ With this poetry config, we can easily switch dependency and minimal installalbe
 
 graph LR
     A[pyproject.toml]
-    A -->|Simple install|   B[poetry install]
-    A -->|Development|  C[poetry install --with lint,test]
-    A -->|Lint check|   D["poetry install --no-root --only lint"]
-    A -->|Test check|   E["poetry install --with test"]
+    A -->|Simple install| B["poetry install"]
+    A -->|Development| C[poetry install --with lint,test]
+    A -->|Lint check| D["poetry install --no-root --only lint"]
+    A -->|Test check| E["poetry install --with test"]
 
 {{< /mermaid >}}
 
