@@ -24,7 +24,7 @@ One of the biggest problems in my throughout year of working in tech industry is
 
 Have you ever made some minor change in your code, only to have to create four pull requests across multiple repositories and get them reviewed, spend half a day testing, and then wait a couple of hours for the changes to be released? Despite all the nonsense that you have been through, some jerks in another repository might decide that your code is no longer needed and delete it without your permission, causing an outage in production just for some minor change in API schemas!!!
 
-![Alt text](image-3.png)
+![Alt text](image-3.webp)
 
 Yup, been there and f\*ck that. This type of situation is not uncommon, and monorepos promise to fix it.
 
@@ -42,7 +42,7 @@ The philosophy of monorepo is really simple, keeping all of the code for a proje
 
 {{< /admonition >}}
 
-![Alt text](image.png "src: https://www.raftt.io/post/development-challenges-of-working-with-monorepos-and-multirepos")
+![Alt text](image.webp "src: https://www.raftt.io/post/development-challenges-of-working-with-monorepos-and-multirepos")
 
 > TLDR: Monorepos are not a new technology, but I find that the tooling around Python monorepos is still poor and more like a hack than making standard. My blog and [github repo](https://github.com/haicheviet/python-monorepo/blob/main/libs/ml/pyproject.toml) plan to solve that: 
 > * A poetry environment playground with production release support.
