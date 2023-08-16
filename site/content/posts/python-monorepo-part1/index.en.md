@@ -62,7 +62,7 @@ So what challenges does a monorepo address?:
 However, all of the code in a single place can create new challenges for Ops teams to solve:
 
 * How can we debug, standardlize flow and make cross change effiencely between multiple projects?
-* Managing dependencies in a monorepo can be challenging, as it is important to ensure that all of the dependencies are compatible with each other. This can be especially difficult when the monorepo contains a large number of dependencies that depend each other.
+* Managing dependencies in a monorepo can be difficult, as it is important to ensure that all of the dependencies are compatible with each other. This can be especially difficult when the monorepo contains a large number of dependencies that depend each other.
 * Each service has a different way of CI/CD and testing, so how can we merge all the pipelines into one flow?
 * Monorepos promise that all test cases can be tested in one place, which sounds good but can be painful to implement. For example, if I just change some minor code in my project, every push to a merge request requires a full rerun of the test suites for all projects. This seems inconvenient and wasteful of resources.
 
