@@ -44,7 +44,8 @@ The philosophy of monorepo is really simple, keeping all of the code for a proje
 
 ![Alt text](image.webp "src: https://www.raftt.io/post/development-challenges-of-working-with-monorepos-and-multirepos")
 
-> TLDR: Monorepos are not a new technology, but I find that the tooling around Python monorepos is still poor and more like a hack than making standard. My blog and [github repo](https://github.com/haicheviet/python-monorepo/blob/main/libs/ml/pyproject.toml) plan to solve that: 
+
+> Although monorepos are not a new technology, I find that the tooling around Python monorepos is still lacking. Most solutions feel like workarounds rather than standard. My blog and [Github repo](https://github.com/haicheviet/python-monorepo/blob/main/libs/ml/pyproject.toml) will aim to address these issues:
 > * A poetry environment playground with production release support.
 > * Automated code formatting and linting for Python projects.
 > * A Docker multi-stage CI/CD pipeline that supports sharing and caching of stages between libraries.
@@ -54,10 +55,10 @@ The philosophy of monorepo is really simple, keeping all of the code for a proje
 
 So what challenges does a monorepo address?:
 
-* Improved collaboration: A monorepo facilitates better code collaboration among teams. With all the code visible in one place, it becomes straightforward to locate and comprehend the project's mechanics.
-* Simplified Dependency Management: Monorepos simplify the intricacies of managing dependencies. Housing all code in one repository ensures easier monitoring of dependencies used throughout the project.
-* Increased productivity: By consolidating all code into a singular repository, both build and test times can be diminished, leading to heightened productivity.
-* Central CI/CD: Monorepos can be used to create a single CI/CD pipeline that automates the build, test, and deployment of all of the code in the project. This can help to improve the reliability and stability of the project, and it can free up developers to focus on more creative work.
+* `Improved collaboration`: A monorepo facilitates better code collaboration among teams. With all the code visible in one place, it becomes straightforward to locate and comprehend the project's mechanics.
+* `Simplified Dependency Management`: Monorepos simplify the intricacies of managing dependencies. Housing all code in one repository ensures easier monitoring of dependencies used throughout the project.
+* `Increased productivity`: By consolidating all code into a singular repository, both build and test times can be diminished, leading to heightened productivity.
+* `Central CI/CD`: Monorepos can be used to create a single CI/CD pipeline that automates the build, test, and deployment of all of the code in the project. This can help to improve the reliability and stability of the project, and it can free up developers to focus on more creative work.
 
 However, all of the code in a single place can create new challenges for Ops teams to solve:
 
@@ -70,7 +71,7 @@ The part one of [this series]() will discuss these items and hopefully solve som
 
 * Project structure
 * Project standard (lint,test,packaging)
-* Python enviroments management and debug
+* Python management and debugging
 
 ## Project structure
 
@@ -158,13 +159,13 @@ addopts = "--cov --cov-report term"
 testpaths = ["tests"]
 ```
 
-## Python enviroments management and debug
+## Python Management and Debugging
 
-Managing Python can be a real journey into [dependency hell](https://medium.com/knerd/the-nine-circles-of-python-dependency-hell-481d53e3e025). The mere thought of using just the pip package for extensive projects baffles me. I initially had reservations about adopting [poetry](https://github.com/python-poetry/poetry) for Python management, but its robust support for monorepos soon won me over, addressing most of my concerns.
+Managing Python can be a real journey into [dependency hell](https://medium.com/knerd/the-nine-circles-of-python-dependency-hell-481d53e3e025). The mere thought of using just the pip package for extensive projects scare me. I initially had some doubts about adopting [poetry](https://github.com/python-poetry/poetry) for Python management, but its robust support for monorepos soon won me over, addressing most of my concerns.
 
-First we will talk about how to use poetry as fully to manage our monorepo
+First I will talk about how to use poetry as fully to manage our monorepo
 
-### Dependency groups
+### Dependency Groups
 
 We should seperate clearly between multiple dependency in our project. For ex: dev, lint, test and main dependency. With [poetry grouping](https://python-poetry.org/docs/master/managing-dependencies/), we can easily achive that:
 
@@ -208,7 +209,7 @@ graph LR
 
 ### One python environment rule all
 
-The second interesting choice we made was to use editable installations for libraries. With Poetry, this can be accomplished using path dependencies, as shown by the command: `poetry add ../../libs/ml`. When we set up an internal library in this manner, its behavior closely mirrors that of a library installed from a package repository. We can import from it, and its dependencies are installed. Additionally, it maintains a link to the local library directory. This means that if we modify the library locally, there's no further need for reinstallation, effectively addressing the challenges of updating the library.
+The second interesting choice I made was to use editable installations for libraries. With Poetry, this can be accomplished using path dependencies, as shown by the command: `poetry add ../../libs/ml`. When we set up an internal library in this manner, its behavior closely mirrors that of a library installed from a package repository. We can import from it, and its dependencies are installed. Additionally, it maintains a link to the local library directory. This means that if we modify the library locally, there's no further need for reinstallation, effectively addressing the challenges of updating the library.
 
 In the demonstration below, you'll see how seamlessly we can debug and implement cross-changes.
 
