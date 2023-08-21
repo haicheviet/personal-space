@@ -1,10 +1,10 @@
 ---
-title: "Embracing Python Monorepos: Part 1 - Tools to Shape, Oversee, and Collaborative Environments"
+title: "Embracing Python Monorepos: Part 1 - Tools to Shape, Oversee, and Collaborative Workspace"
 subtitle: ""
 date: 2023-08-10T14:38:51+07:00
 lastmod: 2023-08-10T14:38:51+07:00
 
-description: "This article shows how to create ML service on Industry-standard."
+description: "This article shows how to create python monorepo in industry grade - Part 1."
 
 resources:
 - name: "featured-image"
@@ -17,7 +17,7 @@ categories: ["monorepo-series"]
 ---
 
 
-One of the biggest problems in my throughout year of working in tech industry is communication and ensure that everyone on team is onboard with each other. The thing here is not only communication in your team but as your whole ogrianziation as well. Mismatch dependency, API contract violate and intergation test is the most common bugs that I found in production and even countless post-mortern notes and meetings, no one can ensure that this problem will not occur again. But I think monorepo can be a solution for this nuisance, with the potential can lead to better communication and a more cohesive team.
+One of the biggest problems in my throughout year of working in tech industry is communication and ensure that everyone on team is onboard with each other. The difficult thing here is not only communication in your team but as your whole organization as well. Mismatch dependency, API contract violate and integration test is the most common bugs that I found in production and even after countless post-mortern notes and meetings, no one can ensure that this problem will not occur again. But I think monorepo can be a solution for this nuisance, with the potential can lead to better communication and a more cohesive team.
 
 <!--more-->
 ## Introduction
