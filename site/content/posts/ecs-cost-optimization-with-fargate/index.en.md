@@ -59,9 +59,9 @@ Moreover Fargate Spot allows you to deploy your containers as you would normally
 |CPU  |$0.04048|$0.01334053|67%|
 |Memory|$0.004445|$0.00146489|67%|
 
-> Cost example: a 0.25 vCPU and 0.5 GB Fargate container running for 24 hours would cost **$0.29622** (calculated as 0.04048 \* 0.25 \* 24 + 0.004445 \* 0.5 \* 24).
+> Cost example: a 0.25 vCPU and 0.5 GB Fargate container running for 24 hours would cost **$0.29622**.
 
-> Cost example: a 0.25 vCPU and 0.5 GB Fargate Spot container running for 24 hours would cost **$0.09762186** (calculated as 0.01334053 \* 0.25 \* 24 + 0.00146489 \* 0.5 \* 24).
+> Cost example: a 0.25 vCPU and 0.5 GB Fargate Spot container running for 24 hours would cost **$0.09762186**.
 
 {{< /admonition >}}
 

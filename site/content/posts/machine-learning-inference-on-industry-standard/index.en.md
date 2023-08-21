@@ -35,17 +35,16 @@ The service can be described in the diagram below and full project available in 
 ![Inference Design](ml-inference.webp "Inference Design")
 
 ## Choosing the right format model
+The model I chose is [transformer RoBERTa model](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment) for text sentiment analysis due to its strong performance on a variety of benchmarks and its ability to handle a wide range of text formats.
 
-The model I pick is [transformer roberta model](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment) to analyst text sentiment
 Firstly, we will find optimize model format to boost inference and standardized our inference code. For pytorch model, we used torch script to tranform our model to jit format. The translate code is in my [github](https://github.com/haicheviet/fullstack-machine-learning-inference/tree/master/visulization/generate_torch_script.py), you can reproduce and testing by yourself.
 
 ![Pytorch comparison](torch-comparison.webp "Pytorch comparison")
+For GPU models, TorchScript's runtime [is slightly better](https://www.educba.com/pytorch-jit/) than PyTorch's, although the performance boost is not significant.
 
-The performance boost is not much but for [GPU model](https://www.educba.com/pytorch-jit/), the runtime of torchscript proves to be better than PyTorch.
+The serving code is decoupled from the model, so it can be reused with different models without modification. This is because the serving code uses `torch.jit.load`` to load a pre-trained model in ScriptModule format.
 
-The serving code is somewhat simple `torch.jit.load` and already in ScriptModule format that will not change even we change our base model.
-
-To further optimize model inference time, some techniques such as quantization or pruning can be applied but require deep dive into investigating model architecture and each architecture has its pruning method. TVM framework can be used for auto pruning but required more time and GPU resource to choose the right compile and inference architecture. The optimized process is very complicated and deserves its dedicated blog and I will talk about it at another time. For the PyTorch model, the no-brainer way is to convert to script format and gain 5->10% percent performance for free
+To further optimize model inference time, some techniques such as quantization or pruning can be applied but require deep dive into investigating model architecture and each architecture has its pruning method. TVM framework can be used for auto pruning but required more time and GPU resource to choose the right compile and inference architecture. The optimized process is very complicated and deserves its dedicated blog and I will talk about it at another time. For the PyTorch model, the no-brainer way is to convert to script format and gain 5->10% percent performance without any hidden constraints.
 
 ## RestAPI and Project Template
 
