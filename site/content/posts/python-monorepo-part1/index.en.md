@@ -212,9 +212,7 @@ The second interesting choice we made was to use editable installations for libr
 
 In the demonstration below, you'll see how seamlessly we can debug and implement cross-changes.
 
-TODO: add gif here
-
-
+{{< video src="/videos/python-monorepo-part1.mp4" >}}
 
 ## Some afterthought
 
