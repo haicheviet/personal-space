@@ -1,7 +1,7 @@
 ---
 title: "Embracing Python Monorepos: Part 1 - Tools to Shape, Oversee, and Collaborative Workspace"
 subtitle: ""
-date: 2023-08-10T14:38:51+07:00
+date: 2023-08-21T14T14:38:51+07:00
 lastmod: 2023-08-21T14:38:51+07:00
 
 description: "This article shows how to create python monorepo in industry grade - Part 1."
