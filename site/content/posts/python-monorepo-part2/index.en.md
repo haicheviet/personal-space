@@ -21,6 +21,8 @@ In our previous post, we explored the benefits of using a monorepo for Python pr
 
 <!--more-->
 
+> TLDR: Here is the link to [Github repo](https://github.com/haicheviet/python-monorepo)
+
 ## Docker Multi-Stage Builds for Monorepo
 
 Docker is an essential tool for any Python developer, allowing us to create isolated environments for our projects. One of the most powerful features of Docker is multi-stage builds, which enable us to create smaller, more efficient images for our applications.
