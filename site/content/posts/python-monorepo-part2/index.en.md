@@ -182,8 +182,9 @@ done
 coverage combine --keep $coverage_files
 coverage report --show-missing
 
+# This command generates an HTML report showing the coverage percentage for each file
+# with links to the source code.
 coverage html
-# This command generates an HTML report showing the coverage percentage for each file, with links to the source code.
 ```
 
 By using the `coverage combine` option, we can generate a combined coverage report for all projects in our monorepo. This provides a comprehensive view of code coverage across all projects, helping us identify areas that need improvement.
