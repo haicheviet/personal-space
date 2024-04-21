@@ -1,7 +1,7 @@
 ---
 title: "Embracing Python Monorepos: Part 1 - Tools to Shape, Oversee, and Collaborative Workspace"
 subtitle: ""
-date: 2023-08-21T14T14:38:51+07:00
+date: 2023-08-21T14:38:51+07:00
 lastmod: 2023-08-21T14:38:51+07:00
 
 description: "This article shows how to create python monorepo in industry grade - Part 1."
@@ -12,7 +12,7 @@ resources:
 - name: "featured-image-preview"
   src: "featured-image.webp"
 
-tags: ["Machine Learning", "FastAPI", "Docker", "Feature Store", "Multi-stage", "Project Template"]
+tags: ["Machine Learning", "FastAPI", "Docker", "Multi-stage", "Project Template"]
 categories: ["monorepo-series"]
 ---
 
@@ -215,7 +215,7 @@ In the demonstration below, you'll see how seamlessly we can debug and implement
 
 {{< video src="/videos/python-monorepo-part1.mp4" >}}
 
-## Some afterthought
+## Conclusion
 
 In this blog, we have discussed the structure and standard of a Python monorepo. We have seen how a monorepo can be used to improve collaboration, code sharing, and dependency management. We have also seen how to choose the right tooling and structure for your project.
 
