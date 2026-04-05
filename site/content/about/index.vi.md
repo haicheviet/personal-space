@@ -7,15 +7,17 @@ draft: false
 math:
   enable: true
 ---
-Hai Che is an engineer and a part-time researcher who currently work as a Senior AI Engineer in [Koidra](https://www.koidra.ai) (Rated at #1 Smart Greenhouse Solutions).
+Hai Che is an AI leader and engineer who currently serves as the **AI LLM Manager** at **VinsmartFuture**. 
 
-Hai is an enthusiastic and passionate programmer who is interested in the field of AI, software, and database. His primary interest sits at the intersections of AI research and software development, examining AI models in the context of software development and closing the feedback loop in AI integration. More broadly, he is interested in the field of natural language processing and vector database.
+In this role, he spearheads the "LLM Vietnam" initiative and oversees the deployment of large-scale AI ecosystems across VinGroup, managing high-availability systems that serve over 2 million users and automate workflows for more than 40 subsidiary companies.
+
+Hai is a strategic AI leader and researcher dedicated to bridging the gap between cutting-edge AI research and robust software engineering. With a focus on the practical integration of Large Language Models (LLMs) and vector databases, he specializes in architecting high-performance systems that close the feedback loop between model inference and enterprise-scale deployment. His expertise lies in transforming complex natural language processing research into seamless, automated workflows that drive organizational efficiency and system reliability.
 
 He also has interest in investing both in stock and cryptocurrency. Hai enjoys good music, bad jokes, and writing about himself in the third person. He is also required, by law and ancient custom, to inform absolutely everyone that he has, in fact, beaten Dark Souls.
 
 TL;DR: Just an engieneer have a lot of fun in learning and want to share it with others :relaxed: :relaxed: :relaxed:.
 
-You can find his CV here (updated 03-04-2024): [link](https://raw.githubusercontent.com/haicheviet/personal-space/main/site/assets/pdf/my_resume.pdf)
+You can find his CV here (updated 05-03-2026): [link](https://raw.githubusercontent.com/haicheviet/personal-space/main/site/assets/pdf/my_resume.pdf)
 
 ### Projects
 
