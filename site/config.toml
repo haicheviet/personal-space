@@ -23,404 +23,18 @@ enableGitInfo = true
 # 是否使用 emoji 代码
 enableEmoji = true
 
-[languages]
-  [languages.en]
-    weight = 1
-    # language code
-    languageCode = "en"
-    # language name
-    languageName = "English"
-    # whether to include Chinese/Japanese/Korean
-    hasCJKLanguage = false
-    # default amount of posts in each pages
-    paginate = 12
-    # copyright description used only for seo schema
-    copyright = "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License."
-    # Menu config
-    [languages.en.menu]
-      [[languages.en.menu.main]]
-        identifier = "posts"
-        # you can add extra information before the name (HTML format is supported), such as icons
-        pre = ""
-        # you can add extra information after the name (HTML format is supported), such as icons
-        post = ""
-        name = "Posts"
-        url = "/posts/"
-        # title will be shown when you hover on this menu link.
-        title = ""
-        weight = 1
-      [[languages.en.menu.main]]
-        identifier = "tags"
-        pre = ""
-        post = ""
-        name = "Tags"
-        url = "/tags/"
-        title = ""
-        weight = 2
-      [[languages.en.menu.main]]
-        identifier = "categories"
-        pre = ""
-        post = ""
-        name = "Categories"
-        url = "/categories/"
-        title = ""
-        weight = 3
-      [[languages.en.menu.main]]
-        identifier = "about"
-        pre = ""
-        post = ""
-        name = "About"
-        url = "/about/"
-        title = ""
-        weight = 5
-      [[languages.en.menu.main]]
-        identifier = "github"
-        pre = "<i class='fab fa-github fa-fw'></i>"
-        post = ""
-        name = ""
-        url = "https://github.com/haicheviet"
-        title = "GitHub"
-        weight = 6
-    [languages.en.params]
-      # site description
-      description = "About Hai Che Blog"
-      # site keywords
-      keywords = ["data science", "blog", "hai che", "AI", "machine learning"]
-      # App icon config
-      [languages.en.params.app]
-        # optional site title override for the app when added to an iOS home screen or Android launcher
-        title = "Hai Che"
-        # whether to omit favicon resource links
-        noFavicon = false
-        # modern SVG favicon to use in place of older style .png and .ico files
-        svgFavicon = ""
-        # Android browser theme color
-        themeColor = "#ffffff"
-        # Safari mask icon color
-        iconColor = "#5bbad5"
-        # Windows v8-10 tile color
-        tileColor = "#da532c"
-      # Search config
-      [languages.en.params.search]
-        enable = true
-        # type of search engine ("lunr", "algolia")
-        type = "algolia"
-        # max index length of the chunked content
-        contentLength = 4000
-        # placeholder of the search bar
-        placeholder = ""
-        # max number of results length
-        maxResultLength = 10
-        # snippet length of the result
-        snippetLength = 30
-        # HTML tag name of the highlight part in results
-        highlightTag = "em"
-        # whether to use the absolute URL based on the baseURL in search index
-        absoluteURL = false
-        [languages.en.params.search.algolia]
-          index = "blog-index-en"
-          appID = "ELSEOHI3SE"
-          searchKey = "4057eb6a16fb0079e7879531d0e97b5c"
-      # Home page config
-      [languages.en.params.home]
-        # amount of RSS pages
-        rss = 10
-        # Home page profile
-        [languages.en.params.home.profile]
-          enable = true
-          onlyToFirstPage = true
-          # Gravatar Email for preferred avatar in home page
-          gravatarEmail = ""
-          # URL of avatar shown in home page
-          avatarURL = "avatar.webp"
-          # title shown in home page (HTML format is supported)
-          title = "<video autoplay loop muted playsinline> <source src='introduction.webm' type='video/webm'> <source src='introduction.mp4' type='video/mp4'> </video>"
-          # subtitle shown in home page (HTML format is supported)
-          subtitle = ""
-          # whether to show social links
-          social = true
-          # disclaimer (HTML format is supported)
-          disclaimer = ""
-        # Home page posts
-        [languages.en.params.home.posts]
-          enable = true
-          # special amount of posts in each home posts page
-          paginate = 6
-      # Social config in home page
-      [languages.en.params.social]
-        GitHub = "haicheviet"
-        Linkedin = "hai-che"
-        Twitter = "viet_che"
-        Instagram = ""
-        Telegram = ""
-        Medium = ""
-        Gitlab = ""
-        Youtubecustom = ""
-        Youtubechannel = ""
-        Tumblr = ""
-        Quora = ""
-        Keybase = ""
-        Pinterest = ""
-        Reddit = ""
-        Codepen = ""
-        FreeCodeCamp = ""
-        Bitbucket = ""
-        Stackoverflow = ""
-        Weibo = ""
-        Odnoklassniki = ""
-        VK = ""
-        Flickr = ""
-        Xing = ""
-        Snapchat = ""
-        Soundcloud = ""
-        Spotify = ""
-        Bandcamp = ""
-        Paypal = ""
-        Fivehundredpx = ""
-        Mix = ""
-        Goodreads = ""
-        Lastfm = ""
-        Foursquare = ""
-        Hackernews = ""
-        Kickstarter = ""
-        Patreon = ""
-        Steam = ""
-        Twitch = ""
-        Strava = ""
-        Skype = ""
-        Whatsapp = ""
-        Zhihu = ""
-        Douban = ""
-        Angellist = ""
-        Slidershare = ""
-        Jsfiddle = ""
-        Deviantart = ""
-        Behance = ""
-        Dribbble = ""
-        Wordpress = ""
-        Vine = ""
-        Googlescholar = ""
-        Researchgate = ""
-        Thingiverse = ""
-        Devto = ""
-        Gitea = ""
-        XMPP = ""
-        Matrix = ""
-        Bilibili = ""
-        Email = "cheviethai123@gmail.com"
-        DockerHub = ""
-        Discord = ""
-        Leanpub = ""
-        Udemy = ""
-        RSS = true
-        [languages.en.params.social.company]
-          id = "en"
-          prefix = "https://www.koidra.ai/"
-  [languages.vi]
-    weight = 1
-    # language code
-    languageCode = "vi"
-    # language name
-    languageName = "Vietnamese"
-    # whether to include Chinese/Japanese/Korean
-    hasCJKLanguage = false
-    # default amount of posts in each pages
-    paginate = 12
-    # copyright description used only for seo schema
-    copyright = "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License."
-    # Menu config
-    [languages.vi.menu]
-      [[languages.vi.menu.main]]
-        identifier = "posts"
-        # you can add extra information before the name (HTML format is supported), such as icons
-        pre = ""
-        # you can add extra information after the name (HTML format is supported), such as icons
-        post = ""
-        name = "Bài báo"
-        url = "/posts/"
-        # title will be shown when you hover on this menu link.
-        title = ""
-        weight = 1
-      [[languages.vi.menu.main]]
-        identifier = "tags"
-        pre = ""
-        post = ""
-        name = "Thẻ tags"
-        url = "/tags/"
-        title = ""
-        weight = 2
-      [[languages.vi.menu.main]]
-        identifier = "categories"
-        pre = ""
-        post = ""
-        name = "Thể loại"
-        url = "/categories/"
-        title = ""
-        weight = 3
-      [[languages.vi.menu.main]]
-        identifier = "about"
-        pre = ""
-        post = ""
-        name = "Về tui"
-        url = "/about/"
-        title = ""
-        weight = 5
-      [[languages.vi.menu.main]]
-        identifier = "github"
-        pre = "<i class='fab fa-github fa-fw'></i>"
-        post = ""
-        name = ""
-        url = "https://github.com/haicheviet"
-        title = "GitHub"
-        weight = 6
-    [languages.vi.params]
-          # site description
-      description = "Blog của Hải Chế"
-      # site keywords
-      keywords = ["data science", "blog", "hai che", "AI", "machine learning"]
-      # App icon config
-      [languages.vi.params.app]
-        # optional site title override for the app when added to an iOS home screen or Android launcher
-        title = "Hải Chế"
-        # whether to omit favicon resource links
-        noFavicon = false
-        # modern SVG favicon to use in place of older style .png and .ico files
-        svgFavicon = ""
-        # Android browser theme color
-        themeColor = "#ffffff"
-        # Safari mask icon color
-        iconColor = "#5bbad5"
-        # Windows v8-10 tile color
-        tileColor = "#da532c"
-      # Search config
-      [languages.vi.params.search]
-        enable = true
-        # type of search engine ("lunr", "algolia")
-        type = "algolia"
-        # max index length of the chunked content
-        contentLength = 4000
-        # placeholder of the search bar
-        placeholder = ""
-        # max number of results length
-        maxResultLength = 10
-        # snippet length of the result
-        snippetLength = 30
-        # HTML tag name of the highlight part in results
-        highlightTag = "em"
-        # whether to use the absolute URL based on the baseURL in search index
-        absoluteURL = false
-        [languages.vi.params.search.algolia]
-          index = "blog-index-vi"
-          appID = "ELSEOHI3SE"
-          searchKey = "4057eb6a16fb0079e7879531d0e97b5c"
-      # Home page config
-      [languages.vi.params.home]
-        # amount of RSS pages
-        rss = 10
-        # Home page profile
-        [languages.vi.params.home.profile]
-          enable = true
-          # Gravatar Email for preferred avatar in home page
-          gravatarEmail = ""
-          # URL of avatar shown in home page
-          avatarURL = "avatar.webp"
-          # title shown in home page (HTML format is supported)
-          title = "<video autoplay loop muted playsinline> <source src='introduction.webm' type='video/webm'> <source src='introduction.mp4' type='video/mp4'> </video>"
-          # subtitle shown in home page (HTML format is supported)
-          # whether to show social links
-          social = true
-          # disclaimer (HTML format is supported)
-          disclaimer = ""
-        # Home page posts
-        [languages.vi.params.home.posts]
-          enable = true
-          # special amount of posts in each home posts page
-          paginate = 6
-      # Social config in home page
-      [languages.vi.params.social]
-        GitHub = "haicheviet"
-        Linkedin = "hai-che"
-        Twitter = "viet_che"
-        Instagram = ""
-        Telegram = ""
-        Medium = ""
-        Gitlab = ""
-        Youtubecustom = ""
-        Youtubechannel = ""
-        Tumblr = ""
-        Quora = ""
-        Keybase = ""
-        Pinterest = ""
-        Reddit = ""
-        Codepen = ""
-        FreeCodeCamp = ""
-        Bitbucket = ""
-        Stackoverflow = ""
-        Weibo = ""
-        Odnoklassniki = ""
-        VK = ""
-        Flickr = ""
-        Xing = ""
-        Snapchat = ""
-        Soundcloud = ""
-        Spotify = ""
-        Bandcamp = ""
-        Paypal = ""
-        Fivehundredpx = ""
-        Mix = ""
-        Goodreads = ""
-        Lastfm = ""
-        Foursquare = ""
-        Hackernews = ""
-        Kickstarter = ""
-        Patreon = ""
-        Steam = ""
-        Twitch = ""
-        Strava = ""
-        Skype = ""
-        Whatsapp = ""
-        Zhihu = ""
-        Douban = ""
-        Angellist = ""
-        Slidershare = ""
-        Jsfiddle = ""
-        Deviantart = ""
-        Behance = ""
-        Dribbble = ""
-        Wordpress = ""
-        Vine = ""
-        Googlescholar = ""
-        Researchgate = ""
-        Thingiverse = ""
-        Devto = ""
-        Gitea = ""
-        XMPP = ""
-        Matrix = ""
-        Bilibili = ""
-        Email = "cheviethai123@gmail.com"
-        DockerHub = ""
-        Discord = ""
-        Leanpub = ""
-        Udemy = ""
-        RSS = true
 
 [params]
-  # uBlogger theme version
   version = "2.0.X"
-  # site default theme ("light", "dark", "auto")
   defaultTheme = "auto"
-  # public git repo url only then enableGitInfo is true
   gitRepo = "https://github.com/HaiCheViet/personal-space"
-  # which hash function used for SRI, when empty, no SRI is used ("sha256", "sha384", "sha512", "md5")
-  # 哪种哈希函数用来 SRI, 为空时表示不使用 SRI ("sha256", "sha384", "sha512", "md5")
-  fingerprint = ""
-  # date format
-  # 日期格式
   dateFormat = "2006-01-02"
-  # website images for Open Graph and Twitter Cards
-  # 网站图片, 用于 Open Graph 和 Twitter Cards
   images = ["/logo.png"]
   newsletterSignup = "https://tinyletter.com/haiche"
+  
+  # Site description and keywords (Moved from languages.en.params)
+  description = "About Hai Che Blog"
+  keywords = ["data science", "blog", "hai che", "AI", "machine learning"]
 
   # Header config
   # 页面头部导航栏配置
@@ -446,6 +60,35 @@ enableEmoji = true
       # you can add extra information after the name (HTML format is supported), such as icons
       # 你可以在名称 (允许 HTML 格式) 之后添加其他信息, 例如图标
       post = ""
+
+  [menu]
+    [[menu.main]]
+      identifier = "posts"
+      name = "Posts"
+      url = "/posts/"
+      weight = 1
+    [[menu.main]]
+      identifier = "tags"
+      name = "Tags"
+      url = "/tags/"
+      weight = 2
+    [[menu.main]]
+      identifier = "categories"
+      name = "Categories"
+      url = "/categories/"
+      weight = 3
+    [[menu.main]]
+      identifier = "about"
+      name = "About"
+      url = "/about/"
+      weight = 5
+    [[menu.main]]
+      identifier = "github"
+      pre = "<i class='fab fa-github fa-fw'></i>"
+      name = ""
+      url = "https://github.com/haicheviet"
+      title = "GitHub"
+      weight = 6
 
   # Footer config
   # 页面底部信息配置
@@ -474,7 +117,6 @@ enableEmoji = true
     license= '<a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>'
 
   # Section (all posts) page config
-  # Section (所有文章) 页面配置
   [params.section]
     # special amount of posts in each section page
     # section 页面每页显示文章数量
@@ -485,6 +127,26 @@ enableEmoji = true
     # amount of RSS pages
     # RSS 文章数目
     rss = 10
+  # Search config
+  [params.search]
+    enable = true
+    type = "algolia"
+    [params.search.algolia]
+      index = "blog-index-en"
+      appID = "ELSEOHI3SE"
+      searchKey = "4057eb6a16fb0079e7879531d0e97b5c"
+
+  # Home page config
+  [params.home]
+    rss = 10
+    [params.home.profile]
+      enable = true
+      avatarURL = "avatar.webp"
+      title = "<video autoplay loop muted playsinline> <source src='introduction.webm' type='video/webm'> <source src='introduction.mp4' type='video/mp4'> </video>"
+      social = true
+    [params.home.posts]
+      enable = true
+      paginate = 6
 
   # List (category or tag) page config
   # List (目录或标签) 页面配置
@@ -498,6 +160,26 @@ enableEmoji = true
     # amount of RSS pages
     # RSS 文章数目
     rss = 10
+
+  # Social config
+  [params.social]
+    GitHub = "haicheviet"
+    Linkedin = "hai-che"
+    Twitter = "viet_che"
+    Email = "cheviethai123@gmail.com"
+    RSS = true
+    [params.social.company]
+      prefix = "https://www.koidra.ai/"
+
+  # Comment config (Utterances)
+  [params.comment]
+    enable = true
+    [params.comment.utterances]
+      enable = true
+      repo = "haicheviet/blog-comment"
+      issueTerm = "pathname"
+      lightTheme = "github-light"
+      darkTheme = "github-dark-orange"
 
   # Comment config
   # 评论系统设置
